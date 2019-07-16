@@ -1,2 +1,8 @@
-# estimator
-Thesis Project
+# SOFTWARE DE MODELO PREDICTIVO PARA LA ESTIMACION DE COSTOS Y PEDIDOS DE MATERIA PRIMA DE UNA EMPRESA APLICANDO INTELIGENCIA ARTIFICIAL
+
+# Estimator
+
+Proyecto de Tesis
+### Miembros
+Chacon Rafael
+Reyes Luis
