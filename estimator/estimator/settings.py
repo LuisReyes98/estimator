@@ -33,12 +33,22 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+
+    # Apps de Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Apps del proyecto Estimator
+    'users',
+    'raw_materials',
+    'sales',
+    'graphics_statistics',
+
+    # Apps de terceros
 ]
 
 MIDDLEWARE = [
