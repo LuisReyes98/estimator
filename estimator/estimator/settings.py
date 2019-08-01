@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
-
+from estimator import dev_env as env
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -75,8 +75,12 @@ WSGI_APPLICATION = 'estimator.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env.DB_NAME,
+        'USER': env.DB_USER,
+        'PASSWORD': env.DB_PASSWORD,
+        'HOST': env.DB_HOST,
+        'PORT': '5432',
     }
 }
 
