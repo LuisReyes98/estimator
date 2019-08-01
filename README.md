@@ -9,28 +9,10 @@ Proyecto de Tesis
 - Chacon Rafael
 - Reyes Luis
 
-## Comandos de setup en ubuntu
+## Requerimientos
 
-Crear entorno virtual:
+- Python 3.6.8
 
-```cmd
-python3 -m venv venv
-```
+## Por Hacer
 
-Activar entorno virtual en ubuntu
-
-```cmd
-source venv/bin/activate
-```
-
-Ver librerias instaladas:
-
-```cmd
-pip freeze
-```
-
-Instalar requirements.txt
-
-```cmd
-pip install -r requirements.txt
-```
+- Buscar forma segura de poner variables de entorno
