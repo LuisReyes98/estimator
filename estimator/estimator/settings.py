@@ -117,6 +117,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# Changing User Authentication model
+
+AUTH_USER_MODEL = 'users.AppUser'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

@@ -4,19 +4,19 @@
 Django~=2.2
 
 #matrices y datos
-numpy==1.17.0
+numpy==1.17.*
 
 #matrices y datos
-pandas==0.25.0
+pandas==0.25.*
 
 #prediccion y machine learning
-scikit-learn==0.21.3
+scikit-learn==0.21.*
 
 #graficos
-matplotlib==3.1.1
+matplotlib==3.1.*
 
 #graficos de matplotlib bonitos
-seaborn==0.9.0
+seaborn==0.9.*
 
 #base de datos postgre
 psycopg2-binary~=2.8

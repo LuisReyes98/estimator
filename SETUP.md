@@ -88,7 +88,7 @@ CREATE DATABASE estimator WITH OWNER luis;
 Borrar base de datos
 
 ```shell
-DROP DATABASE [IF EXISTS] name;
+DROP DATABASE IF EXISTS estimator;
 ```
 
 Conectar a base de datos
@@ -127,3 +127,10 @@ aplicar migraciones
 ```shell
 python manage.py migrate
 ```
+
+## Recomendaciones
+
+- crear un super user con `python manage.py createsuperuser`
+mi superusuario de desarrollo
+correo: `admin@email.com`
+contraseña: `admin`
