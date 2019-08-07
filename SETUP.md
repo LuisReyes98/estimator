@@ -1,5 +1,7 @@
 # Requerimientos
 
+Python 3
+
 ## Base de datos
 
 Nombre: `estimator`
