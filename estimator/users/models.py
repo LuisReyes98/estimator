@@ -39,7 +39,7 @@ class UserManager(BaseUserManager):
 
 
 class AppUser(AbstractUser):
-    """User model."""
+    """Basic User model."""
 
     username = None
     email = models.EmailField(translate('email address'), unique=True)
@@ -48,3 +48,63 @@ class AppUser(AbstractUser):
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    @property
+    def full_name(self):
+        """Retorna el nombre completo del usuario"""
+        return '%s %s' % (self.first_name, self.last_name)
+
+
+class Company(models.Model):
+    """ Company user model """
+    # Referencias
+    user = models.OneToOneField(
+        AppUser,
+        on_delete=models.CASCADE,
+        parent_link=True
+    )
+
+    # Campos propios
+    company_name = models.CharField(
+        translate('name of company'),
+        max_length=30,
+        blank=False
+    )
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        # Retornar el nombre de la compañia
+        return self.company_name
+
+
+class CompanyUser(models.Model):
+    """ Company User model user model """
+    # Referencias
+    user = models.OneToOneField(  # Autenticacion de usuario
+        AppUser,
+        on_delete=models.CASCADE,
+        parent_link=True
+    )
+
+    company = models.ForeignKey(  # Compañia a la que pertenece
+        Company,
+        on_delete=models.CASCADE,
+        parent_link=True,
+        blank=False,
+        null=False,
+    )
+    # Campos propios
+    is_manager = models.BooleanField(
+        translate('is manager'),
+        default=False,
+        null=False
+    )
+
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        # Retornar el nombre de la compañia y nombre del usuario
+        return '%s: %s' % (self.company.company_name, self.user.username)
