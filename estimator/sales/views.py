@@ -10,7 +10,16 @@ class HomeView(LoginRequiredMixin, TemplateView):
     # context_object_name = 'estimation'
 
     def get_context_data(self, **kwargs):
-        """Añadiendo variables al contexto"""
+        """Añadiendo variables al contexto """
         context = super().get_context_data(**kwargs)
-        context["request"] = self.request
+        # context["user"] = self.request.user
+
         return context
+
+    def get(self, request, *args, **kwargs):
+        """añadiendo variables al contexto en get"""
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Bienvenido"
+        context["user"] = self.request.user
+
+        return self.render_to_response(context)

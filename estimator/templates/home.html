@@ -4,7 +4,9 @@
     <h2>
         Pagina de inicio/Bienvenida
     </h2>
-    <p>request: {{ request.pk }}</p>
+    <p>
+        <strong>Bienvenido:</strong> {{ user.email }}
+    </p>
     <p></p>
 
     <a href="{% url 'users:login' %}">Iniciar sesion</a>
