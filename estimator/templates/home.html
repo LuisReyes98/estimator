@@ -4,5 +4,9 @@
     <h2>
         Pagina de inicio/Bienvenida
     </h2>
+    <p>request: {{ request.pk }}</p>
+    <p></p>
+
     <a href="{% url 'users:login' %}">Iniciar sesion</a>
+    <a href="{% url 'users:logout' %}">Cerrar sesion</a>
 {% endblock content %}
