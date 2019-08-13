@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'graphics_statistics',
 
     # Apps de terceros
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [

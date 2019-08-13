@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView
+from django.views.generic import CreateView, FormView
 # Create your views here.
 
 
@@ -19,3 +19,7 @@ class LoginView(auth_views.LoginView):
 
 class LogoutView(LoginRequiredMixin, auth_views.LogoutView):
     """ Vista de cerrar sesion , logica sin html """
+
+
+class RegisterCompany(FormView):
+    """Vista de registro de una nueva comap"""

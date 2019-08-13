@@ -3,6 +3,12 @@
 #Framework web
 Django~=2.2
 
+#django form frontend helper
+django-widget-tweaks~=1.4
+
+#base de datos postgre para django
+psycopg2-binary~=2.8
+
 #matrices y datos
 numpy==1.17.*
 
@@ -17,6 +23,3 @@ matplotlib==3.1.*
 
 #graficos de matplotlib bonitos
 seaborn==0.9.*
-
-#base de datos postgre
-psycopg2-binary~=2.8
