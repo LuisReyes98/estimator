@@ -44,6 +44,9 @@ class AppUser(AbstractUser):
     username = None
     email = models.EmailField(translate('email address'), unique=True)
 
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
@@ -94,12 +97,6 @@ class CompanyUser(models.Model):
         parent_link=True,
         blank=False,
         null=False,
-    )
-    # Campos propios
-    is_manager = models.BooleanField(
-        translate('is manager'),
-        default=False,
-        null=False
     )
 
     created = models.DateTimeField(auto_now_add=True)
