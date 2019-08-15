@@ -53,6 +53,8 @@ class CreateCompanyForm(forms.ModelForm):
         data.pop('password_confirmation')
         data.pop('company_name')
 
+        data['is_superuser'] = True
+
         user = AppUser.objects.create_user(**data)
         user.save()
 

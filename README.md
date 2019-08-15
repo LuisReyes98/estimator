@@ -21,6 +21,14 @@ A la hora de escribir codigo tomar en cuenta lo siguiente
 - Desarrollar con MVT (MVC de Django)
 - Escribir codigo python en usando pep8 cuando posible
 
+## Logica de autenticacion
+
+Logica empleada para aprovechar al maximo el modelo de usuario de Django
+
+- las compañias son superuser
+- los usuarios normales tiene accesos normales
+- los usuarios admin de una company son staff pero no son superuser
+
 ## Por Hacer
 
 - Buscar forma segura de poner variables de entorno

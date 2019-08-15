@@ -7,7 +7,16 @@
     <p>
         <strong>Bienvenido:</strong> {{ user.email }}
     </p>
-    <p></p>
+    <p>
+        {% if user.company %}
+        <h1>Compañia: {{ user.company.company_name }}</h1>
+        {% endif %}
+    </p>
+    <p>
+        {% if user.is_superuser %}
+            <h3>soy super user solo companies son superuser</h3>
+        {% endif %}
+    </p>
 
 
     <a href="{% url 'users:login' %}">Iniciar sesion</a>
