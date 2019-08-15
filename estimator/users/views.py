@@ -3,7 +3,10 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, FormView
 from django.urls import reverse_lazy
+from django.http import HttpResponseRedirect
+
 from users.forms import CreateCompanyForm
+
 # Create your views here.
 
 
@@ -23,7 +26,7 @@ class LogoutView(LoginRequiredMixin, auth_views.LogoutView):
     """ Vista de cerrar sesion , logica sin html """
 
 
-class RegisterCompany(FormView):
+class RegisterCompanyView(FormView):
     """Vista de registro de una nueva comap"""
 
     template_name = "users/signup.html"
@@ -35,3 +38,8 @@ class RegisterCompany(FormView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect('/')
+        return super(RegisterCompanyView, self).get(request, *args, **kwargs)

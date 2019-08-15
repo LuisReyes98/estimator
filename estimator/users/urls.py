@@ -19,7 +19,7 @@ urlpatterns = [
 
     path(
         route='signup/',
-        view=views.RegisterCompany.as_view(),
+        view=views.RegisterCompanyView.as_view(),
         name='signup',
     ),
 ]
