@@ -16,4 +16,10 @@ urlpatterns = [
         view=views.LogoutView.as_view(),
         name='logout'
     ),
+
+    path(
+        route='signup/',
+        view=views.RegisterCompany.as_view(),
+        name='signup',
+    ),
 ]

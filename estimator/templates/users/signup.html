@@ -1,0 +1,15 @@
+{% extends 'layouts/base.html' %}
+{# to use widget_tweaks #}
+{% load widget_tweaks %}
+
+{% block content %}
+<h2>Registro de Usuario</h2>
+<form  method="POST" action="{% url "users:signup" %}" >
+    {% csrf_token %}
+
+    {{ form.as_p }}
+    <button type="submit" >Registrarse</button>
+</form>
+
+
+{% endblock content %}

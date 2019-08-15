@@ -1,6 +1,7 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
 from django.utils.translation import ugettext_lazy as translate
+
 # Create your models here.
 
 
@@ -41,7 +42,9 @@ class UserManager(BaseUserManager):
 class AppUser(AbstractUser):
     """Basic User model."""
 
-    username = None
+    username = None  # removiendo campo username
+
+    # campo unico email  de registro
     email = models.EmailField(translate('email address'), unique=True)
 
     created = models.DateTimeField(auto_now_add=True)

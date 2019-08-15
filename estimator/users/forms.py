@@ -1,28 +1,32 @@
 """ Formularios de los usuarios """
 
 from django import forms
-from users.models import Company, CompanyUser, AppUser
+from django.utils.translation import ugettext_lazy as translate
+from users.models import AppUser, Company, CompanyUser
 
 
-class AppUserForm(forms.ModelForm):
+class CreateCompanyForm(forms.ModelForm):
     password_confirmation = forms.CharField(
+        label=translate('Password confirmation'),
         max_length=70,
-        widget=forms.PasswordInput()
+        widget=forms.PasswordInput(),
+        required=True,
+    )
+    company_name = forms.CharField(
+        label="Nombre de la Compañia",
+        max_length=90,
+        widget=forms.TextInput(),
+        required=True,
     )
 
     class Meta:
         model = AppUser
+        fields = (
+            "email",
+            "first_name",
+            "last_name",
+            "password",
+        )
 
+    # Logica de guardado y limpieza de datos
 
-class CompanyForm(forms.ModelForm):
-
-    class Meta:
-        model = Company
-        fields = ("company_name", "user")
-
-
-class CompanyUserForm(forms.ModelForm):
-
-    class Meta:
-        model = CompanyUser
-        fields = ("",)
