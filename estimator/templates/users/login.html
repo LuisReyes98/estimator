@@ -7,7 +7,11 @@
         Pagina de inicio de sesion
     </h2>
     {% if form.non_field_errors %}
-        {{ form.non_field_errors }}
+        {% for error in form.non_field_errors %}
+            <h3>
+                {{ error }}
+            </h3>
+        {% endfor %}
     {% endif %}
     <form method="POST" action="{% url "users:login" %}" >
 
@@ -19,6 +23,7 @@
             {% for error in form.username.errors %}
                 <li>{{ error }}</li>
             {% endfor %}
+
         </div>
         <div  class="form-group">
             {{ form.password.label_tag }}

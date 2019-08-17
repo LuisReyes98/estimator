@@ -10,4 +10,9 @@ urlpatterns = [
         view=views.HomeView.as_view(),
         name='home'
     ),
+    path(
+        route='test/',
+        view=views.VistaTest.as_view(),
+        name='test'
+    ),
 ]

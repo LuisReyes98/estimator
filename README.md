@@ -32,3 +32,5 @@ Logica empleada para aprovechar al maximo el modelo de usuario de Django
 ## Por Hacer
 
 - Buscar forma segura de poner variables de entorno
+- Aplicar un middleware para redirecion de urls
+- las compañia no puede tener first name o last name o ningun campo vacio

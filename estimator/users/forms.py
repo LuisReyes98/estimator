@@ -6,6 +6,7 @@ from users.models import AppUser, Company, CompanyUser
 
 
 class CreateCompanyForm(forms.ModelForm):
+
     password_confirmation = forms.CharField(
         label=translate('Password confirmation'),
         max_length=70,
@@ -28,6 +29,12 @@ class CreateCompanyForm(forms.ModelForm):
             "password",
         )
 
+    def __init__(self, *args, **kwargs):
+        super(CreateCompanyForm, self).__init__(*args, **kwargs)
+
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+
     # Logica de limpieza de datos
     def clean(self):
         """Verificando que las contraseñas coinciden"""
@@ -39,7 +46,7 @@ class CreateCompanyForm(forms.ModelForm):
         password_confirmation = data['password_confirmation']
 
         if password != password_confirmation:
-            raise forms.ValidationError('Passwords do not match')
+            raise forms.ValidationError('Contraseñas no coinciden')
 
         return data
 
