@@ -42,4 +42,4 @@ class RegisterCompanyView(FormView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return HttpResponseRedirect('/')
-        return super(RegisterCompanyView, self).get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)

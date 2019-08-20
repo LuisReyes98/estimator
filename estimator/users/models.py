@@ -1,8 +1,7 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as translate
-
-# Create your models here.
+# Modelos para el control de usuarios
 
 
 class UserManager(BaseUserManager):
@@ -73,7 +72,7 @@ class Company(models.Model):
     # Campos propios
     company_name = models.CharField(
         translate('name of company'),
-        max_length=30,
+        max_length=50,
         blank=False
     )
 
@@ -83,6 +82,10 @@ class Company(models.Model):
     def __str__(self):
         # Retornar el nombre de la compañia
         return self.company_name
+
+    class Meta:
+        verbose_name = translate("Company")
+        verbose_name_plural = translate("Companies")
 
 
 class CompanyUser(models.Model):
@@ -108,3 +111,7 @@ class CompanyUser(models.Model):
     def __str__(self):
         # Retornar el nombre de la compañia y nombre del usuario
         return '%s: %s' % (self.company.company_name, self.user.username)
+
+    class Meta:
+        verbose_name = translate("Company User")
+        verbose_name_plural = translate("Company Users")
