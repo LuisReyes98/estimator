@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext_lazy as translate
+from estimator.mixins import TimeStampFields
+
 # Modelos para el control de usuarios
 
 
@@ -38,21 +40,21 @@ class UserManager(BaseUserManager):
         return self._create_user(email, password, **extra_fields)
 
 
-class AppUser(AbstractUser):
+class AppUser(AbstractUser, TimeStampFields):
     """Basic User model."""
 
     username = None  # removiendo campo username
 
     # campo unico email  de registro
-    email = models.EmailField(translate('email address'), unique=True)
-
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
+    email = models.EmailField(translate('Email address'), unique=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     objects = UserManager()
+
+    class Meta:
+        pass
 
     @property
     def full_name(self):
@@ -60,24 +62,22 @@ class AppUser(AbstractUser):
         return '%s %s' % (self.first_name, self.last_name)
 
 
-class Company(models.Model):
+class Company(TimeStampFields):
     """ Company user model """
     # Referencias
     user = models.OneToOneField(
         AppUser,
+        verbose_name=translate('User'),
         on_delete=models.CASCADE,
         parent_link=True
     )
 
     # Campos propios
     company_name = models.CharField(
-        translate('name of company'),
+        translate('Name of the company'),
         max_length=50,
         blank=False
     )
-
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         # Retornar el nombre de la compañia
@@ -88,25 +88,24 @@ class Company(models.Model):
         verbose_name_plural = translate("Companies")
 
 
-class CompanyUser(models.Model):
+class CompanyUser(TimeStampFields):
     """ Company User model user model """
     # Referencias
     user = models.OneToOneField(  # Autenticacion de usuario
         AppUser,
+        verbose_name=translate('User'),
         on_delete=models.CASCADE,
         parent_link=True
     )
 
     company = models.ForeignKey(  # Compañia a la que pertenece
         Company,
+        verbose_name=translate('Company'),
         on_delete=models.CASCADE,
         parent_link=True,
         blank=False,
         null=False,
     )
-
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         # Retornar el nombre de la compañia y nombre del usuario

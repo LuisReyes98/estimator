@@ -34,6 +34,7 @@ class CreateCompanyForm(forms.ModelForm):
 
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
+        self.fields['password'].widget = forms.PasswordInput()
 
     # Logica de limpieza de datos
     def clean(self):

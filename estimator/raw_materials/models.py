@@ -1,9 +1,10 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as translate
+from estimator.mixins import TimeStampFields
 # Modelos necesarios para la materia prima
 
 
-class Provider(models.Model):
+class Provider(TimeStampFields):
     """ Modelo de los proveedores """
     # Campos propios
     # Nombre
@@ -35,7 +36,7 @@ class Provider(models.Model):
     #     return reverse("Provider_detail", kwargs={"pk": self.pk})
 
 
-class RawMaterial(models.Model):
+class RawMaterial(TimeStampFields):
     """Modelo de Materia prima"""
     TON = 'T'
     KILOGRAM = 'Kg'
@@ -67,13 +68,13 @@ class RawMaterial(models.Model):
 
     # nombre
     name = models.CharField(
-        translate('name of company'),
+        translate('Name'),
         max_length=50,
         blank=False
     )
     # se vence?
     can_expire = models.BooleanField(
-        translate('can expire'),
+        translate('Can expire ?'),
         blank=False,
         default=False,
     )
@@ -85,12 +86,10 @@ class RawMaterial(models.Model):
 
     # es importada?
     is_imported = models.BooleanField(
-        translate('is imported'),
+        translate('Is imported ?'),
         blank=False,
         default=False,
     )
-    created = models.DateTimeField(auto_now_add=True)
-    modified = models.DateTimeField(auto_now=True)
 
     # Campos Referencias
     # Muchos proveedores
