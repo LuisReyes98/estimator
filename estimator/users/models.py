@@ -61,6 +61,10 @@ class AppUser(AbstractUser, TimeStampFields):
         """Retorna el nombre completo del usuario"""
         return '%s %s' % (self.first_name, self.last_name)
 
+    def __str__(self):
+        # Retorna el nombre completo del usuario
+        return self.full_name
+
 
 class Company(TimeStampFields):
     """ Company user model """

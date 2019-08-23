@@ -20,11 +20,6 @@ class Provider(TimeStampFields):
         on_delete=models.CASCADE
     )
 
-    raw_materials = models.ManyToManyField(
-        "RawMaterial",
-        verbose_name=translate("Raw Materials")
-    )
-
     class Meta:
         verbose_name = translate("Provider")
         verbose_name_plural = translate("Providers")
@@ -95,9 +90,11 @@ class RawMaterial(TimeStampFields):
     # Muchos proveedores
     providers = models.ManyToManyField(
         Provider,
-        verbose_name=translate("Providers")
+        verbose_name=translate("Providers"),
+        through="MaterialProvider",
+        through_fields=('raw_material', 'provider'),
     )
-    # una compañia
+    # pertenece a una compañia
     company = models.ForeignKey(
         "users.Company",
         verbose_name=translate("Company"),
@@ -113,3 +110,23 @@ class RawMaterial(TimeStampFields):
 
     # def get_absolute_url(self):
     #     return reverse("RawMaterial_detail", kwargs={"pk": self.pk})
+
+
+class MaterialProvider(models.Model):
+    """ Tabla auxiliar de union de mucho a muchos
+    de proveedores(provider) con  materia prima(raw material)"""
+
+    provider = models.ForeignKey(
+        Provider,
+        verbose_name=translate("Provider"),
+        on_delete=models.CASCADE,
+        related_name="providers"
+
+    )
+
+    raw_material = models.ForeignKey(
+        RawMaterial,
+        verbose_name=translate("Raw Material"),
+        on_delete=models.CASCADE,
+        related_name="raw_materials"
+    )

@@ -5,11 +5,11 @@
         Pagina de inicio/Bienvenida
     </h2>
     <p>
-        <strong>Bienvenido:</strong> {{ user.email }}
+        <strong>Bienvenido:</strong> {{ user }}
     </p>
     <p>
         {% if user.company %}
-        <h1>Compañia: {{ user.company.company_name }}</h1>
+        <h1>Compañia: {{ user.company }}</h1>
         {% endif %}
     </p>
     <p>
