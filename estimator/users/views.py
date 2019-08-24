@@ -18,7 +18,7 @@ class LoginView(auth_views.LoginView):
     def get(self, request, *args, **kwargs):
         """añadiendo variables al contexto en get"""
         context = super().get_context_data(**kwargs)
-        context["title"] = "Iniciar Sesion"
+        context["title"] = "Iniciar Sesión"
         return self.render_to_response(context)
 
 

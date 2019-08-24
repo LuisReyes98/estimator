@@ -3,40 +3,72 @@
 {% load widget_tweaks %}
 
 {% block content %}
-    <h2>
-        Pagina de inicio de sesion
-    </h2>
-    {% if form.non_field_errors %}
-        {% for error in form.non_field_errors %}
-            <h3>
-                {{ error }}
-            </h3>
-        {% endfor %}
-    {% endif %}
-    <form method="POST" action="{% url "users:login" %}" >
-
-        {% csrf_token %}
-
-        <div class="form-group" >
-            {{ form.username.label_tag }}
-            {% render_field form.username placeholder=form.username.label class+="form-control"  type="email" %}
-            {% for error in form.username.errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-
-        </div>
-        <div  class="form-group">
-            {{ form.password.label_tag }}
-
-            {% render_field form.password placeholder=form.password.label class+="form-control" %}
-            {% for error in form.password.errors %}
-                <li>{{ error }}</li>
-            {% endfor %}
-        </div>
-        <button class="btn btn-primary" type="submit" > Iniciar sesion </button>
-    </form>
-
-    <a href="{% url 'sales:home' %}">Home</a>
-    <a href="{% url 'users:signup' %}">Registrarte</a>
+    <!-- <div class="container mt-5">
+        <div class="row"> -->
+            <!-- class="col-lg-6 col-md-10 m-auto" -->
+            <div class=" d-flex justify-content-center align-items-center" style="height: 100vh;" >
+                <div class="card m-4" style="width: 25rem;">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-12 m-auto">
+                                    <h2 class="text-center">
+                                        Inicio de Sesión
+                                    </h2>
+                                </div>
+                            </div>
+                            <div class="row pb-3">
+                                <div class="col pl-1 pr-1">
+                                    {% if form.non_field_errors %}
+                                        {% for error in form.non_field_errors %}
+                    
+                                            <p class="text-danger">
+                                                {{ error }}
+                                            </p>
+                    
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="row pb-3">
+                                <div class="col-12 m-auto">
+                                    <form method="POST" action="{% url "users:login" %}" >
+                                
+                                        {% csrf_token %}
+                                
+                                        <div class="form-group" >
+                                            {{ form.username.label_tag }}
+                                            {% render_field form.username placeholder=form.username.label class+="form-control rounded-pill"  type="email" %}
+                                            {% for error in form.username.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                
+                                        </div>
+                                        <div  class="form-group">
+                                            {{ form.password.label_tag }}
+                                
+                                            {% render_field form.password placeholder=form.password.label class+="form-control rounded-pill" %}
+                                            {% for error in form.password.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        </div>
+                                    </form>
+                                    <div class="col m-auto text-center">
+                                        <button class="btn btn-outline-primary rounded-pill app__button" type="submit" >Ingresar</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <a class="text-primary" href="{% url 'sales:home' %}">Inicio</a>
+                                    <a class="text-primary" href="{% url 'users:signup' %}">Registrarse</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- </div>
+    </div> -->
 
 {% endblock content %}

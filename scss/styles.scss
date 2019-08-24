@@ -5,4 +5,20 @@ $ligth_green: #46F042;
 $deep_blue: #315CCD;
 $dark_blue: #1A20BF;
 
+.app {
+   &__button {
+        border-width: 2px;
+        padding-left: 10px;
+        padding-right: 10px;
+
+        &.button--cyan {
+            background-color: $cyan;
+        }
+
+        &.button--ligth_green {
+            background-color: $ligth_green;
+        }
+    }
+}
+
 @import 'login';

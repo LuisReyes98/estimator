@@ -1,3 +1,13 @@
-
+.app__button {
+  border-width: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.app__button.button--cyan {
+  background-color: #1ABFAB;
+}
+.app__button.button--ligth_green {
+  background-color: #46F042;
+}
 
 /*# sourceMappingURL=styles.css.map */
