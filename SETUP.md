@@ -134,6 +134,12 @@ aplicar migraciones
 python manage.py migrate
 ```
 
+## Comando SASS
+
+```shell
+sass --watch scss/styles.scss:estimator/static/css/styles.css
+```
+
 ## Recomendaciones
 
 - crear un super user con `python manage.py createsuperuser`
