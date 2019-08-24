@@ -20,6 +20,12 @@ Activar entorno virtual en ubuntu
 source venv/bin/activate
 ```
 
+Activar entorno en windows
+
+```shell
+call .venv/Scripts/activate.bat
+```
+
 Ver librerias instaladas:
 
 ```shell
