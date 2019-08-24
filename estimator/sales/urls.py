@@ -11,8 +11,8 @@ urlpatterns = [
         name='home'
     ),
     path(
-        route='test/',
-        view=views.VistaTest.as_view(),
-        name='test'
+        route='sales/calendar',
+        view=views.CalendarView.as_view(),
+        name='calendar'
     ),
 ]

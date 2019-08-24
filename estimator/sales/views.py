@@ -25,5 +25,5 @@ class HomeView(LoginRequiredMixin, TemplateView):
         return self.render_to_response(context)
 
 
-class VistaTest(TemplateView):
-    template_name = 'test/test.html'
+class CalendarView(TemplateView):
+    template_name = "sales/calendar.html"

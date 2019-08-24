@@ -1,0 +1,41 @@
+{% extends 'layouts/base.html' %}
+
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/fullcalendar/core.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fullcalendar/daygrid.css' %}">
+
+{% endblock head %}
+
+{% block content %}
+    {{ block.super }}
+    <h2>Prueba del Calendario</h2>
+    <p>
+        Usando full calendar
+        <a target="_blank" href="https://fullcalendar.io/">
+            Full Calendar
+        </a>
+    </p>
+
+    <div id="calendar" ></div>
+{% endblock content %}
+
+{% block javascript %}
+<script src="{% static 'js/fullcalendar/core.js' %}"></script>
+<script src="{% static 'js/fullcalendar/daygrid.js' %}"></script>
+<script src="{% static 'js/fullcalendar/locale-all.js' %}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            plugins: [ 'dayGrid' ],
+            locale: 'es',
+        });
+        calendar.render();
+    });
+
+</script>
+
+{% endblock javascript %}

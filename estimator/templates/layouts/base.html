@@ -3,10 +3,15 @@
 <head>
     {% include "layouts/meta/head.html" %}
     {% include "layouts/meta/styles.html" %}
+
+    {% block head %}
+    {% endblock head %}
 </head>
 <body>
     {% block content %}
-    
     {% endblock content %}
 </body>
+{% block javascript %}
+
+{% endblock javascript %}
 </html>
