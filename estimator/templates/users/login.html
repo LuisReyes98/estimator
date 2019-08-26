@@ -3,9 +3,6 @@
 {% load widget_tweaks %}
 
 {% block content %}
-    <!-- <div class="container mt-5">
-        <div class="row"> -->
-            <!-- class="col-lg-6 col-md-10 m-auto" -->
             <div class="bg__black_gradient d-flex justify-content-center align-items-center" style="height: 100vh;" >
                 <div class="card m-4" style="width: 25rem;">
                     <div class="card-body">
@@ -52,15 +49,14 @@
                                                 <li>{{ error }}</li>
                                             {% endfor %}
                                         </div>
+                                        <div class="col m-auto text-center">
+                                            <button class="btn btn-outline-primary rounded-pill app__button" type="submit" >Ingresar</button>
+                                        </div>
                                     </form>
-                                    <div class="col m-auto text-center">
-                                        <button class="btn btn-outline-primary rounded-pill app__button" type="submit" >Ingresar</button>
-                                    </div>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row dummy_red">
                                 <div class="col-12 text-center">
-                                    <a class="text-primary" href="{% url 'sales:home' %}">Inicio</a>
                                     <a class="text-primary" href="{% url 'users:signup' %}">Registrarse</a>
                                 </div>
                             </div>
@@ -68,7 +64,5 @@
                     </div>
                 </div>
             </div>
-        <!-- </div>
-    </div> -->
 
 {% endblock content %}
