@@ -10,8 +10,17 @@
     height: 65%;
 }
 
-@for $i from 0 to 10 {
-    .z__#{$i}{
-        z-index: $i;
+
+.fc-custom.fc{
+    width: 100%;
+    height: 100%;
+    .fc-center{
+        > div{
+            display: flex;
+            
+            > button{
+                padding: 0px 5px;
+            }
+        }
     }
 }

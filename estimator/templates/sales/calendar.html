@@ -5,53 +5,78 @@
 {% block head %}
     {{ block.super }}
 
-    <link rel="stylesheet" href="{% static 'css/fullcalendar/core.css' %}">
-    <link rel="stylesheet" href="{% static 'css/fullcalendar/daygrid.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fullcalendar/core.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fullcalendar/daygrid.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fullcalendar/bootstrap.min.css' %}">
 
 {% endblock head %}
 
 {% block content %}
     {{ block.super }}
-    <h2>Prueba del Calendario</h2>
-    <p>
-        Usando full calendar
-        <a target="_blank" href="https://fullcalendar.io/">
-            Full Calendar
-        </a>
-    </p>
+    <div class="container-fluid">
+        <div class="row vh-100">
+            <div class="col-md-2 bg-dark"> Hola </div>
+            <div class="p-3 col-md-10" style="height: 95%;">
+                <div class="fc-custom" id="calendar"></div>
+            </div>
+        </div>
+        <div class="row">
+            <h2>Prueba del Calendario</h2>
+            <p>
+                Usando full calendar
+                <a target="_blank" href="https://fullcalendar.io/">
+                    Full Calendar
+                </a>
+            </p>
+        </div>
+    </div>
 
-    <div id="calendar" ></div>
-
+    
     <div id="lorem" class="calendar_box d-none"> <a class="" href="{% url 'sales:home' %}">Volver a casa </a> HOla</div>
 {% endblock content %}
-    
+
+
 {% block javascript %}
     {{ block.super }}
 
-    <script src="{% static 'js/fullcalendar/core.js' %}"></script>
-    <script src="{% static 'js/fullcalendar/locales-all.js' %}"></script>
-    <script src="{% static 'js/fullcalendar/daygrid.js' %}"></script>
+    <script src="{% static 'js/fullcalendar/core.min.js' %}"></script>
+    <script src="{% static 'js/fullcalendar/locales-all.min.js' %}"></script>
+    <script src="{% static 'js/fullcalendar/daygrid.min.js' %}"></script>
+    <script src="{% static 'js/fullcalendar/bootstrap.min.js' %}"></script>
 
 <script>
-    var mydate = new Date({{ date | safe_js }})
+    var mydate = {{ date | safe_js }};
+
     var template = document.getElementById('lorem');
 
     document.addEventListener('DOMContentLoaded', function() {
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: [ 'dayGrid' ],
+            plugins: [ 'bootstrap', 'dayGrid' ],
+            themeSystem: 'bootstrap',
+            bootstrapFontAwesome: {
+                close: 'fa-times',
+                prev: ' mdi mdi-chevron-left mdi-24px',
+                next: ' mdi mdi-chevron-right mdi-24px',
+                prevYear: ' mdi mdi-undo',
+                nextYear: ' mdi mdi-redo'
+            },
+            header: {
+                left: 'prevYear',
+                center: ' prev,title,next ',
+                right: 'today nextYear'
+            },
+            height: 'parent',
             locale: 'es',
             selectable: true,
             dayRender: function (dayRenderInfo) {
-                if (dayRenderInfo.date.toDateString() === mydate.toDateString()) {
-                    tem = template.cloneNode(true);
-                    tem.classList.remove("d-none");
-                    // dayRenderInfo.el.appendChild("Hola");
-                    //dayRenderInfo.el.outerHTML = template.outerHTML;
-                    dayRenderInfo.el.innerHTML = tem.outerHTML;
-                    console.log(dayRenderInfo);
-                }
+                // if (dayRenderInfo.date.toDateString() === mydate.toDateString()) {
+                //     tem = template.cloneNode(true);
+                //     tem.classList.remove("d-none");
+                //     dayRenderInfo.el.innerHTML = tem.outerHTML;
+                //     console.log(dayRenderInfo);
+                // }
             },
         });
         calendar.render();

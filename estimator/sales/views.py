@@ -29,14 +29,22 @@ class HomeView(LoginRequiredMixin, TemplateView):
 class CalendarView(LoginRequiredMixin, TemplateView):
     template_name = "sales/calendar.html"
 
+    def exampleDates(self):
+        now = datetime.now()
+        some_dates = []
+
+        for i in range(10):
+            some_dates.append((now - timedelta(days=i)).strftime("%m/%d/%Y"))
+
+        return some_dates
+
     def get(self, request, *args, **kwargs):
-        yesterday = datetime.now() - timedelta(days=1)
 
         """añadiendo variables al contexto en get"""
         context = super().get_context_data(**kwargs)
         context["title"] = "Calendario"
         context["user"] = self.request.user
 
-        context["date"] = yesterday.strftime("%m/%d/%Y")
+        context["date"] = self.exampleDates()
 
         return self.render_to_response(context)
