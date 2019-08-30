@@ -31,8 +31,12 @@
         </div>
     </div>
 
+    {% for prediction in predictions %}
+        <div id="{{prediction.pk}}" class="calendar_box ">
+            Para el {{prediction.date}} se estima
+        </div>
     
-    <div id="lorem" class="calendar_box d-none"> <a class="" href="{% url 'sales:home' %}">Volver a casa </a> HOla</div>
+    {% endfor %}
 {% endblock content %}
 
 
@@ -45,7 +49,7 @@
     <script src="{% static 'js/fullcalendar/bootstrap.min.js' %}"></script>
 
 <script>
-    var mydate = {{ date | safe_js }};
+    var mydate = {{ predictions | safe_js }};
 
     var template = document.getElementById('lorem');
 

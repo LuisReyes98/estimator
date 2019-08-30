@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime, timedelta
-
+from sales.objects import Prediction
 # Create your views here.
 
 
@@ -34,7 +34,12 @@ class CalendarView(LoginRequiredMixin, TemplateView):
         some_dates = []
 
         for i in range(10):
-            some_dates.append((now - timedelta(days=i)).strftime("%m/%d/%Y"))
+            some_dates.append(
+                Prediction(
+                    date=(now - timedelta(days=i)).strftime("%m/%d/%Y"),
+                    pk=i,
+                ).__dict__
+            )
 
         return some_dates
 
@@ -45,6 +50,6 @@ class CalendarView(LoginRequiredMixin, TemplateView):
         context["title"] = "Calendario"
         context["user"] = self.request.user
 
-        context["date"] = self.exampleDates()
+        context["predictions"] = self.exampleDates()
 
         return self.render_to_response(context)

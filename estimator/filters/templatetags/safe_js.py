@@ -9,4 +9,8 @@ register = Library()
 
 @register.filter(is_safe=True)
 def safe_js(obj):
-    return mark_safe(json.dumps(obj))
+    try:
+        return mark_safe(json.dumps(obj))
+    except Exception as ex:
+        print(ex)
+        return mark_safe(json.dumps({}))
