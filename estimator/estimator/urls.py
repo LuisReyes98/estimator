@@ -15,9 +15,32 @@ Including another URLconf
 """
 # from django.contrib import admin
 from django.urls import path, include
+from . import views
 
 urlpatterns = [
     # path('admin/', admin.site.urls),
-    path('', include(('sales.urls', 'sales'), namespace='sales')),
-    path('users/', include(('users.urls', 'users'), namespace="users")),
+    path(
+        route='',
+        view=views.HomeView.as_view(),
+        name='home'
+    ),
+    path(
+        'sales/',
+        include(
+            ('sales.urls', 'sales'),
+            namespace='sales')
+        ),
+    path(
+        'raw_material/',
+        include(
+            ('raw_materials.urls', 'raw_materials'), namespace='raw_materials'
+        )
+    ),
+    path(
+        'users/',
+        include(
+            ('users.urls', 'users'),
+            namespace="users"
+        )
+    ),
 ]
