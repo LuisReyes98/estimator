@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as translate
 from estimator.mixins import TimeStampFields
+from django.urls import reverse_lazy
+
 # Modelos necesarios para la materia prima
 
 
@@ -10,7 +12,8 @@ class Provider(TimeStampFields):
     # Nombre
     name = models.CharField(
         translate("Name"),
-        max_length=50
+        max_length=50,
+        blank=False,
     )
 
     # Referencias
@@ -27,8 +30,8 @@ class Provider(TimeStampFields):
     def __str__(self):
         return self.name
 
-    # def get_absolute_url(self):
-    #     return reverse("Provider_detail", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse_lazy("raw_materials:provider", kwargs={"pk": self.pk})
 
 
 class RawMaterial(TimeStampFields):

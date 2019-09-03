@@ -4,5 +4,13 @@
 <h1>
     Editar o Crear proveedor
 </h1>
-
+<a href="{% url 'raw_materials:providers' %}"> Volver</a>
+{{action}}
+<form action="">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button>
+        Crear
+    </button>
+</form>
 {% endblock content %}
