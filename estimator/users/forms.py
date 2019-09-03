@@ -14,7 +14,7 @@ class CreateCompanyForm(forms.ModelForm):
         required=True,
     )
     company_name = forms.CharField(
-        label="Nombre de la Compañia",
+        label="Nombre de la Compañía",
         max_length=90,
         widget=forms.TextInput(),
         required=True,

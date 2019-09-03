@@ -35,15 +35,13 @@
                         
                                 <div class="form-group" >
                                     {{ form.username.label_tag }}
-                                    {% render_field form.username placeholder=form.username.label class+="app__input form-control"  type="email" %}
+                                    {% render_field form.username placeholder=form.username.label class+="app__input form-control" type="email" %}
                                     {% for error in form.username.errors %}
                                         <li>{{ error }}</li>
                                     {% endfor %}
-                        
                                 </div>
                                 <div  class="form-group">
                                     {{ form.password.label_tag }}
-                        
                                     {% render_field form.password placeholder=form.password.label class+="app__input form-control" %}
                                     {% for error in form.password.errors %}
                                         <li>{{ error }}</li>
@@ -55,7 +53,7 @@
                             </form>
                         </div>
                     </div>
-                    <div class="row dummy_red">
+                    <div class="row">
                         <div class="col-12 text-center">
                             <a class="app__link" href="{% url 'users:signup' %}">Registrarse</a>
                         </div>

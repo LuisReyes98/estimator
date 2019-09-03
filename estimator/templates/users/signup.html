@@ -3,14 +3,97 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<h2>Registro de Usuario</h2>
-<form  method="POST" action="{% url "users:signup" %}" >
-    {% csrf_token %}
-
-    {{ form.as_p }}
-    <button type="submit" >Registrarse</button>
-    <a href="{% url 'users:login' %}"> Ya tengo cuenta </a>
-</form>
+<div class="bg__black_gradient d-flex justify-content-center align-items-center">
+    <div class="card m-4" style="width: 25rem;">
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 m-auto">
+                        <h2 class="text-center">
+                            Registro de Compañía
+                        </h2>
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col pl-1 pr-1">
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+        
+                                <p class="text-danger">
+                                    {{ error }}
+                                </p>
+        
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col-12 m-auto">
+                        <form  method="POST" action="{% url "users:signup" %}" >
+                        
+                            {% csrf_token %}
+                        
+                            <div class="form-group">
+                                {{ form.company_name.label_tag }}
+                                {% render_field form.company_name placeholder=form.company_name.label class+="app__input form-control" type="email" %}
+                                {% for error in form.company_name.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </div>
+                            <div class="form-group">
+                                {{ form.email.label_tag }}
+                                {% render_field form.email placeholder=form.email.label class+="app__input form-control" type="email" %}
+                                {% for error in form.email.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6 col-sm-12">
+                                    {{ form.first_name.label_tag }}
+                                    {% render_field form.first_name placeholder=form.first_name.label class+="app__input form-control" type="email" %}
+                                    {% for error in form.first_name.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group col-md-6 col-sm-12">
+                                    {{ form.last_name.label_tag }}
+                                    {% render_field form.last_name placeholder=form.last_name.label class+="app__input form-control" type="email" %}
+                                    {% for error in form.last_name.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12 col-sm-12">
+                                    {{ form.password.label_tag }}
+                                    {% render_field form.password placeholder=form.password.label class+="app__input form-control" %}
+                                    {% for error in form.password.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12">
+                                    {{ form.password_confirmation.label_tag }}
+                                    {% render_field form.password_confirmation placeholder=form.password_confirmation.label class+="app__input form-control" %}
+                                    {% for error in form.password_confirmation.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="form-group text-center">
+                                <button class="btn rounded-pill app__button button--cyan" type="submit" >Registrarse</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <a class="app__link" href="{% url 'users:login' %}"> Ya tengo cuenta </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% endblock content %}
