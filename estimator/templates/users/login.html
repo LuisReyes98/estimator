@@ -3,66 +3,66 @@
 {% load widget_tweaks %}
 
 {% block content %}
-            <div class="bg__black_gradient d-flex justify-content-center align-items-center" style="height: 100vh;" >
-                <div class="card m-4" style="width: 25rem;">
-                    <div class="card-body">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-12 m-auto">
-                                    <h2 class="text-center">
-                                        Inicio de Sesión
-                                    </h2>
+    <div class="bg__black_gradient d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="card m-4" style="width: 25rem;">
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12 m-auto">
+                            <h2 class="text-center">
+                                Inicio de Sesión
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="row pb-3">
+                        <div class="col pl-1 pr-1">
+                            {% if form.non_field_errors %}
+                                {% for error in form.non_field_errors %}
+            
+                                    <p class="text-danger">
+                                        {{ error }}
+                                    </p>
+            
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="row pb-3">
+                        <div class="col-12 m-auto">
+                            <form method="POST" action="{% url "users:login" %}" >
+                        
+                                {% csrf_token %}
+                        
+                                <div class="form-group" >
+                                    {{ form.username.label_tag }}
+                                    {% render_field form.username placeholder=form.username.label class+="app__input form-control"  type="email" %}
+                                    {% for error in form.username.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
+                        
                                 </div>
-                            </div>
-                            <div class="row pb-3">
-                                <div class="col pl-1 pr-1">
-                                    {% if form.non_field_errors %}
-                                        {% for error in form.non_field_errors %}
-                    
-                                            <p class="text-danger">
-                                                {{ error }}
-                                            </p>
-                    
-                                        {% endfor %}
-                                    {% endif %}
+                                <div  class="form-group">
+                                    {{ form.password.label_tag }}
+                        
+                                    {% render_field form.password placeholder=form.password.label class+="app__input form-control" %}
+                                    {% for error in form.password.errors %}
+                                        <li>{{ error }}</li>
+                                    {% endfor %}
                                 </div>
-                            </div>
-                            <div class="row pb-3">
-                                <div class="col-12 m-auto">
-                                    <form method="POST" action="{% url "users:login" %}" >
-                                
-                                        {% csrf_token %}
-                                
-                                        <div class="form-group" >
-                                            {{ form.username.label_tag }}
-                                            {% render_field form.username placeholder=form.username.label class+="form-control rounded-pill"  type="email" %}
-                                            {% for error in form.username.errors %}
-                                                <li>{{ error }}</li>
-                                            {% endfor %}
-                                
-                                        </div>
-                                        <div  class="form-group">
-                                            {{ form.password.label_tag }}
-                                
-                                            {% render_field form.password placeholder=form.password.label class+="form-control rounded-pill" %}
-                                            {% for error in form.password.errors %}
-                                                <li>{{ error }}</li>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="col m-auto text-center">
-                                            <button class="btn btn-outline-primary rounded-pill app__button" type="submit" >Ingresar</button>
-                                        </div>
-                                    </form>
+                                <div class="col m-auto text-center">
+                                    <button class="btn rounded-pill app__button button--cyan" type="submit" >Ingresar</button>
                                 </div>
-                            </div>
-                            <div class="row dummy_red">
-                                <div class="col-12 text-center">
-                                    <a class="text-primary" href="{% url 'users:signup' %}">Registrarse</a>
-                                </div>
-                            </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row dummy_red">
+                        <div class="col-12 text-center">
+                            <a class="app__link" href="{% url 'users:signup' %}">Registrarse</a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
 
 {% endblock content %}
