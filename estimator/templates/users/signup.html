@@ -42,10 +42,17 @@
                             </div>
                             <div class="form-group">
                                 {{ form.email.label_tag }}
-                                {% render_field form.email placeholder=form.email.label class+="app__input form-control" type="email" %}
-                                {% for error in form.email.errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
+                                {% if form.email.errors %}
+                                    {% render_field form.email placeholder=form.email.label class+="app__input form-control is-invalid" type="email" %}
+                                    <div class="invalid-feedback">
+                                        {% for error in form.email.errors %}
+                                            {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+
+                                    {% render_field form.email placeholder=form.email.label class+="app__input form-control" type="email" %}
+                                {% endif %}
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6 col-sm-12">
