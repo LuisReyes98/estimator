@@ -19,7 +19,7 @@
                             {% if form.non_field_errors %}
                                 {% for error in form.non_field_errors %}
             
-                                    <p class="text-danger mb-0">
+                                    <p class="app__form--error text-danger mb-0">
                                         {{ error }}
                                     </p>
             
@@ -35,17 +35,29 @@
                         
                                 <div class="form-group" >
                                     {{ form.username.label_tag }}
-                                    {% render_field form.username placeholder=form.username.label class+="app__input form-control" type="email" %}
-                                    {% for error in form.username.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
+                                    {% if form.username.errors  %}
+                                        {% render_field form.username placeholder=form.username.label class+="app__input form-control is-invalid" type="email" %}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.username.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {% render_field form.username placeholder=form.username.label class+="app__input form-control" type="email" %}
+                                    {% endif %}
                                 </div>
                                 <div  class="form-group">
                                     {{ form.password.label_tag }}
-                                    {% render_field form.password placeholder=form.password.label class+="app__input form-control" %}
-                                    {% for error in form.password.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
+                                    {% if form.password.errors %}
+                                        {% render_field form.password placeholder=form.password.label class+="app__input form-control is-invalid" %}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.password.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {% render_field form.password placeholder=form.password.label class+="app__input form-control" %}
+                                    {% endif %}
                                 </div>
                                 <div class="col m-auto text-center">
                                     <button class="btn rounded-pill app__button button--cyan" type="submit" >Ingresar</button>

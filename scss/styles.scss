@@ -65,7 +65,7 @@ $dark_blue: #1A20BF;
         border-width: 0px 0px 2px 0px;
         border-radius: 0px;
         &:focus {
-            box-shadow: none;
+            box-shadow: none !important;
             border-color: $light_cyan;
             transition: all ease .2s;
         }
@@ -76,6 +76,16 @@ $dark_blue: #1A20BF;
         &:hover {
             color: $light_cyan;
         }
+    }
+    &__form--error {
+        font-size: 14px;
+    }
+
+    &__icon--input {
+        font-family: 'Material Design Icons';
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
     }
 }
 

@@ -42,4 +42,6 @@ class RegisterCompanyView(FormView):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return HttpResponseRedirect('/')
-        return super().get(request, *args, **kwargs)
+        context = super().get_context_data(**kwargs)
+        context["title"] = "Registrarse"
+        return self.render_to_response(context)
