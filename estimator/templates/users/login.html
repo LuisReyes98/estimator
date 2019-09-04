@@ -18,11 +18,12 @@
                         <div class="col pl-1 pr-1">
                             {% if form.non_field_errors %}
                                 {% for error in form.non_field_errors %}
-            
-                                    <p class="app__form--error text-danger mb-0">
-                                        {{ error }}
-                                    </p>
-            
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="mdi mdi-alert"></i>
+                                        <p class="app__form--error text-danger mb-0">
+                                            {{ error }}
+                                        </p>
+                                    </div>
                                 {% endfor %}
                             {% endif %}
                         </div>
