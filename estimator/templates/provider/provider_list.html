@@ -1,7 +1,9 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
-<h1>Proveedores</h1>
+<a href="{% url 'home' %}"> Volver</a>
+
+<h1>Proveedores de {{company}}</h1>
 <a href="{% url 'raw_materials:new_provider' %}"> Nuevo Proveedor</a>
 <table>
     <thead>
@@ -15,7 +17,7 @@
         {% for provider in object_list %}
         <tr>
             <td>{{ provider.name }}</td>
-            <td>{{ provider.company.name }}</td>
+            <td>{{ provider.company }}</td>
             <td>
                 <a  href="{% url 'raw_materials:provider'  provider.id  %}">
                     detalle

@@ -1,8 +1,14 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
+<a href="{% url 'raw_materials:providers' %}"> Volver</a>
+
 <h1>
     Proveedor individual
 </h1>
+<p>Nombre</p>
+<p>{{object.name}}</p>
+<p>Compañia</p>
+<p>{{object.company}}</p>
 
 {% endblock content %}

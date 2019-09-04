@@ -1,0 +1,11 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<h1>Vista de confirmacion de eliminacion</h1>
+
+<form method="post">{% csrf_token %}
+    <p>Seguro de eliminar "{{ object }}"?</p>
+    <button type="submit">SI</button>
+</form>
+
+{% endblock content %}

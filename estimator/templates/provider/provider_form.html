@@ -1,15 +1,18 @@
 {% extends 'layouts/base.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
 <h1>
     Editar o Crear proveedor
 </h1>
 <a href="{% url 'raw_materials:providers' %}"> Volver</a>
-{{action}}
-<form action="">
+
+<form action="{{form_url}}" method="POST" >
     {% csrf_token %}
-    {{form.as_p}}
-    <button>
+    {{ form.name.label_tag }}
+    {% render_field form.name %}
+    <input type="hidden" name="company" value="{{company.pk}}" >
+    <button type="submit">
         Crear
     </button>
 </form>
