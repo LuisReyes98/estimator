@@ -12,7 +12,6 @@ from django.urls import reverse_lazy
 from .forms import ProviderForm
 from django.shortcuts import redirect
 
-# from django.http import HttpResponse
 # Create your views here.
 
 
@@ -57,7 +56,6 @@ class ProviderDetailView(LoginRequiredMixin, DetailView):
     def get(self, request, *args, **kwargs):
         if self.get_object().company.pk != self.request.user.company.pk:
             return redirect('raw_materials:providers')
-            # return HttpResponse('Unauthorized', status=401)
         return super().get(request, *args, **kwargs)
 
 
