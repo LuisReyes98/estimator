@@ -3,7 +3,8 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, FormView
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+
 
 from users.forms import CreateCompanyForm
 
@@ -15,11 +16,18 @@ class LoginView(auth_views.LoginView):
     template_name = 'users/login.html'
     redirect_authenticated_user = True
 
-    def get(self, request, *args, **kwargs):
-        """añadiendo variables al contexto en get"""
+    def get_context_data(self, **kwargs):
+        """Agregando variables al contexto"""
         context = super().get_context_data(**kwargs)
         context["title"] = "Iniciar Sesión"
-        return self.render_to_response(context)
+
+        return context
+
+    # def get(self, request, *args, **kwargs):
+    #     """añadiendo variables al contexto en get"""
+    #     context = super().get_context_data(**kwargs)
+    #     context["title"] = "Iniciar Sesión"
+    #     return self.render_to_response(context)
 
 
 class LogoutView(LoginRequiredMixin, auth_views.LogoutView):
@@ -39,9 +47,16 @@ class RegisterCompanyView(FormView):
         form.save()
         return super().form_valid(form)
 
-    def get(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return HttpResponseRedirect('/')
+    def get_context_data(self, **kwargs):
+        """Agregando variables al contexto"""
         context = super().get_context_data(**kwargs)
         context["title"] = "Registrarse"
-        return self.render_to_response(context)
+
+        return context
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect('home')
+        # context = super().get_context_data(**kwargs)
+        # context["title"] = "Registrarse"
+        return super().get(request, *args, **kwargs)

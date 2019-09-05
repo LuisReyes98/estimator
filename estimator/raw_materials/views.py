@@ -10,6 +10,9 @@ from django.views.generic import (
 from raw_materials.models import Provider
 from django.urls import reverse_lazy
 from .forms import ProviderForm
+from django.shortcuts import redirect
+
+# from django.http import HttpResponse
 # Create your views here.
 
 
@@ -51,11 +54,22 @@ class ProviderDetailView(LoginRequiredMixin, DetailView):
     model = Provider
     template_name = "provider/provider_detail.html"
 
+    def get(self, request, *args, **kwargs):
+        if self.get_object().company.pk != self.request.user.company.pk:
+            return redirect('raw_materials:providers')
+            # return HttpResponse('Unauthorized', status=401)
+        return super().get(request, *args, **kwargs)
+
 
 class ProviderUpdateView(LoginRequiredMixin, UpdateView):
     model = Provider
     template_name = "provider/provider_form.html"
     form_class = ProviderForm
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().company.pk != self.request.user.company.pk:
+            return redirect('raw_materials:providers')
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         """User and profile to context"""
@@ -73,3 +87,8 @@ class ProviderDeleteView(LoginRequiredMixin, DeleteView):
     model = Provider
     template_name = "provider/provider_delete.html"
     success_url = reverse_lazy('raw_materials:providers')
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().company.pk != self.request.user.company.pk:
+            return redirect('raw_materials:providers')
+        return super().get(request, *args, **kwargs)

@@ -11,6 +11,8 @@ $font_folder_url: '../fonts/';
     src: url("#{$font_folder_url}Lato-Regular.ttf");
 }
 
-body{
+html, body {
     font-family: 'Lato';
+    margin: 0;
+    height: 100%;
 }

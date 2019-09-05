@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as translate
-from estimator.mixins import TimeStampFields
+from estimator.model_mixins import TimeStampFields
 from django.urls import reverse_lazy
 
 # Modelos necesarios para la materia prima
