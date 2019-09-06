@@ -6,6 +6,7 @@
 <form method="post">{% csrf_token %}
     <p>Seguro de eliminar "{{ object }}"?</p>
     <button type="submit">SI</button>
+    <a href="{% url 'raw_materials:providers' %}">No</a>
 </form>
 
 

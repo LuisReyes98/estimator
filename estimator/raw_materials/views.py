@@ -11,14 +11,13 @@ from raw_materials.models import Provider
 from django.urls import reverse_lazy
 from .forms import ProviderForm
 from django.shortcuts import redirect
-
 # Create your views here.
 
 
 class ProviderListView(LoginRequiredMixin, ListView):
     """Vista listado de todos los proveedores"""
     model = Provider
-    template_name = "provider/provider_list.html"
+    template_name = "providers/provider_list.html"
 
     def get_queryset(self):
         new_context = Provider.objects.filter(
@@ -36,7 +35,7 @@ class ProviderListView(LoginRequiredMixin, ListView):
 
 class ProviderCreateView(LoginRequiredMixin, CreateView):
     model = Provider
-    template_name = "provider/provider_form.html"
+    template_name = "providers/provider_form.html"
     success_url = reverse_lazy('raw_materials:providers')
     form_class = ProviderForm
 
@@ -51,7 +50,7 @@ class ProviderCreateView(LoginRequiredMixin, CreateView):
 
 class ProviderDetailView(LoginRequiredMixin, DetailView):
     model = Provider
-    template_name = "provider/provider_detail.html"
+    template_name = "providers/provider_detail.html"
 
     def get(self, request, *args, **kwargs):
         if self.get_object().company.pk != self.request.user.company.pk:
@@ -61,7 +60,7 @@ class ProviderDetailView(LoginRequiredMixin, DetailView):
 
 class ProviderUpdateView(LoginRequiredMixin, UpdateView):
     model = Provider
-    template_name = "provider/provider_form.html"
+    template_name = "providers/provider_form.html"
     form_class = ProviderForm
 
     def get(self, request, *args, **kwargs):
@@ -83,7 +82,7 @@ class ProviderUpdateView(LoginRequiredMixin, UpdateView):
 
 class ProviderDeleteView(LoginRequiredMixin, DeleteView):
     model = Provider
-    template_name = "provider/provider_delete.html"
+    template_name = "providers/provider_delete.html"
     success_url = reverse_lazy('raw_materials:providers')
 
     def get(self, request, *args, **kwargs):
