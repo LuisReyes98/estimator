@@ -8,7 +8,26 @@
             top: 0;
             right: 0;
             font-size: 2em;
-            margin: 5px;
+            margin: 5px 15px 5px 15px;
+            color: #f8f9fa;
+
+            &:hover {
+                color: #383838;
+            }
+
+        }
+        .nav--settings {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            font-size: 2em;
+            margin: 5px 15px 5px 15px;
+            color: #f8f8f8;
+
+            &:hover {
+                color: #383838;
+            }
+
         }
 
         .nav--bg_light {
@@ -16,11 +35,14 @@
         }
 
         .nav--menu {
-            border-bottom: 1px #333;
+            border-top: 1px solid #383838;
 
             li:hover {
                 background: #333;
-                color: #f8f9fa;
+
+                a {
+                    color: #f8f9fa !important;
+                }
             }
         }
     }
