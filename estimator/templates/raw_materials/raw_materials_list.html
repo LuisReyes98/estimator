@@ -1,0 +1,37 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+<h1>
+    Lista de materia prima
+</h1>
+<a href="{% url 'raw_materials:new_material' %}"> Nueva Materia Prima</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Compañia</th>
+            <th>Proveedores</th>
+            <th>Unidad de Medida</th>
+            <th>Puede Expirar</th>
+            <th>Tiempo en Expirar</th>
+            <th>Es importado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for material in object_list %}
+        <tr>
+            <td>{{ material.name }}</td>
+            <td>{{ material.company }}</td>
+            <td>{{ material.providers }}</td>
+            <td>{{ material.measurement_unit }}</td>
+            <td>{{ material.can_expire }}</td>
+            <td>{{ material.time_to_expire }}</td>
+            <td>{{ material.is_imported }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock content %}

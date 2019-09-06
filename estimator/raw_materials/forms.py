@@ -1,5 +1,5 @@
 from django import forms
-from .models import Provider
+from .models import Provider, RawMaterial
 
 
 class ProviderForm(forms.ModelForm):
@@ -8,3 +8,19 @@ class ProviderForm(forms.ModelForm):
     class Meta:
         model = Provider
         fields = ("name", "company")
+
+
+class RawMaterialForm(forms.ModelForm):
+    """Formulario de la materia prima"""
+
+    class Meta:
+        model = RawMaterial
+        fields = (
+            "name",
+            "company",
+            "providers",
+            "measurement_unit",
+            "can_expire",
+            "time_to_expire",
+            "is_imported",
+        )

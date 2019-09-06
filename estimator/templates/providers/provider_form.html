@@ -3,7 +3,11 @@
 
 {% block content %}
 <h1>
-    Editar o Crear proveedor
+{% if editing %}
+    Editar proveedor
+{% else %}
+    Crear proveedor
+{% endif %}
 </h1>
 <a href="{% url 'raw_materials:providers' %}"> Volver</a>
 
@@ -15,5 +19,17 @@
     <button type="submit">
         Crear
     </button>
+    {% if editing %}
+        <a  href="{% url 'raw_materials:provider'  provider.pk  %}">
+            detalle
+        </a>
+        <a  href="{% url 'raw_materials:delete_provider'  provider.pk  %}">
+            eliminar
+        </a>
+    {% else %}
+        <a href="{% url 'raw_materials:providers' %}"> 
+            Cancelar
+        </a>
+    {% endif %}
 </form>
 {% endblock content %}

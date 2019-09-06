@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+<h1>
+    {% if editing %}
+        Edita materia prima
+    {% else %}
+        Crear Materia Prima
+    {% endif %}
+</h1>
+<form action="{{form_url}}">
+    <input type="hidden" name="company" value="{{company.pk}}" >
+    {% csrf_token %}
+    {{ form.name.label_tag }}
+    {% render_field form.name %}
+
+    {{ form.providers.label_tag }}
+    {% render_field form.providers %}
+
+    {{ form.measurement_unit.label_tag }}
+    {% render_field form.measurement_unit %}
+
+    {{ form.can_expire.label_tag }}
+    {% render_field form.can_expire %}
+
+    {{ form.time_to_expire.label_tag }}
+    {% render_field form.time_to_expire %}
+
+    {{ form.is_imported.label_tag }}
+    {% render_field form.is_imported %}
+
+    <button type="submit">Crear</button>
+</form>
+{% endblock content %}

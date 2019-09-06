@@ -8,6 +8,10 @@
     <button type="submit">SI</button>
     <a href="{% url 'raw_materials:providers' %}">No</a>
 </form>
-
-
+<a  href="{% url 'raw_materials:provider'  provider.pk  %}">
+    detalle
+</a>
+<a  href="{% url 'raw_materials:update_provider'  provider.pk  %}">
+    editar
+</a>
 {% endblock content %}

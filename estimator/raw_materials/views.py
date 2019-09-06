@@ -7,9 +7,9 @@ from django.views.generic import (
     UpdateView,
     DeleteView
 )
-from raw_materials.models import Provider
+from raw_materials.models import Provider, RawMaterial
 from django.urls import reverse_lazy
-from .forms import ProviderForm
+from .forms import ProviderForm, RawMaterialForm
 from django.shortcuts import redirect
 # Create your views here.
 
@@ -17,7 +17,7 @@ from django.shortcuts import redirect
 class ProviderListView(LoginRequiredMixin, ListView):
     """Vista listado de todos los proveedores"""
     model = Provider
-    template_name = "providers/provider_list.html"
+    template_name = "providers/providers_list.html"
 
     def get_queryset(self):
         new_context = Provider.objects.filter(
@@ -77,6 +77,7 @@ class ProviderUpdateView(LoginRequiredMixin, UpdateView):
             'raw_materials:update_provider',
             args=[self.object.pk]
         )
+        context["editing"] = True
         return context
 
 
@@ -89,3 +90,44 @@ class ProviderDeleteView(LoginRequiredMixin, DeleteView):
         if self.get_object().company.pk != self.request.user.company.pk:
             return redirect('raw_materials:providers')
         return super().get(request, *args, **kwargs)
+
+
+class RawMaterialListView(ListView):
+    model = RawMaterial
+    template_name = "raw_materials/raw_materials_list.html"
+
+    def get_queryset(self):
+        new_context = RawMaterial.objects.filter(
+            company=self.request.user.company,
+        )
+        return new_context
+
+
+class RawMaterialCreateView(CreateView):
+    model = RawMaterial
+    template_name = "raw_materials/raw_material_form.html"
+    success_url = reverse_lazy('raw_materials:materials')
+    form_class = RawMaterialForm
+
+    def get_context_data(self, **kwargs):
+        """User and profile to context"""
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        context["company"] = self.request.user.company
+        context["form_url"] = reverse_lazy('raw_materials:new_material')
+        return context
+
+
+class RawMaterialDetailView(DetailView):
+    model = RawMaterial
+    template_name = ".html"
+
+
+class RawMaterialUpdateView(UpdateView):
+    model = RawMaterial
+    template_name = ".html"
+
+
+class RawMaterialDeleteView(DeleteView):
+    model = RawMaterial
+    template_name = ".html"

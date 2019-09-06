@@ -31,9 +31,10 @@ urlpatterns = [
             namespace='sales')
         ),
     path(
-        'raw_material/',
+        'raw_materials/',
         include(
-            ('raw_materials.urls', 'raw_materials'), namespace='raw_materials'
+            ('raw_materials.urls', 'raw_materials'),
+            namespace='raw_materials'
         )
     ),
     path(

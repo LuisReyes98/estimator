@@ -10,5 +10,10 @@
 <p>{{object.name}}</p>
 <p>Compañia</p>
 <p>{{object.company}}</p>
-
+<a  href="{% url 'raw_materials:update_provider'  object.pk  %}">
+    editar
+</a>
+<a  href="{% url 'raw_materials:delete_provider'  object.pk %}">
+    eliminar
+</a>
 {% endblock content %}

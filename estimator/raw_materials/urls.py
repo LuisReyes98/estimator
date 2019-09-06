@@ -21,14 +21,27 @@ provider_patterns = [
         name='new_provider'
     ),
     path(
-        "update/<int:pk>/",
-        views.ProviderUpdateView.as_view(),
+        route="update/<int:pk>/",
+        view=views.ProviderUpdateView.as_view(),
         name="update_provider"
     ),
     path(
-        "delete/<int:pk>/",
-        views.ProviderDeleteView.as_view(),
+        route="delete/<int:pk>/",
+        view=views.ProviderDeleteView.as_view(),
         name="delete_provider"
+    )
+]
+
+raw_material_patterns = [
+    path(
+        route="",
+        view=views.RawMaterialListView.as_view(),
+        name="materials"
+    ),
+    path(
+        route="new/",
+        view=views.RawMaterialCreateView.as_view(),
+        name="new_material"
     )
 ]
 
@@ -36,5 +49,9 @@ urlpatterns = [
     path(
         "providers/",
         include((provider_patterns), namespace=''),
+    ),
+    path(
+        "materials/",
+        include((raw_material_patterns), namespace=''),
     ),
 ]

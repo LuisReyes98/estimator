@@ -46,13 +46,13 @@ class RawMaterial(TimeStampFields):
 
     # measurement unit
     MEASUREMENT_UNITS = [
-        (TON, translate('Ton')),
-        (KILOGRAM, translate('Kilograms')),
-        (GRAM, translate('grams')),
-        (MILLIGRAM, translate('milligrams')),
-        (LITER, translate('Liters')),
-        (MILLILITER, translate('milliliters')),
-        (UNIT, translate('Units')),
+        (TON, 'Toneladas'),
+        (KILOGRAM, 'Kilogramos'),
+        (GRAM, 'gramos'),
+        (MILLIGRAM, 'milligramos'),
+        (LITER, 'Litros'),
+        (MILLILITER, 'mililitros'),
+        (UNIT, 'Unidades'),
     ]
 
     # Campos propios
