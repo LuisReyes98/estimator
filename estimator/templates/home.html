@@ -1,30 +1,33 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base_app.html' %}
 
 {% block content %}
-    <h2>
-        Pagina de inicio/Bienvenida
-    </h2>
-    <p>
-        <strong>Bienvenido:</strong> {{ user }}
-    </p>
-    <p>
-        {% if user.company %}
-        <h1>Compañia: {{ user.company }}</h1>
-        {% endif %}
-    </p>
-    <p>
-        {% if user.is_superuser %}
-            <h3>soy super user solo companies son superuser</h3>
-        {% endif %}
-    </p>
-
-    <a href="{% url 'sales:calendar' %}">Calendario</a>
-    <br>
-    <a href="{% url 'users:logout' %}">Cerrar sesion</a>
-    <br>
-    <a href="{% url 'raw_materials:providers' %}">Proveedores</a>
-    <br>
-
-    <a class="waves-effect waves-dark btn">button</a>
+    {{block.super}}
+    <div class="page-content">
+        <h2>
+            Pagina de inicio/Bienvenida
+        </h2>
+        <p>
+            <strong>Bienvenido:</strong> {{ user }}
+        </p>
+        <p>
+            {% if user.company %}
+            <h1>Compañia: {{ user.company }}</h1>
+            {% endif %}
+        </p>
+        <p>
+            {% if user.is_superuser %}
+                <h3>soy super user solo companies son superuser</h3>
+            {% endif %}
+        </p>
+    
+        <a href="{% url 'sales:calendar' %}">Calendario</a>
+        <br>
+        <a href="{% url 'users:logout' %}">Cerrar sesion</a>
+        <br>
+        <a href="{% url 'raw_materials:providers' %}">Proveedores</a>
+        <br>
+    
+        <a class="waves-effect waves-dark btn">button</a>
+    </div>
     
 {% endblock content %}
