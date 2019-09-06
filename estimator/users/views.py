@@ -27,6 +27,9 @@ class LoginView(auth_views.LoginView):
         context = super().get_context_data(**kwargs)
         if request.GET.get("signed"):
             context["signed"] = True
+        if request.GET.get("next"):
+            context["next"] = request.GET.get("next")
+
         return self.render_to_response(context)
 
 

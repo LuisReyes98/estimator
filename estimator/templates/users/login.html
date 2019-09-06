@@ -33,10 +33,12 @@
                     </div>
                     <div class="row pb-3">
                         <div class="col-12 m-auto">
-                            <form method="POST" action="{% url "users:login" %}" >
-                        
+                            {% if next %}
+                                <form action="{% url "users:login" %}?next={{next}}" method="POST" >
+                            {%else%}
+                                <form action="{% url "users:login" %}" method="POST" >
+                            {% endif %}
                                 {% csrf_token %}
-                        
                                 <div class="form-group" >
                                     {{ form.username.label_tag }}
                                     {% if form.username.errors  %}
