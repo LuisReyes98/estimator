@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'estimator.urls'
@@ -129,8 +130,8 @@ AUTH_USER_MODEL = 'users.AppUser'
 LANGUAGE_CODE = 'es'
 
 LANGUAGES = (
-    ('en', ugettext_lazy('English')),
     ('es', ugettext_lazy('Spanish')),
+    ('en', ugettext_lazy('English')),
 )
 
 TIME_ZONE = 'UTC'
