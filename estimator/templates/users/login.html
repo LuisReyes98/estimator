@@ -7,7 +7,7 @@
         <div class="card m-4" style="width: 25rem;">
             <div class="card-body">
                 <div class="container-fluid">
-                    <div class="row">
+                    <div class="row pb-3">
                         <div class="col-12 m-auto">
                             <h2 class="text-center">
                                 Inicio de Sesión
@@ -15,22 +15,28 @@
                         </div>
                     </div>
                     <div class="row pb-3">
-                        <div class="col pl-1 pr-1">
+                        <div class="col pl-3 pr-1"
+                             style="border-left: solid 2px;
+                                    border-color: #dc3545;">
                             {% if form.non_field_errors %}
                                 {% for error in form.non_field_errors %}
                                     <div class="d-flex flex-row align-items-center">
-                                        <i class="mdi mdi-alert"></i>
-                                        <p class="app__form--error text-danger mb-0">
+                                        <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+                                        <p class="app__form--error text-danger mb-0 ml-3">
                                             {{ error }}
                                         </p>
                                     </div>
                                 {% endfor %}
                             {% endif %}
-                            {% if signed %}
-                                Registro exitoso
-                            {% endif %}
                         </div>
                     </div>
+                    {% if signed %}
+                    <div class="row pb-3">
+                        <div class="col pt-1 pb-1">
+                            <h6 class="text-center font-weight-bold text-uppercase app__text--light_cyan">Registro exitoso</h6>
+                        </div>
+                    </div>
+                    {% endif %}
                     <div class="row pb-3">
                         <div class="col-12 m-auto">
                             <form method="POST" action="{% url "users:login" %}" >

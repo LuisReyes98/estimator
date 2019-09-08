@@ -6,10 +6,35 @@ $deep_blue: #315CCD;
 $dark_blue: #1A20BF;
 
 .app {
+    &__text {
+        &--cyan {
+            color: $cyan;
+        }
+
+        &--light_cyan {
+            color: $light_cyan;
+        }
+
+        &--dark_gray {
+            color: $dark_gray;
+        }
+
+        &--light_green {
+            color: $ligth_green;
+        }
+
+        &--deep_blue {
+            color: $deep_blue;
+        }
+
+        &--dark_blue {
+            color: $dark_blue;
+        }
+    }
    &__button {
-        border-width: 2px ;
-        padding-left: 15px ;
-        padding-right: 15px ;
+        border-width: 2px;
+        padding-left: 15px;
+        padding-right: 15px;
 
         &.button--cyan {
             background-color: white;
@@ -86,6 +111,10 @@ $dark_blue: #1A20BF;
         font-style: normal;
         font-weight: normal;
         text-decoration: inherit;
+    }
+
+    &__icon--alert {
+        font-size: 30px;
     }
 }
 
