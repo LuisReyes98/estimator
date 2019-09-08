@@ -1,35 +1,85 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base_app.html' %}
 {% load widget_tweaks %}
 
 {% block content %}
-<h1>
-    {% if editing %}
-        Edita materia prima
-    {% else %}
-        Crear Materia Prima
-    {% endif %}
-</h1>
-<form action="{{form_url}}">
-    <input type="hidden" name="company" value="{{company.pk}}" >
-    {% csrf_token %}
-    {{ form.name.label_tag }}
-    {% render_field form.name %}
-
-    {{ form.providers.label_tag }}
-    {% render_field form.providers %}
-
-    {{ form.measurement_unit.label_tag }}
-    {% render_field form.measurement_unit %}
-
-    {{ form.can_expire.label_tag }}
-    {% render_field form.can_expire %}
-
-    {{ form.time_to_expire.label_tag }}
-    {% render_field form.time_to_expire %}
-
-    {{ form.is_imported.label_tag }}
-    {% render_field form.is_imported %}
-
-    <button type="submit">Crear</button>
-</form>
+{{block.super}}
+<div class="page-content">
+    <h1>
+        {% if editing %}
+            Edita materia prima
+        {% else %}
+            Crear Materia Prima
+        {% endif %}
+    </h1>
+    <a href="{% url 'raw_materials:materials' %}">Volver</a>
+    <form action="{{form_url}}" method="POST">
+        {% if form.non_field_errors %}
+            {% for error in form.non_field_errors %}
+                <div class="d-flex flex-row align-items-center">
+                    <i class="mdi mdi-alert"></i>
+                    <p class="app__form--error text-danger mb-0">
+                        {{ error }}
+                    </p>
+                </div>
+            {% endfor %}
+        {% endif %}
+        <input type="hidden" name="company" value="{{company.pk}}" >
+        {% csrf_token %}
+    
+        <div>
+            {{ form.name.label_tag }}
+            {% render_field form.name %}
+            {% for error in form.name.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    
+        <div>
+            {{ form.providers.label_tag }}
+            {% render_field form.providers %}
+            
+            {% for error in form.providers.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    
+        <div>
+            {{ form.measurement_unit.label_tag }}
+            {% render_field form.measurement_unit %}
+            
+            {% for error in form.measurement_unit.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    
+        <div>
+            {{ form.can_expire.label_tag }}
+            {% render_field form.can_expire %}
+            
+            {% for error in form.can_expire.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    
+        <div>
+            {{ form.time_to_expire.label_tag }}
+            {% render_field form.time_to_expire %}
+            
+            {% for error in form.time_to_expire.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    
+        <div>
+            {{ form.is_imported.label_tag }}
+            {% render_field form.is_imported %}
+            
+            {% for error in form.is_imported.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+    
+        <button type="submit">Crear</button>
+    </form>
+</div>
 {% endblock content %}

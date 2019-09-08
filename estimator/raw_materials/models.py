@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as translate
 from estimator.model_mixins import TimeStampFields
 from django.urls import reverse_lazy
-
+from datetime import timedelta
 # Modelos necesarios para la materia prima
 
 
@@ -36,6 +36,9 @@ class Provider(TimeStampFields):
 
 class RawMaterial(TimeStampFields):
     """Modelo de Materia prima"""
+    YEAR = timedelta(days=365)
+    MONTH = timedelta(days=30)
+
     TON = 'T'
     KILOGRAM = 'Kg'
     GRAM = 'g'
@@ -78,7 +81,7 @@ class RawMaterial(TimeStampFields):
     )
     # Tiempo en vencerse almacenado como un datetime.timedelta de python
     time_to_expire = models.DurationField(
-        translate("Time to expire"),
+        translate("Aproximated Time to expire"),
         blank=True,
     )
 
@@ -107,6 +110,41 @@ class RawMaterial(TimeStampFields):
     class Meta:
         verbose_name = translate("Raw Material")
         verbose_name_plural = translate("Raw Materials")
+
+    def reduce_days_to_years(self, days):
+        return days // 365
+
+    def reduce_days_to_months(self, days):
+        while days >= self.YEAR.days:
+            days -= 365
+        return days // 30
+
+    def extract_year_months_from_days(self, days):
+        while days >= self.YEAR.days:
+            days -= 365
+        while days >= self.MONTH.days:
+            days -= 30
+        return days
+
+    @property
+    def years_to_expire(self):
+        days = self.time_to_expire.days
+        if days >= self.YEAR.days:
+            return self.reduce_days_to_years(days)
+        return 0
+
+    @property
+    def months_to_expire(self):
+        days = self.time_to_expire.days
+        if days > 30:
+            return self.reduce_days_to_months(days)
+        else:
+            return 0
+
+    @property
+    def days_to_expire(self):
+        days = self.time_to_expire.days
+        return self.extract_year_months_from_days(days)
 
     def __str__(self):
         return self.name

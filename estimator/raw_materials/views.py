@@ -92,7 +92,7 @@ class ProviderDeleteView(LoginRequiredMixin, DeleteView):
         return super().get(request, *args, **kwargs)
 
 
-class RawMaterialListView(ListView):
+class RawMaterialListView(LoginRequiredMixin, ListView):
     model = RawMaterial
     template_name = "raw_materials/raw_materials_list.html"
 
@@ -103,7 +103,7 @@ class RawMaterialListView(ListView):
         return new_context
 
 
-class RawMaterialCreateView(CreateView):
+class RawMaterialCreateView(LoginRequiredMixin, CreateView):
     model = RawMaterial
     template_name = "raw_materials/raw_material_form.html"
     success_url = reverse_lazy('raw_materials:materials')
@@ -118,16 +118,16 @@ class RawMaterialCreateView(CreateView):
         return context
 
 
-class RawMaterialDetailView(DetailView):
+class RawMaterialDetailView(LoginRequiredMixin, DetailView):
     model = RawMaterial
     template_name = ".html"
 
 
-class RawMaterialUpdateView(UpdateView):
+class RawMaterialUpdateView(LoginRequiredMixin, UpdateView):
     model = RawMaterial
     template_name = ".html"
 
 
-class RawMaterialDeleteView(DeleteView):
+class RawMaterialDeleteView(LoginRequiredMixin, DeleteView):
     model = RawMaterial
     template_name = ".html"
