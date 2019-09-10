@@ -1,4 +1,12 @@
 .app {
+    &__nav--link {
+      margin-left: 15px;
+
+      i {
+        font-size: 2rem;
+        margin-right: 15px;
+      }
+    }
 
     &__navigation {
         background: #1a1a1a;
@@ -9,10 +17,10 @@
             right: 0;
             font-size: 2em;
             margin: 5px 15px 5px 15px;
-            color: #f8f9fa;
+            color: $light_gray;
 
             &:hover {
-                color: #383838;
+                color: #f8f9fa;
             }
 
         }
@@ -22,10 +30,10 @@
             left: 0;
             font-size: 2em;
             margin: 5px 15px 5px 15px;
-            color: #f8f8f8;
+            color: $light_gray;
 
             &:hover {
-                color: #383838;
+                color: #f8f9fa;
             }
 
         }
