@@ -13,6 +13,12 @@ class ProviderForm(forms.ModelForm):
 class RawMaterialForm(forms.ModelForm):
     """Formulario de la materia prima"""
 
+    years_to_expire = forms.IntegerField(, required=False)
+
+    months_to_expire = forms.IntegerField(, required=False)
+
+    days_to_expire = forms.IntegerField(, required=False)
+
     class Meta:
         model = RawMaterial
         fields = (
