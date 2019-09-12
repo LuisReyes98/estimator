@@ -5,3 +5,11 @@
     {{block.super}}
     {% include "layouts/components/navigation.html" %}
 {% endblock content %}
+
+{% block javascript %}
+    {% load static %}
+    {{block.super}}
+
+    <script src="{% static 'js/navigation.js' %}"></script>
+
+{% endblock javascript %}

@@ -25,15 +25,27 @@
 
   <p
     class="app__item--hidden text-light font-weight-bold text-uppercase px-3 small pb-4 mb-0"
+    id="nav_menu"
   >
     Menú
   </p>
 
-  <ul class="nav flex-column mb-0 nav--menu" id="nav_menu">
+  <ul class="nav flex-column mb-0 nav--menu">
+    <li class="nav-item">
+      <a
+        href="{% url 'home' %}"
+        class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+        data-toggle="Inicio"
+      >
+        <i class="mdi mdi-home"></i>
+          Inicio
+      </a>
+    </li>
     <li class="nav-item">
       <a
         href="{% url 'sales:calendar' %}"
         class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+        data-toggle="Calendario Predictor"
       >
         <i class="mdi mdi-calendar"></i>
           Calendario Predictor
@@ -43,6 +55,7 @@
       <a
         href="{% url 'raw_materials:materials' %}"
         class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+        data-toggle="Materia Prima"
       >
         <i class="mdi mdi-layers-triple"></i>
           Materia Prima
@@ -52,6 +65,7 @@
       <a
         href="{% url 'raw_materials:providers' %}"
         class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+        data-toggle="Proveedores"
       >
         <i class="mdi mdi-account"></i>
           Proveedores
@@ -61,6 +75,7 @@
       <a
         href="#"
         class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+        data-toggle="Gráficas y Estadísticas"
       >
         <i class="mdi mdi-chart-bar"></i>
           Gráficas y Estadísticas
@@ -70,6 +85,7 @@
       <a
         href="{% url 'users:logout' %}"
         class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+        data-toggle="Cerrar Sesión"
       >
         <i class="mdi mdi-logout"></i>
           Cerrar Sesión
@@ -114,34 +130,3 @@
   {% endcomment %}
 </div>
 <!-- End vertical navbar -->
-<script>
-  var click = true;
-  var item = document.getElementsByClassName("app__item--hidden");
-
-  function mostrar() {
-    if (click) {
-      document.getElementById("sidebar").style.width = "50px";
-      document.getElementById("content").style.marginLeft = "50px";
-      document.getElementById("nav_menu").style.borderTop = "solid 1px rgba(0,0,0,0)";
-      document.getElementById("arrow").style.transform = "rotate(-180deg)";
-
-
-      for (i = 0; i < item.length; i++) {
-        item[i].style.marginLeft = "-17rem";
-      }
-
-      click = false;
-    } else {
-      document.getElementById("sidebar").style.width = "17rem";
-      document.getElementById("content").style.marginLeft = "17rem";
-      document.getElementById("nav_menu").style.borderTop = "solid 1px #383838";
-      document.getElementById("arrow").style.transform = "rotate(0deg)";
-
-      for (i = 0; i < item.length; i++) {
-        item[i].style.marginLeft = "0";
-      }
-
-      click = true;
-    }
-  }
-</script>
