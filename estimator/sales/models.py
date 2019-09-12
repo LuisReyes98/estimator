@@ -9,11 +9,11 @@ class Sale(TimeStampFields):
     # campos propios
 
     total_cost_dollar = models.FloatField(
-        translate("Total sale cost in Dollars")
+        "Costo total en dolares"
     )
 
     total_cost_local = models.FloatField(
-        translate("Total sale cost in the local coin"),
+        "Costo total en la moneda local",
     )
 
     # Referencias
@@ -35,14 +35,14 @@ class Sale(TimeStampFields):
 
     raw_materials = models.ManyToManyField(
         "raw_materials.RawMaterial",
-        verbose_name=translate("Raw Materials"),
+        verbose_name="Materias primas",
         through="MaterialSaleRelation",
         through_fields=("sale", "raw_material")
     )
 
     class Meta:
-        verbose_name = translate("Sale")
-        verbose_name_plural = translate("Sales")
+        verbose_name = "Venta"
+        verbose_name_plural = "Ventas"
 
     def __str__(self):
         return '%s %d' % (self._meta.verbose_name, self.pk)
@@ -57,21 +57,21 @@ class MaterialSaleRelation(TimeStampFields):
 
     # Campos propios
     amount = models.PositiveIntegerField(
-        translate("Amount")
+        "Cantidad"
     )
 
     cost_dollar = models.FloatField(
-        translate("Cost in Dollars")
+        "Costo en Dolares"
     )
 
     cost_local = models.FloatField(
-        translate("Cost in the local coin"),
+        "Costo en la moneda local",
     )
 
     # Referencias
     raw_material = models.ForeignKey(
         "raw_materials.RawMaterial",
-        verbose_name=translate("Raw Material"),
+        verbose_name="Materia prima",
         null=True,
         on_delete=models.SET_NULL,
         related_name="sold_ocassions",
@@ -81,7 +81,7 @@ class MaterialSaleRelation(TimeStampFields):
 
     sale = models.ForeignKey(
         "Sale",
-        verbose_name=translate("Sale"),
+        verbose_name="Venta",
         on_delete=models.CASCADE,
         related_name="sold_materials",
     )

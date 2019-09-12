@@ -61,7 +61,7 @@ class RawMaterial(TimeStampFields):
     # Campos propios
     # unidad de medida, en una lista de opciones
     measurement_unit = models.CharField(
-        translate("Measurement Unit"),
+        "Unidad de medida",
         max_length=2,
         choices=MEASUREMENT_UNITS,
         default=UNIT,
@@ -69,27 +69,30 @@ class RawMaterial(TimeStampFields):
 
     # nombre
     name = models.CharField(
-        translate('Name'),
+        "Nombre",
         max_length=50,
         blank=False
     )
     # se vence?
     can_expire = models.BooleanField(
-        translate('Can expire ?'),
-        blank=False,
+        "¿Puede expirar?",
+        blank=True,
         default=False,
+        # null=True,
     )
     # Tiempo en vencerse almacenado como un datetime.timedelta de python
     time_to_expire = models.DurationField(
-        translate("Aproximated Time to expire"),
+        "Tiempo aproximado en expirar",
         blank=True,
+        null=True,
     )
 
     # es importada?
     is_imported = models.BooleanField(
-        translate('Is imported ?'),
-        blank=False,
+        '¿Es importado?',
+        blank=True,
         default=False,
+        # null=True,
     )
 
     # Campos Referencias

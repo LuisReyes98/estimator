@@ -1,5 +1,12 @@
 {% extends 'layouts/base_app.html' %}
 {% load widget_tweaks %}
+{% load static %}
+
+{% block head %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}">
+
+{% endblock head %}
 
 {% block content %}
 {{block.super}}
@@ -25,61 +32,77 @@
         {% endif %}
         <input type="hidden" name="company" value="{{company.pk}}" >
         {% csrf_token %}
-    
-        <div>
+
+        <div >
             {{ form.name.label_tag }}
             {% render_field form.name %}
             {% for error in form.name.errors %}
                 {{ error }}
             {% endfor %}
         </div>
-    
+
         <div>
             {{ form.providers.label_tag }}
-            {% render_field form.providers %}
-            
+            {% render_field form.providers class+="selectpicker" multiple="" data-live-search="true" title="Escoge los proveedores" %}
             {% for error in form.providers.errors %}
                 {{ error }}
             {% endfor %}
         </div>
-    
+
         <div>
             {{ form.measurement_unit.label_tag }}
             {% render_field form.measurement_unit %}
-            
+
             {% for error in form.measurement_unit.errors %}
                 {{ error }}
             {% endfor %}
         </div>
-    
+
         <div>
             {{ form.can_expire.label_tag }}
             {% render_field form.can_expire %}
-            
+
             {% for error in form.can_expire.errors %}
                 {{ error }}
             {% endfor %}
         </div>
-    
+
         <div>
-            {{ form.time_to_expire.label_tag }}
-            {% render_field form.time_to_expire %}
-            
-            {% for error in form.time_to_expire.errors %}
+            {{ form.days_to_expire.label_tag }}
+            {% render_field form.days_to_expire %}
+
+            {% for error in form.days_to_expire.errors %}
                 {{ error }}
             {% endfor %}
         </div>
-    
+        <div>
+            {{ form.months_to_expire.label_tag }}
+            {% render_field form.months_to_expire %}
+            {% for error in form.months_to_expire.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+        <div>
+            {{ form.years_to_expire.label_tag }}
+            {% render_field form.years_to_expire %}
+            {% for error in form.years_to_expire.errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
         <div>
             {{ form.is_imported.label_tag }}
             {% render_field form.is_imported %}
-            
             {% for error in form.is_imported.errors %}
                 {{ error }}
             {% endfor %}
         </div>
-    
         <button type="submit">Crear</button>
     </form>
 </div>
 {% endblock content %}
+
+{% block javascript %}
+{{block.super}}
+<script src="{% static 'js/bootstrap_select/bootstrap-select.min.js' %}"></script>
+
+{% endblock javascript %}
