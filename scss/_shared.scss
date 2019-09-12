@@ -12,7 +12,7 @@ $font_folder_url: '../fonts/';
 }
 
 html, body {
-    font-family: 'Lato';
+    font-family: 'Lato' !important;
     margin: 0;
     height: 100%;
 }
