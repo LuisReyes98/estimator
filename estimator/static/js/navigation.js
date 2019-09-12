@@ -6,7 +6,9 @@ var item3 = document.getElementsByClassName("app__nav--link");
 function mostrar() {
   if (click) {
     document.getElementById("sidebar").style.width = "50px";
+    // document.getElementById("sidebar").classList.toggle("active");
     document.getElementById("content").style.marginLeft = "50px";
+    document.getElementById("content").classList.toggle("active");
     document.getElementById("nav_menu").style.borderBottom =
       "solid 1px rgba(0,0,0,0)";
     document.getElementById("arrow").style.transform = "rotate(-180deg)";
@@ -24,8 +26,10 @@ function mostrar() {
     }
     click = false;
   } else {
-    document.getElementById("sidebar").style.width = "17rem";
+      document.getElementById("sidebar").style.width = "17rem";
+    //   document.getElementById("sidebar").classList.toggle("active");
     document.getElementById("content").style.marginLeft = "17rem";
+    document.getElementById("content").classList.toggle("active");
     document.getElementById("nav_menu").style.borderBottom =
       "solid 1px #383838";
     document.getElementById("arrow").style.transform = "rotate(0deg)";

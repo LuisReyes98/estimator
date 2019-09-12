@@ -1,33 +1,33 @@
-{% extends 'layouts/base_app.html' %}
-
-{% block content %}
-    {{block.super}}
-    <div class="page-content" id="content">
-        <h2>
-            Pagina de inicio/Bienvenida
+{% extends 'layouts/base_app.html' %} {% block content %}
+{{ block.super }}
+<div class="page-content" id="content">
+  <div class="container-fluid">
+    <div class="row pt-3 pb-3">
+      <div class="col">
+        <h2 class="text-center">
+          Bienvenido
         </h2>
-        <p>
-            <strong>Bienvenido:</strong> {{ user }}
-        </p>
-        <p>
-            {% if user.company %}
-            <h1>Compañia: {{ user.company }}</h1>
-            {% endif %}
-        </p>
-        <p>
-            {% if user.is_superuser %}
-                <h3>soy super user solo companies son superuser</h3>
-            {% endif %}
-        </p>
-    
-        <a href="{% url 'sales:calendar' %}">Calendario</a>
-        <br>
-        <a href="{% url 'users:logout' %}">Cerrar sesion</a>
-        <br>
-        <a href="{% url 'raw_materials:providers' %}">Proveedores</a>
-        <br>
-    
-        <a class="waves-effect waves-dark btn">button</a>
+      </div>
     </div>
-    
+    <div class="row mb-3 pt-2 pb-2 app__background--cyan">
+      <div class="col text-light">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
+          officiis, magni ipsa assumenda impedit alias! Pariatur error optio
+          natus amet numquam, et aliquam reprehenderit modi. Voluptate
+          perferendis consequatur reprehenderit illum.
+        </p>
+      </div>
+    </div>
+    <div class="row mb-3 pt-2 pb-2">
+      <div class="col p-5 text-center" style="z-index: -1">
+        <h6 class="text-center font-weight-bold text-uppercase">
+          Trabajando...
+        </h6>
+        <img src="static/images/loader.gif" alt="" class="img-fluid" />
+      </div>
+    </div>
+  </div>
+</div>
+
 {% endblock content %}
