@@ -34,14 +34,16 @@
                     {% if material.can_expire %}Si{% else %}No{% endif %}
                 </td>
                 <td>
-                    {% if material.years_to_expire > 0  %}
-                        {{ material.years_to_expire }} años
-                    {% endif %}
-                    {% if material.months_to_expire > 0 %}
-                        {{ material.months_to_expire }} meses
-                    {% endif %}
-                    {% if material.days_to_expire > 0 %}
-                        {{ material.days_to_expire }} días
+                    {% if material.can_expire %}
+                        {% if material.years_to_expire > 0  %}
+                            {{ material.years_to_expire }} años
+                        {% endif %}
+                        {% if material.months_to_expire > 0 %}
+                            {{ material.months_to_expire }} meses
+                        {% endif %}
+                        {% if material.days_to_expire > 0 %}
+                            {{ material.days_to_expire }} días
+                        {% endif %}
                     {% endif %}
                 </td>
                 <td>
@@ -50,6 +52,17 @@
                     {% else %}
                         No
                     {% endif %}
+                </td>
+                <td>
+                    <a href="{% url 'raw_materials:material' material.pk %}">
+                        Detalle
+                    </a>
+                    <a href="{% url 'raw_materials:update_material' material.pk %}">
+                        Editar
+                    </a>
+                    <a href="{% url 'raw_materials:delete_material' material.pk %}">
+                        Eliminar
+                    </a>
                 </td>
             </tr>
             {% endfor %}

@@ -4,9 +4,46 @@
 {% block content %}
 {{block.super}}
 <div class="page-content" id="content">
+<a href="{% url 'raw_materials:materials' %}">Volver</a>
     <h1>
         Materia prima individual
     </h1>
-</div>
+    <p>Nombre: {{object.name}}</p>
+    <p>Proveedores:
+        <ul>
+            {% for provider in object.providers.all %}
+                <li>{{provider}}</li>
+            {% endfor %}
+        </ul>
+    </p>
+    <p>Unidad de Medida: {{object.measurement_unit}}</p>
+    <p>Puede expirar: {% if object.can_expire %}Si{% else %}No{% endif %}</p>
+    <p>Tiempo para expirar:
+        {% if object.can_expire %}
+            {% if object.years_to_expire > 0  %}
+                {{ object.years_to_expire }} años
+            {% endif %}
+            {% if object.months_to_expire > 0 %}
+                {{ object.months_to_expire }} meses
+            {% endif %}
+            {% if object.days_to_expire > 0 %}
+                {{ object.days_to_expire }} días
+            {% endif %}
+        {% endif %}
+    </p>
+    <p>Es importado:
+        {% if object.is_imported %}
+            Si
+        {% else %}
+            No
+        {% endif %}
+    </p>
+    <a href="{% url 'raw_materials:update_material' object.pk %}">
+        Editar
+    </a>
+    <a  href="{% url 'raw_materials:delete_material'  object.pk  %}">
+        Eliminar
+    </a>
 
+</div>
 {% endblock content %}

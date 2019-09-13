@@ -96,7 +96,21 @@
                 {{ error }}
             {% endfor %}
         </div>
-        <button type="submit">Crear</button>
+        <button type="submit">
+            {% if editing %}
+                Guardar
+            {% else %}
+                Crear
+            {% endif %}
+        </button>
+        {% if editing %}
+            <a  href="{% url 'raw_materials:material'  object.pk  %}">
+                detalle
+            </a>
+            <a  href="{% url 'raw_materials:delete_material'  object.pk  %}">
+                eliminar
+            </a>
+        {% endif %}
     </form>
 </div>
 {% endblock content %}

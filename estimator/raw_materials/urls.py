@@ -42,6 +42,21 @@ raw_material_patterns = [
         route="new/",
         view=views.RawMaterialCreateView.as_view(),
         name="new_material"
+    ),
+    path(
+        route="<int:pk>/",
+        view=views.RawMaterialDetailView.as_view(),
+        name="material"
+    ),
+    path(
+        route="update/<int:pk>/",
+        view=views.RawMaterialUpdateView.as_view(),
+        name="update_material"
+    ),
+    path(
+        route="delete/<int:pk>/",
+        view=views.RawMaterialDeleteView.as_view(),
+        name="delete_material"
     )
 ]
 

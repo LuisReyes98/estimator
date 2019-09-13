@@ -35,6 +35,13 @@ class RawMaterialForm(forms.ModelForm):
         required=False
     )
 
+    def __init__(self, *args, **kwargs):
+        super(RawMaterialForm, self).__init__(*args, **kwargs)
+
+        self.fields['days_to_expire'].initial = self.instance.days_to_expire
+        self.fields['months_to_expire'].initial = self.instance.months_to_expire
+        self.fields['years_to_expire'].initial = self.instance.years_to_expire
+
     class Meta:
         model = RawMaterial
         fields = (

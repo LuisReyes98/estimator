@@ -120,14 +120,44 @@ class RawMaterialCreateView(LoginRequiredMixin, CreateView):
 
 class RawMaterialDetailView(LoginRequiredMixin, DetailView):
     model = RawMaterial
-    template_name = ".html"
+    template_name = "raw_materials/raw_material_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().company.pk != self.request.user.company.pk:
+            return redirect('raw_materials:materials')
+        return super().get(request, *args, **kwargs)
 
 
 class RawMaterialUpdateView(LoginRequiredMixin, UpdateView):
     model = RawMaterial
-    template_name = ".html"
+    template_name = "raw_materials/raw_material_form.html"
+    success_url = reverse_lazy('raw_materials:materials')
+    form_class = RawMaterialForm
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().company.pk != self.request.user.company.pk:
+            return redirect('raw_materials:materials')
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """Usuarios, compañia, y url al formulario"""
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        context["company"] = self.request.user.company
+        context["form_url"] = reverse_lazy(
+            'raw_materials:update_material',
+            args=[self.object.pk]
+        )
+        context["editing"] = True
+        return context
 
 
 class RawMaterialDeleteView(LoginRequiredMixin, DeleteView):
     model = RawMaterial
-    template_name = ".html"
+    template_name = "raw_materials/raw_material_delete.html"
+    success_url = reverse_lazy('raw_materials:materials')
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().company.pk != self.request.user.company.pk:
+            return redirect('raw_materials:materials')
+        return super().get(request, *args, **kwargs)
