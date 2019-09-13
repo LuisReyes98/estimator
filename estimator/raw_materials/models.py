@@ -131,23 +131,28 @@ class RawMaterial(TimeStampFields):
 
     @property
     def years_to_expire(self):
-        days = self.time_to_expire.days
-        if days >= self.YEAR.days:
-            return self.reduce_days_to_years(days)
+        if self.time_to_expire is not None:
+            days = self.time_to_expire.days
+            if days >= self.YEAR.days:
+                return self.reduce_days_to_years(days)
         return 0
 
     @property
     def months_to_expire(self):
-        days = self.time_to_expire.days
-        if days > 30:
-            return self.reduce_days_to_months(days)
-        else:
-            return 0
+        if self.time_to_expire is not None:
+            days = self.time_to_expire.days
+            if days > 30:
+                return self.reduce_days_to_months(days)
+            else:
+                return 0
+        return 0
 
     @property
     def days_to_expire(self):
-        days = self.time_to_expire.days
-        return self.extract_year_months_from_days(days)
+        if self.time_to_expire is not None:
+            days = self.time_to_expire.days
+            return self.extract_year_months_from_days(days)
+        return 0
 
     def __str__(self):
         return self.name

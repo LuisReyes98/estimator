@@ -12,7 +12,6 @@
         <thead>
             <tr>
                 <th>Nombre</th>
-                {% comment %} <th>Compañia</th> {% endcomment %}
                 <th>Proveedores</th>
                 <th>Unidad de Medida</th>
                 <th>Puede Expirar</th>
@@ -25,16 +24,33 @@
             {% for material in object_list %}
             <tr>
                 <td>{{ material.name }}</td>
-                {% comment %} <td>{{ material.company }}</td> {% endcomment %}
                 <td>
                 {% for provider in material.providers.all %}
                     <b>{{provider}}</b>
                 {% endfor %}
                 </td>
                 <td>{{ material.measurement_unit }}</td>
-                <td>{{ material.can_expire }}</td>
-                <td>{{ material.time_to_expire }}</td>
-                <td>{{ material.is_imported }}</td>
+                <td>
+                    {% if material.can_expire %}Si{% else %}No{% endif %}
+                </td>
+                <td>
+                    {% if material.years_to_expire > 0  %}
+                        {{ material.years_to_expire }} años
+                    {% endif %}
+                    {% if material.months_to_expire > 0 %}
+                        {{ material.months_to_expire }} meses
+                    {% endif %}
+                    {% if material.days_to_expire > 0 %}
+                        {{ material.days_to_expire }} días
+                    {% endif %}
+                </td>
+                <td>
+                    {% if material.is_imported %}
+                        Si
+                    {% else %}
+                        No
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
