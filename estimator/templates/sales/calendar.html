@@ -1,4 +1,4 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base_app.html' %}
 {% load safe_js %} 
 {% load static %}
 
@@ -13,30 +13,31 @@
 
 {% block content %}
     {{ block.super }}
-    <div class="container-fluid">
-        <div class="row vh-100">
-            <div class="col-md-2 bg-dark"> Hola </div>
-            <div class="p-3 col-md-10" style="height: 95%;">
-                <div class="fc-custom" id="calendar"></div>
+    <div  class="page-content" id="content">
+        <div class="container">
+            <div class="row">
+                <h2>Prueba del Calendario</h2>
+                <p>
+                    Usando full calendar
+                    <a target="_blank" href="https://fullcalendar.io/">
+                        Full Calendar
+                    </a>
+                </p>
             </div>
-        </div>
-        <div class="row">
-            <h2>Prueba del Calendario</h2>
-            <p>
-                Usando full calendar
-                <a target="_blank" href="https://fullcalendar.io/">
-                    Full Calendar
-                </a>
-            </p>
+            <div class="row vh-100">
+                <div class="p-4 col-12" style="height: 95%;">
+                    <div class="fc-custom" id="calendar"></div>
+                </div>
+            </div>
+            {% for prediction in predictions %}
+                <div id="{{prediction.pk}}" class="calendar_box ">
+                    Para el {{prediction.date}} se estima
+                </div>
+            
+            {% endfor %}
         </div>
     </div>
 
-    {% for prediction in predictions %}
-        <div id="{{prediction.pk}}" class="calendar_box ">
-            Para el {{prediction.date}} se estima
-        </div>
-    
-    {% endfor %}
 {% endblock content %}
 
 
