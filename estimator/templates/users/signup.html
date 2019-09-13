@@ -3,7 +3,7 @@
 {% load widget_tweaks %}
 
 {% block content %}
-<div class="bg__black_gradient d-flex justify-content-center  align-items-md-center align-items-start vh-100 overflow-y-scroll p-4">
+<div class="bg__black_gradient d-flex justify-content-center align-items-lg-center align-items-start vh-100 overflow-y-scroll p-4">
     <div class="card m-4" style="width: 25rem;">
         <div class="card-body">
             <div class="container-fluid">
@@ -33,9 +33,7 @@
                 <div class="row">
                     <div class="col-12 m-auto">
                         <form  method="POST" action="{% url "users:signup" %}" >
-                        
                             {% csrf_token %}
-                        
                             <div class="form-group">
                                 {{ form.company_name.label_tag }}
                                 {% if form.company_name.errors %}
@@ -133,6 +131,5 @@
         </div>
     </div>
 </div>
-
 
 {% endblock content %}

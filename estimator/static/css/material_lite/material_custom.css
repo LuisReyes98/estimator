@@ -10156,9 +10156,9 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
     margin: 0; }
   .mdl-textfield.is-focused .mdl-textfield__input {
     outline: none; }
-  .mdl-textfield.is-invalid .mdl-textfield__input {
+  /* .mdl-textfield.is-invalid .mdl-textfield__input {
     border-color: rgb(213,0,0);
-    box-shadow: none; }
+    box-shadow: none; } */
   fieldset[disabled] .mdl-textfield .mdl-textfield__input,
   .mdl-textfield.is-disabled .mdl-textfield__input {
     background-color: transparent;
@@ -10204,9 +10204,9 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
   .mdl-textfield--floating-label.is-dirty .mdl-textfield__expandable-holder .mdl-textfield__label,
   .mdl-textfield--floating-label.has-placeholder .mdl-textfield__expandable-holder .mdl-textfield__label {
     top: -16px; }
-  .mdl-textfield--floating-label.is-invalid .mdl-textfield__label {
+  /* .mdl-textfield--floating-label.is-invalid .mdl-textfield__label {
     color: rgb(213,0,0);
-    font-size: 12px; }
+    font-size: 12px; } */
   .mdl-textfield__label:after {
     background-color: rgb(63,81,181);
     bottom: 20px;
@@ -10222,8 +10222,8 @@ _:-ms-input-placeholder, :root .mdl-slider.mdl-slider.is-upgraded {
     left: 0;
     visibility: visible;
     width: 100%; }
-  .mdl-textfield.is-invalid .mdl-textfield__label:after {
-    background-color: rgb(213,0,0); }
+  /* .mdl-textfield.is-invalid .mdl-textfield__label:after {
+    background-color: rgb(213,0,0); } */
 
 .mdl-textfield__error {
   color: rgb(213,0,0);

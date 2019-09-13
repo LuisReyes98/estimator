@@ -1,30 +1,36 @@
-.material_fix{
-    &.label_placeholder{
-        font-size: 18px;
-        display: flex;
-        &::after{
-            bottom: 12px;
-        }
+.material_fix {
+  &.label_placeholder {
+    font-size: 18px;
+    display: flex;
+    &::after {
+      bottom: 12px;
+      left: 50%;
     }
-
+    @each $name, $color in $project_colors {
+      &.focused__color__#{$name + ""} {
+        &::after {
+          background-color: $color;
+        }
+      }
+    }
+  }
 }
 
-.is-focused{
-    .material_fix {
+.is-focused,
+.is-dirty {
+  .material_fix {
+    &.label_placeholder {
+      font-size: 16px;
 
-        &.label_placeholder {
-            font-size: 15px;
+      @each $name, $color in $project_colors {
+        &.focused__color__#{$name + ""} {
+          color: $color;
 
-            @each $name, $color in $project_colors {
-                &.focused__color__#{$name + ""}{
-                    color: $color;
-
-                    &::after {
-                        background-color: $color;
-                    }
-                }
-            }
+          &::after {
+            background-color: $color;
+          }
         }
-
+      }
     }
+  }
 }

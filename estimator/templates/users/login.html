@@ -41,22 +41,24 @@
                         <div class="col-12 m-auto">
                             {% if next %}
                                 <form action="{% url "users:login" %}?next={{next}}" method="POST" >
-                            {%else%}
+                            {% else %}
                                 <form action="{% url "users:login" %}" method="POST" >
                             {% endif %}
                                 {% csrf_token %}
-                                <div class="form-group" >
-                                    {{ form.username.label_tag }}
-                                    {% if form.username.errors  %}
-                                        {% render_field form.username placeholder=form.username.label class+="app__input form-control is-invalid" type="email" %}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.username.errors %}
-                                                {{ error }}
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {% render_field form.username placeholder=form.username.label class+="app__input form-control" type="email" %}
-                                    {% endif %}
+                                <div class="form-group">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.username.errors %}
+                                            {% render_field form.username class+="mdl-textfield__input" type="email" id="id_username" %}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.username.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {% render_field form.username class+="mdl-textfield__input" type="email" id="id_username" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_username">{{ form.username.label }}</label>
+                                    </div>
                                 </div>
                                 <div  class="form-group">
                                     {{ form.password.label_tag }}
