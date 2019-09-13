@@ -17,7 +17,7 @@ class Sale(TimeStampFields):
     )
 
     # Referencias
-    company = models.ForeignKey(  # Compañia a la que pertenece
+    company = models.ForeignKey(  # Si la registra el superusuario
         'users.Company',
         on_delete=models.SET_NULL,
         parent_link=True,
@@ -25,7 +25,7 @@ class Sale(TimeStampFields):
         null=True,
     )
 
-    company_user = models.ForeignKey(  # Compañia a la que pertenece
+    company_user = models.ForeignKey(  # Si la registra un admin
         'users.CompanyUser',
         on_delete=models.SET_NULL,
         parent_link=True,

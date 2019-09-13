@@ -16,12 +16,10 @@
     <div  class="page-content" id="content">
         <div class="container">
             <div class="row">
-                <h2>Prueba del Calendario</h2>
+                <h2>Calendario</h2>
                 <p>
-                    Usando full calendar
-                    <a target="_blank" href="https://fullcalendar.io/">
-                        Full Calendar
-                    </a>
+                    <a href="#">Crear Venta</a>
+                    <a href="#">Realizar prediccion</a>
                 </p>
             </div>
             <div class="row vh-100">
@@ -30,7 +28,7 @@
                 </div>
             </div>
             {% for prediction in predictions %}
-                <div id="{{prediction.pk}}" class="calendar_box ">
+                <div id="{{prediction.pk}}" class="calendar_box d-none">
                     Para el {{prediction.date}} se estima
                 </div>
             

@@ -1,5 +1,13 @@
 from django.views.generic import TemplateView
+from .models import Sale
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import (
+    ListView,
+    CreateView,
+    DetailView,
+    UpdateView,
+    DeleteView
+)
 from datetime import datetime, timedelta
 from sales.objects import Prediction
 # Create your views here.
@@ -32,3 +40,28 @@ class CalendarView(LoginRequiredMixin, TemplateView):
         context["predictions"] = self.exampleDates()
 
         return self.render_to_response(context)
+
+
+class SaleDetailView(DetailView):
+    model = Sale
+    template_name = ".html"
+
+
+class SaleListView(ListView):
+    model = Sale
+    template_name = ".html"
+
+
+class SaleCreateView(CreateView):
+    model = Sale
+    template_name = ".html"
+
+
+class SaleUpdateView(UpdateView):
+    model = Sale
+    template_name = ".html"
+
+
+class SaleDeleteView(DeleteView):
+    model = Sale
+    template_name = ".html"
