@@ -9,7 +9,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         """Añadiendo variables al contexto """
         context = super().get_context_data(**kwargs)
-        context["title"] = "Bienvenido"
+        # context["title"] = "Bienvenido"
         context["user"] = self.request.user
 
         return context
