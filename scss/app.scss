@@ -1,0 +1,134 @@
+.app {
+    &__text {
+        &--cyan {
+            color: $cyan;
+        }
+
+        &--light_cyan {
+            color: $light_cyan;
+        }
+
+        &--light_gray {
+            color: $light_gray;
+        }
+
+        &--dark_gray {
+            color: $dark_gray;
+        }
+
+        &--light_green {
+            color: $ligth_green;
+        }
+
+        &--deep_blue {
+            color: $deep_blue;
+        }
+
+        &--dark_blue {
+            color: $dark_blue;
+        }
+    }
+
+    &__background {
+        &--cyan {
+            background-color: $cyan;
+        }
+
+        &--light_cyan {
+            background-color: $light_cyan;
+        }
+    }
+
+    &__button {
+        border-width: 2px;
+        padding-left: 15px;
+        padding-right: 15px;
+
+        &.button--cyan {
+            background-color: white;
+            border-color: $cyan;
+            color: $cyan;
+
+            &:hover {
+                background-color: $cyan;
+                border-color: $cyan;
+                color: white;
+                transition: all ease .2s;
+            }
+        }
+
+        &.button--ligth_green {
+            background-color: white;
+            border-color: $ligth_green;
+            color: $ligth_green;
+
+            &:hover {
+                background-color: $ligth_green;
+                border-color: $ligth_green;
+                color: white;
+                transition: all ease .2s;
+            }
+        }
+
+        &.button--dark_gray {
+            background-color: white;
+            border-color: $dark_gray;
+            color: $dark_gray;
+
+            &:hover {
+                background-color: $dark_gray;
+                border-color: $dark_gray;
+                color: white;
+                transition: all ease .2s;
+            }
+        }
+
+        &.button--deep_blue {
+            background-color: white;
+            border-color: $deep_blue;
+            color: $deep_blue;
+
+            &:hover {
+                background-color: $deep_blue;
+                border-color: $deep_blue;
+                color: white;
+                transition: all ease .2s;
+            }
+        }
+    }
+
+    &__input {
+        border-style: solid;
+        border-width: 0px 0px 2px 0px;
+        border-radius: 0px;
+
+        &:focus {
+            box-shadow: none !important;
+            border-color: $light_cyan;
+            transition: all ease .2s;
+        }
+    }
+
+    &__link {
+        color: $cyan;
+
+        &:hover {
+            color: $light_cyan;
+        }
+    }
+
+    &__form--error {
+        font-size: 14px;
+    }
+
+    &__icon--input {
+        font-family: 'Material Design Icons';
+        font-style: normal;
+        font-weight: normal;
+        text-decoration: inherit;
+    }
+
+    &__icon--alert {
+        font-size: 30px;
+    }
+}

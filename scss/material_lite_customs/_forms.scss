@@ -1,0 +1,30 @@
+.material_fix{
+    &.label_placeholder{
+        font-size: 18px;
+        display: flex;
+        &::after{
+            bottom: 12px;
+        }
+    }
+
+}
+
+.is-focused{
+    .material_fix {
+
+        &.label_placeholder {
+            font-size: 15px;
+
+            @each $name, $color in $project_colors {
+                &.focused__color__#{$name + ""}{
+                    color: $color;
+
+                    &::after {
+                        background-color: $color;
+                    }
+                }
+            }
+        }
+
+    }
+}

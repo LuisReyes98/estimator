@@ -28,22 +28,36 @@
       </div>
     </div>
     <div class="row m-6">
-      <h3>Material Lite test</h3>
-      <form class="" action="#">
+      <h3 class="col-12">Material Lite test</h3>
+      <form class="col-3" action="#">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <input class="mdl-textfield__input" type="text" id="sample3">
-          <label class="mdl-textfield__label" for="sample3">Text...</label>
+          <label
+            class="
+              focused__color__cyan
+              mdl-textfield__label
+              material_fix
+              label_placeholder "
+            for="sample3"><i class="mdi mdi-home"></i>Text</label>
         </div>
       </form>
       <!-- Numeric Textfield with Floating Label -->
-      <form class="" action="#">
+      <form class="col-3" action="#">
         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
           <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample4">
-          <label class="mdl-textfield__label" for="sample4">Number...</label>
+          <label class="mdl-textfield__label material_fix label_placeholder" for="sample4">Number...</label>
           <span class="mdl-textfield__error">Input is not a number!</span>
         </div>
       </form>
-      <input type="text">
+      <p class="d-flex align-baseline">
+        HOLA
+        <i class="mdi mdi-home"></i>
+      </p>
+      <!-- Raised button with ripple -->
+      <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+        Button
+      </button>
+      <button class="bg-primary text-white mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect ">hey</button>
     </div>
   </div>
 </div>
