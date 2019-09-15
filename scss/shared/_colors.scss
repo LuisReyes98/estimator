@@ -38,11 +38,11 @@ $project_colors: (
 );
 
 @each $name, $color in $project_colors {
-  .color__#{$name + ""} {
+  .app__text--#{$name + ""} {
     color: $color;
   }
 
-  .background__#{$name + ""} {
+  .app__background--#{$name + ""} {
     background-color: $color;
   }
 }

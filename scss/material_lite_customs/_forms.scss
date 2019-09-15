@@ -21,6 +21,7 @@
   .material_fix {
     &.label_placeholder {
       font-size: 16px;
+      top: 0;
 
       @each $name, $color in $project_colors {
         &.focused__color__#{$name + ""} {

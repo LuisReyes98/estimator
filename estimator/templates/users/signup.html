@@ -9,9 +9,9 @@
             <div class="container-fluid">
                 <div class="row pb-3">
                     <div class="col-12 m-auto">
-                        <h2 class="text-center">
+                        <h4 class="text-center font-weight-bold text-uppercase">
                             Registro de Compañía
-                        </h2>
+                        </h4>
                     </div>
                 </div>
                 <div class="row pb-3">
@@ -35,89 +35,115 @@
                         <form  method="POST" action="{% url "users:signup" %}" >
                             {% csrf_token %}
                             <div class="form-group">
-                                {{ form.company_name.label_tag }}
-                                {% if form.company_name.errors %}
-                                    {% render_field form.company_name placeholder=form.company_name.label class+="app__input form-control is-invalid" type="text" %}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.company_name.errors %}
-                                            {{ error }}
-                                        {% endfor %}
-                                    </div>
-                                {% else %}
-                                    {% render_field form.company_name placeholder=form.company_name.label class+="app__input form-control" type="text" %}
-                                {% endif %}
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                    {% if form.company_name.errors %}
+                                        {% render_field form.company_name class+="mdl-textfield__input" type="text" id="id_company" %}
+                                        <span class="mdl-textfield__error text-danger">
+                                            {% for error in form.company_name.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </span>
+                                    {% else %}
+                                        {% render_field form.company_name class+="mdl-textfield__input" type="text" id="id_company" %}
+                                    {% endif %}
+                                    <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_company">
+                                        <i class="mdi mdi-factory mr-1"></i>{{ form.company_name.label }}
+                                    </label>
+                                </div>
                             </div>
                             <div class="form-group">
-                                {{ form.email.label_tag }}
-                                {% if form.email.errors %}
-                                    {% render_field form.email placeholder=form.email.label class+="app__input form-control is-invalid" type="email" %}
-                                    <div class="invalid-feedback">
-                                        {% for error in form.email.errors %}
-                                            {{ error }}
-                                        {% endfor %}
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                    {% if form.email.errors %}
+                                        {% render_field form.email class+="mdl-textfield__input" type="email" id="id_email" %}
+                                        <span class="mdl-textfield__error text-danger">
+                                            {% for error in form.email.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </span>
+                                    {% else %}
+                                        {% render_field form.email class+="mdl-textfield__input" type="email" id="id_email" %}
+                                    {% endif %}
+                                    <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_email">
+                                        <i class="mdi mdi-email mr-1"></i>{{ form.email.label }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.first_name.errors %}
+                                            {% render_field form.first_name class+="mdl-textfield__input" type="text" id="id_first_name" %}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {% for error in form.first_name.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </span>
+                                        {% else %}
+                                            {% render_field form.first_name class+="mdl-textfield__input" type="text" id="id_first_name" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_first_name">
+                                            <i class="mdi mdi-textbox mr-1"></i>{{ form.first_name.label }}
+                                        </label>
                                     </div>
-                                {% else %}
-                                    {% render_field form.email placeholder=form.email.label class+="app__input form-control" type="email" %}
-                                {% endif %}
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-6 col-sm-12">
-                                    {{ form.first_name.label_tag }}
-                                    {% if form.first_name.errors %}
-                                        {% render_field form.first_name placeholder=form.first_name.label class+="app__input form-control is-invalid" type="text" %}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.first_name.errors %}
-                                                {{ error }}
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {% render_field form.first_name placeholder=form.first_name.label class+="app__input form-control" type="text" %}
-                                    {% endif %}
                                 </div>
                                 <div class="form-group col-md-6 col-sm-12">
-                                    {{ form.last_name.label_tag }}
-                                    {% if form.last_name.errors %}
-                                        {% render_field form.last_name placeholder=form.last_name.label class+="app__input form-control is-invalid" type="text" %}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.last_name.errors %}
-                                                {{ error }}
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {% render_field form.last_name placeholder=form.last_name.label class+="app__input form-control" type="text" %}
-                                    {% endif %}
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.last_name.errors %}
+                                            {% render_field form.last_name class+="mdl-textfield__input" type="text" id="id_last_name" %}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {% for error in form.last_name.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </span>
+                                        {% else %}
+                                            {% render_field form.last_name class+="mdl-textfield__input" type="text" id="id_last_name" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_last_name">
+                                            <i class="mdi mdi-textbox mr-1"></i>{{ form.last_name.label }}
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12 col-sm-12">
-                                    {{ form.password.label_tag }}
-                                    {% if form.password.errors %}
-                                        {% render_field form.password placeholder=form.password.label class+="app__input form-control is-invalid" %}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.password.errors %}
-                                                {{ error }}
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {% render_field form.password placeholder=form.password.label class+="app__input form-control" %}
-                                    {% endif %}
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.password.errors %}
+                                            {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {% for error in form.password.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </span>
+                                        {% else %}
+                                            {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_password">
+                                            <i class="mdi mdi-textbox-password mr-1"></i>{{ form.password.label }}
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="form-group col-md-12 col-sm-12">
-                                    {{ form.password_confirmation.label_tag }}
-                                    {% if form.password_confirmation.errors %}
-                                        {% render_field form.password_confirmation placeholder=form.password_confirmation.label class+="app__input form-control is-invalid" %}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.password_confirmation.errors %}
-                                                {{ error }}
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {% render_field form.password_confirmation placeholder=form.password_confirmation.label class+="app__input form-control" %}
-                                    {% endif %}
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.password_confirmation.errors %}
+                                            {% render_field form.password_confirmation class+="mdl-textfield__input" id="id_password_confirmation" %}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {% for error in form.password_confirmation.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </span>
+                                        {% else %}
+                                            {% render_field form.password_confirmation class+="mdl-textfield__input" id="id_password_confirmation" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_password_confirmation">
+                                            <i class="mdi mdi-textbox-password mr-1"></i>{{ form.password_confirmation.label }}
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group text-center">
-                                <button class="btn rounded-pill app__button button--cyan" type="submit" >Registrarse</button>
+                                <button class="rounded-pill app__button button--cyan mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="submit" >
+                                    Registrarse
+                                </button>
                             </div>
                         </form>
                     </div>

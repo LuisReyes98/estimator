@@ -9,9 +9,9 @@
                 <div class="container-fluid">
                     <div class="row pb-3">
                         <div class="col-12 m-auto">
-                            <h2 class="text-center">
+                            <h4 class="text-center font-weight-bold text-uppercase">
                                 Inicio de Sesión
-                            </h2>
+                            </h4>
                         </div>
                     </div>
                     <div class="row pb-3">
@@ -49,16 +49,16 @@
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                         {% if form.username.errors %}
                                             {% render_field form.username class+="mdl-textfield__input" type="email" id="id_username" %}
-                                            <div class="invalid-feedback">
+                                            <span class="mdl-textfield__error text-danger">
                                                 {% for error in form.username.errors %}
                                                     {{ error }}
                                                 {% endfor %}
-                                            </div>
+                                            </span>
                                         {% else %}
                                             {% render_field form.username class+="mdl-textfield__input" type="email" id="id_username" %}
                                         {% endif %}
                                         <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_username">
-                                            <i class="mdi mdi-email mr-1"></i>{{ form.username.label }}
+                                            <i class="mdi mdi-account mr-1"></i>{{ form.username.label }}
                                         </label>
                                     </div>
                                 </div>
@@ -66,11 +66,11 @@
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                         {% if form.password.errors %}
                                             {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
-                                            <div class="invalid-feedback">
+                                            <span class="mdl-textfield__error text-danger">
                                                 {% for error in form.password.errors %}
                                                     {{ error }}
                                                 {% endfor %}
-                                            </div>
+                                            </span>
                                         {% else %}
                                             {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
                                         {% endif %}
