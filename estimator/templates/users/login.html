@@ -44,7 +44,7 @@
                             {% else %}
                                 <form action="{% url "users:login" %}" method="POST" >
                             {% endif %}
-                                {% csrf_token %}
+                            {% csrf_token %}
                                 <div class="form-group">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                         {% if form.username.errors %}
@@ -57,24 +57,32 @@
                                         {% else %}
                                             {% render_field form.username class+="mdl-textfield__input" type="email" id="id_username" %}
                                         {% endif %}
-                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_username">{{ form.username.label }}</label>
+                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_username">
+                                            <i class="mdi mdi-email mr-1"></i>{{ form.username.label }}
+                                        </label>
                                     </div>
                                 </div>
                                 <div  class="form-group">
-                                    {{ form.password.label_tag }}
-                                    {% if form.password.errors %}
-                                        {% render_field form.password placeholder=form.password.label class+="app__input form-control is-invalid" %}
-                                        <div class="invalid-feedback">
-                                            {% for error in form.password.errors %}
-                                                {{ error }}
-                                            {% endfor %}
-                                        </div>
-                                    {% else %}
-                                        {% render_field form.password placeholder=form.password.label class+="app__input form-control" %}
-                                    {% endif %}
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.password.errors %}
+                                            {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
+                                            <div class="invalid-feedback">
+                                                {% for error in form.password.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </div>
+                                        {% else %}
+                                            {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_password">
+                                            <i class="mdi mdi-key mr-1"></i>{{ form.password.label }}
+                                        </label>
+                                    </div>
                                 </div>
                                 <div class="col m-auto text-center">
-                                    <button class="btn rounded-pill app__button button--cyan" type="submit" >Ingresar</button>
+                                    <button class="rounded-pill app__button button--cyan mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" type="submit" >
+                                        Ingresar
+                                    </button>
                                 </div>
                             </form>
                         </div>
