@@ -13,7 +13,7 @@
 
 {% block content %}
 {{block.super}}
-<div class="page-content" id="content">
+<div class="page-content sales__form" id="content">
     <h1>
         {% if editing %}
             Editando Venta
@@ -26,25 +26,54 @@
         <input type="hidden" name="company" value="{{company.pk}}" >
         {% if not user.is_superuser %}
             <input type="hidden" name="company_user" value="{{company_user.pk}}" >
-
         {% endif %}
-        {{form.raw_materials.label_tag}}
-        <p> {% render_field form.raw_materials class+="selectpicker col-8 mx-4" multiple="" v-model="materials" data-live-search="true" title="Escoge los proveedores" %}</p>
-        <div >
-            <div v-for="(item, index) in selected_materials()" :key="index">
-                <p>
-                    [[item.name]]
-                </p>
-                <input type="text" v-model="item.hello">
-                <p>[[item.hello]]</p>
+        <div>
+            <label for="id_dolar_converion">Costo del dolar en moneda local</label>
+            <input type="number" v-model="dolar_convertion_factor" placeholder="Costo local del dolar">
+        </div>
+        {% comment %} <span class="mdl-button">Obtener en bolivares</span> {% endcomment %}
+
+        <div>
+            {{form.raw_materials.label_tag}}
+            <p> {% render_field form.raw_materials class+="selectpicker col-8 mx-4" multiple="" v-model="materials" data-live-search="true" title="Escoge los proveedores" %}</p>
+        </div>
+        <div class="app__background--gray-300 d-flex flex-column overflow-y-scroll materials__list">
+            <div v-for="(item, index) in selected_materials()" class="p-4 border border-dark container"
+                :key="index">
+                <div class="row">
+                    <p class="col-5">
+                        Nombre: [[item.name]]
+                    </p>
+
+                    <div class="col-5">
+                        <label :for="'amount' + index">Cantidad </label>
+                        <input :id="'amount' + index" type="number" min="1" v-model="item.amount">
+                        <p>[[ unit_system[item.measurement_unit] ]]</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div>
+                        <label :for="'local_coin' + index">Costo Modena Local </label>
+                        <input :id="'local_coin' + index" type="number" min="1" v-model="item.local_cost">
+                    </div>
+                    <div>
+                        <label :for="'dollar_coin' + index">Costo Modena Dolar </label>
+                        <input :id="'dollar_coin' + index" type="number" min="1" v-model="item.dollar_cost">
+                    </div>
+                </div>
             </div>
 
         </div>
 
-        {{form.total_cost_dollar.label_tag}}
-        <p> {% render_field form.total_cost_dollar%}</p>
-        {{form.total_cost_local.label_tag}}
-        <p> {% render_field form.total_cost_local%}</p>
+        <div>
+            {{form.total_cost_dollar.label_tag}}
+            <p> {% render_field form.total_cost_dollar%}</p>
+        </div>
+        
+        <div>
+            {{form.total_cost_local.label_tag}}
+            <p> {% render_field form.total_cost_local%}</p>
+        </div>
 
         <input type="hidden" name="sold_materials[]" >
     </form>
@@ -63,6 +92,8 @@ var app = new Vue({
     data: {
         materials: [],
         raw_materials: {{ raw_materials | safe }},
+        unit_system: {{unit_system | safe_js}},
+        dolar_convertion_factor: 1,
         // selected_materials: [],
     },
     methods: {
@@ -76,6 +107,9 @@ var app = new Vue({
             }
             return selected
         },
+        get_total_cost: function(){
+
+        }
     }
 });
 
