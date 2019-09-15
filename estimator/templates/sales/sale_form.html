@@ -30,25 +30,25 @@
         {% endif %}
         {{form.raw_materials.label_tag}}
         <p> {% render_field form.raw_materials class+="selectpicker col-8 mx-4" multiple="" v-model="materials" data-live-search="true" title="Escoge los proveedores" %}</p>
+        <div >
+            <div v-for="(item, index) in selected_materials()" :key="index">
+                <p>
+                    [[item.name]]
+                </p>
+                <input type="text" v-model="item.hello">
+                <p>[[item.hello]]</p>
+            </div>
+
+        </div>
 
         {{form.total_cost_dollar.label_tag}}
         <p> {% render_field form.total_cost_dollar%}</p>
         {{form.total_cost_local.label_tag}}
         <p> {% render_field form.total_cost_local%}</p>
 
-        <p>
-            [[materials]]
-        </p>
-        {% if editing %}
-
-        {% else %}
-
-        {% endif %}
+        <input type="hidden" name="sold_materials[]" >
     </form>
-    {% comment %} {% for m in raw_materials %}{{m.name}}{% endfor %} {% endcomment %}
-    <div>
-        [[raw_materials]]
-    </div>
+
 </div>
 
 {% endblock content %}
@@ -63,10 +63,21 @@ var app = new Vue({
     data: {
         materials: [],
         raw_materials: {{ raw_materials | safe }},
+        // selected_materials: [],
     },
     methods: {
-
+        selected_materials: function() {
+            let selected = Array(this.materials.length)
+            let self = this;
+            for (let i = 0; i < this.materials.length; i++) {
+                selected[i] = this.raw_materials.find(function(el) {
+                    return el.pk === parseInt(self.materials[i]);
+                });
+            }
+            return selected
+        },
     }
 });
+
 </script>
 {% endblock javascript %}

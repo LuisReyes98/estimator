@@ -76,7 +76,7 @@ class SaleCreateView(CreateView):
                 company=self.request.user.company,).values(
                     'measurement_unit',
                     'name',
-                    'id',
+                    'pk',
                 )
             ), cls=DjangoJSONEncoder
         )
