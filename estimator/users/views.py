@@ -24,7 +24,7 @@ class LoginView(auth_views.LoginView):
 
     def get(self, request, *args, **kwargs):
         """añadiendo variables al contexto en get"""
-        context = super().get_context_data(**kwargs)
+        context = self.get_context_data(**kwargs)
         if request.GET.get("signed"):
             context["signed"] = True
         if request.GET.get("next"):
