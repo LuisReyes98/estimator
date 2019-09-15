@@ -76,10 +76,11 @@ class SaleCreateView(CreateView):
                 company=self.request.user.company,).values(
                     'measurement_unit',
                     'name',
-                    'id',
+                    'pk',
                 )
             ), cls=DjangoJSONEncoder
         )
+        context["unit_system"] = dict(RawMaterial.MEASUREMENT_UNITS)
         if not self.request.user.is_superuser:
             context["company_user"] = self.request.user.company_user
         context["form_url"] = reverse_lazy('sales:new_sale')

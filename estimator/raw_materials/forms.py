@@ -65,7 +65,7 @@ class RawMaterialForm(forms.ModelForm):
     def save(self, commit=True):
         """Metodo de guardar materia prima """
         instance = super(RawMaterialForm, self).save(commit=False)
-
+        self.save_m2m()
         data = self.cleaned_data
 
         expiration_time = {
