@@ -1,10 +1,72 @@
 {% extends 'layouts/base_app.html' %}
+{% load widget_tweaks %}
+{% load safe_js %}
+
+{% load static %}
+
+{% block head %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}">
+
+{% endblock head %}
+
 
 {% block content %}
 {{block.super}}
 <div class="page-content" id="content">
+    <h1>
+        {% if editing %}
+            Editando Venta
+        {% else %}
+            Creando Venta
+        {% endif %}
+    </h1>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="company" value="{{company.pk}}" >
+        {% if not user.is_superuser %}
+            <input type="hidden" name="company_user" value="{{company_user.pk}}" >
 
+        {% endif %}
+        {{form.raw_materials.label_tag}}
+        <p> {% render_field form.raw_materials class+="selectpicker col-8 mx-4" multiple="" v-model="materials" data-live-search="true" title="Escoge los proveedores" %}</p>
 
+        {{form.total_cost_dollar.label_tag}}
+        <p> {% render_field form.total_cost_dollar%}</p>
+        {{form.total_cost_local.label_tag}}
+        <p> {% render_field form.total_cost_local%}</p>
+
+        <p>
+            [[materials]]
+        </p>
+        {% if editing %}
+
+        {% else %}
+
+        {% endif %}
+    </form>
+    {% comment %} {% for m in raw_materials %}{{m.name}}{% endfor %} {% endcomment %}
+    <div>
+        [[raw_materials]]
+    </div>
 </div>
 
 {% endblock content %}
+
+{% block javascript %}
+    {{block.super}}
+    <script src="{% static 'js/bootstrap_select/bootstrap-select.min.js' %}"></script>
+<script>
+var app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#app',
+    data: {
+        materials: [],
+        raw_materials: {{ raw_materials | safe }},
+    },
+    methods: {
+
+    }
+});
+</script>
+{% endblock javascript %}

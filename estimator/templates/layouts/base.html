@@ -9,9 +9,11 @@
     {% endblock head %}
 </head>
 <body >
-    {% block content %}
-    
-    {% endblock content %}
+    <div id="app" class="m-0 p-0">
+        {% block content %}
+        
+        {% endblock content %}
+    </div>
 </body>
     {% include "layouts/meta/javascript.html" %}
 {% block javascript %}

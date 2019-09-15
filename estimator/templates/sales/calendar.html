@@ -1,5 +1,5 @@
 {% extends 'layouts/base_app.html' %}
-{% load safe_js %} 
+{% load safe_js %}
 {% load static %}
 
 {% block head %}
@@ -18,7 +18,7 @@
             <div class="row">
                 <h2>Calendario</h2>
                 <p>
-                    <a href="#">Crear Venta</a>
+                    <a href="{% url 'sales:new_sale' %}">Crear Venta</a>
                     <a href="#">Realizar prediccion</a>
                 </p>
             </div>

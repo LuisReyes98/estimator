@@ -1,15 +1,22 @@
-from django.views.generic import TemplateView
-from .models import Sale
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import (
-    ListView,
-    CreateView,
-    DetailView,
-    UpdateView,
-    DeleteView
-)
 from datetime import datetime, timedelta
+import json
+
+from django.core.serializers.json import DjangoJSONEncoder
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    TemplateView,
+    UpdateView)
+
 from sales.objects import Prediction
+from .forms import SaleForm
+from raw_materials.models import RawMaterial
+from .models import Sale
+
 # Create your views here.
 
 
@@ -54,7 +61,29 @@ class SaleListView(ListView):
 
 class SaleCreateView(CreateView):
     model = Sale
-    template_name = ".html"
+    template_name = "sales/sale_form.html"
+    success_url = reverse_lazy("sales:calendar")
+    form_class = SaleForm
+
+    def get_context_data(self, **kwargs):
+        """User and profile to context"""
+        context = super().get_context_data(**kwargs)
+        context["user"] = self.request.user
+        context["company"] = self.request.user.company
+
+        context["raw_materials"] = json.dumps(
+            list(RawMaterial.objects.filter(
+                company=self.request.user.company,).values(
+                    'measurement_unit',
+                    'name',
+                    'id',
+                )
+            ), cls=DjangoJSONEncoder
+        )
+        if not self.request.user.is_superuser:
+            context["company_user"] = self.request.user.company_user
+        context["form_url"] = reverse_lazy('sales:new_sale')
+        return context
 
 
 class SaleUpdateView(UpdateView):
