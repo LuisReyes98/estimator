@@ -1,17 +1,36 @@
 .app {
-
   &__button {
     border-width: 2px;
     padding-left: 15px;
     padding-right: 15px;
 
+    &--icon {
+      margin-left: 5px;
+      margin-right: 5px;
+      font-size: 20px;
+      color: map-get($project_colors, "light_gray");
+
+      &:hover {
+        text-decoration: none;
+        color: map-get($project_colors, "deep_blue");
+      }
+
+      &.icon--trash {
+        color: map-get($project_colors, "light_gray");
+
+        &:hover {
+        color: map-get($project_colors, "red");
+        }
+      }
+
+    }
     &:active {
       box-shadow: none !important;
     }
 
     &.button--cyan {
       background-color: map-get($project_colors, light_cyan);
-    //   border-color: $cyan;
+      //   border-color: $cyan;
       color: white;
 
       &:hover {

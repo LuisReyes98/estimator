@@ -45,4 +45,9 @@ $project_colors: (
   .app__background--#{$name + ""} {
     background-color: $color;
   }
+
+  .app__border--#{$name + ""} {
+    border-top: 1px solid $color;
+    border-bottom: 1px solid $color;
+  }
 }
