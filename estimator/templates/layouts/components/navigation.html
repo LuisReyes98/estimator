@@ -1,3 +1,5 @@
+{% load safe_js %}
+
 <!-- Vertical navbar -->
 <div class="vertical-nav app__navigation" id="sidebar">
   <div class="py-4 px-3 mb-4">
@@ -100,3 +102,7 @@
   </a>
 </div>
 <!-- End vertical navbar -->
+<script >
+var sidebar_extended = {{request.session.sidebar_extended | safe_js}};
+
+</script>
