@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
 
-class SessionVariablesView(LoginRequiredMixin, View):
+class SessionVariablesView( View):
 
     def get(self, request, *args, **kwargs):
         # Code for GET requests
@@ -19,3 +19,4 @@ class SessionVariablesView(LoginRequiredMixin, View):
         print(variable_name)
         received_json_data = json.loads(request.body)
         print(received_json_data)
+        return JsonResponse({'post': variable_name})

@@ -1,51 +1,36 @@
-var click = true;
-var item = document.getElementsByClassName("app__item--hidden");
-var item2 = document.getElementsByClassName("nav-item");
-var item3 = document.getElementsByClassName("app__nav--link");
+var toggled_navigation = true;
+// var item = document.getElementsByClassName("app__item--hidden");
+// var item2 = document.getElementsByClassName("nav-item");
+// var item3 = document.getElementsByClassName("app__nav--link");
 
 function mostrar() {
-  if (click) {
-    document.getElementById("sidebar").style.width = "50px";
-    // document.getElementById("sidebar").classList.toggle("active");
-    document.getElementById("content").style.marginLeft = "50px";
-    document.getElementById("content").classList.toggle("active");
-    document.getElementById("nav_menu").style.borderBottom =
-      "solid 1px rgba(0,0,0,0)";
-    document.getElementById("arrow").style.transform = "rotate(-180deg)";
+  let content = document.getElementById("content");
+  let sidebar = document.getElementById("sidebar");
+  if (toggled_navigation) {
 
-    for (let i = 0; i < item.length; i++) {
-      item[i].style.marginLeft = "-17rem";
-    }
+    content.classList.toggle("active");
+    sidebar.classList.toggle("nav__toggled")
 
-    for (let i = 0; i < item2.length; i++) {
-      item2[i].style.width = "50px";
-    }
-
-    for (let i = 0; i < item3.length; i++) {
-      item3[i].classList.toggle("app__tooltip");
-    }
-    click = false;
   } else {
-      document.getElementById("sidebar").style.width = "17rem";
-    //   document.getElementById("sidebar").classList.toggle("active");
-    document.getElementById("content").style.marginLeft = "17rem";
-    document.getElementById("content").classList.toggle("active");
-    document.getElementById("nav_menu").style.borderBottom =
-      "solid 1px #383838";
-    document.getElementById("arrow").style.transform = "rotate(0deg)";
+    sidebar.classList.toggle("nav__toggled")
+    content.classList.toggle("active");
 
-    for (let i = 0; i < item.length; i++) {
-      item[i].style.marginLeft = "0";
-    }
-
-    for (let i = 0; i < item2.length; i++) {
-      item2[i].style.width = "17rem";
-    }
-
-    for (let i = 0; i < item3.length; i++) {
-      item3[i].classList.toggle("app__tooltip");
-    }
-
-    click = true;
   }
+  toggled_navigation = !toggled_navigation;
+  postSidebarSession();
+}
+
+async function postSidebarSession() {
+  let response = await fetch('/apiv1/session/sidebar/', {
+    method: 'POST',
+    body: {
+      'hola': 'hola'
+    },
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(function (res) {
+    console.log(res);
+  }
+  );
 }
