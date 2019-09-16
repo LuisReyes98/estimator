@@ -53,12 +53,12 @@
                 </div>
                 <div class="row">
                     <div>
-                        <label :for="'local_coin' + index">Costo Modena Local </label>
-                        <input :id="'local_coin' + index" type="number" min="1" v-model="item.local_cost">
-                    </div>
-                    <div>
                         <label :for="'dollar_coin' + index">Costo Modena Dolar </label>
                         <input :id="'dollar_coin' + index" type="number" min="1" v-model="item.dollar_cost">
+                    </div>
+                    <div>
+                        <label :for="'local_coin' + index">Costo Modena Local </label>
+                        <input :id="'local_coin' + index" type="number" min="1" v-model="item.local_cost">
                     </div>
                 </div>
             </div>

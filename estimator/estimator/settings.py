@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'sales',
     'graphics_statistics',
     'filters',
+    'api',
 
     # Apps de terceros
     'widget_tweaks',

@@ -44,4 +44,11 @@ urlpatterns = [
             namespace="users"
         )
     ),
+    path(
+        'apiv1/',
+        include(
+            ('api.urls', 'api'),
+            namespace="api"
+        )
+    ),
 ]
