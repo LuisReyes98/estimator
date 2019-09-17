@@ -1,8 +1,10 @@
 .app {
   &__button {
-    border-width: 2px;
-    padding-left: 15px;
-    padding-right: 15px;
+    .other__button {
+      border-width: 2px;
+      padding-left: 15px;
+      padding-right: 15px;
+    }
 
     &--icon {
       margin-left: 5px;
@@ -24,11 +26,15 @@
       }
 
       &.button--back {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
         i {
-          position: absolute;
+          display: flex;
+          align-items: center;
+          justify-content: center;
           font-size: 26px;
-          left: 9%;
-          bottom: -9%;
         }
 
         &:hover {
@@ -42,18 +48,14 @@
       min-width: 36px;
       width: 36px;
       height: 36px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
       i {
-        position: absolute;
-        left: 17%;
-        bottom: 4%;
-
-        &.mdi-eye {
-          left: 18%;
-        }
-
-        &.mdi-delete {
-          left: 18%;
-        }
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
 
