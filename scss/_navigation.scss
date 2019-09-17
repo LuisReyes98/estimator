@@ -37,7 +37,6 @@
       width: max-content;
       padding: 4px;
       border-radius: 4px;
-      // z-index: 999 !important;
     }
 
     &::before {
@@ -52,6 +51,50 @@
 
   &__navigation {
     background: #1a1a1a;
+
+    width: 17rem;
+    .app__item--hidden{
+      margin-left: 0 ;
+    }
+    .nav-item{
+      width: 17rem;
+    }
+    .app__nav--link{
+      &::before{
+        content: none;
+      }
+      &::after {
+        content: none;
+      }
+    }
+    #nav_menu {
+      border-bottom: solid 1px #383838;
+    }
+    #arrow{
+      transform: rotate(0deg);
+    }
+
+    &.nav__toggled{ //Estilos Cuando la barra de navegacion se reduce
+      width: 50px;
+      .app__item--hidden {
+        margin-left: -17rem;
+      }
+
+      .nav-item{
+        width: 50px;
+      }
+
+      .app__nav--link{
+        @extend .app__tooltip ;
+      }
+
+      #nav_menu {
+        border-bottom: solid 1px rgba(0, 0, 0, 0);
+      }
+      #arrow {
+        transform: rotate(-180deg);
+      }
+    }
 
     .nav--button {
       position: absolute;
@@ -73,7 +116,6 @@
       font-size: 20px;
       margin: 5px 15px 5px 15px;
       color: $light_gray;
-      // transition: all 0.4s;
 
       &:hover {
         color: #f8f9fa;
@@ -115,12 +157,10 @@
 }
 
 #nav_menu {
-  border-bottom: 1px solid #383838;
   transition: all 0.4s;
 }
 
 .vertical-nav {
-  // min-width: 17rem;
   width: 17rem;
   height: 100vh;
   position: fixed;
@@ -129,36 +169,15 @@
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.4s;
 
-  // overflow: hidden;
 }
-
-// #sidebar.active {
-//   margin-left: -17rem;
-// }
 
 #content.active {
   width: calc(100% - 50px);
   margin: 0;
+  margin-left: 50px;
 }
 
-// @media (max-width: 768px) {
-//   #sidebar {
-//     margin-left: -17rem;
-//   }
-//   #sidebar.active {
-//     margin-left: 0;
-//   }
-//   #content {
-//     width: 100%;
-//     margin: 0;
-//   }
-//   #content.active {
-//     margin-left: 17rem;
-//     width: calc(100% - 17rem);
-//   }
-// }
-
-.page-content {
+#content {
   width: calc(100% - 17rem);
   margin-left: 17rem;
   transition: all 0.4s;

@@ -1,51 +1,49 @@
-var click = true;
-var item = document.getElementsByClassName("app__item--hidden");
-var item2 = document.getElementsByClassName("nav-item");
-var item3 = document.getElementsByClassName("app__nav--link");
-
 function mostrar() {
-  if (click) {
-    document.getElementById("sidebar").style.width = "50px";
-    // document.getElementById("sidebar").classList.toggle("active");
-    document.getElementById("content").style.marginLeft = "50px";
-    document.getElementById("content").classList.toggle("active");
-    document.getElementById("nav_menu").style.borderBottom =
-      "solid 1px rgba(0,0,0,0)";
-    document.getElementById("arrow").style.transform = "rotate(-180deg)";
+  let content = document.getElementById("content");
+  let sidebar = document.getElementById("sidebar");
 
-    for (let i = 0; i < item.length; i++) {
-      item[i].style.marginLeft = "-17rem";
-    }
+  
+  if (sidebar_extended) {
+    content.classList.remove("active");
+    sidebar.classList.remove("nav__toggled");
 
-    for (let i = 0; i < item2.length; i++) {
-      item2[i].style.width = "50px";
-    }
-
-    for (let i = 0; i < item3.length; i++) {
-      item3[i].classList.toggle("app__tooltip");
-    }
-    click = false;
-  } else {
-      document.getElementById("sidebar").style.width = "17rem";
-    //   document.getElementById("sidebar").classList.toggle("active");
-    document.getElementById("content").style.marginLeft = "17rem";
-    document.getElementById("content").classList.toggle("active");
-    document.getElementById("nav_menu").style.borderBottom =
-      "solid 1px #383838";
-    document.getElementById("arrow").style.transform = "rotate(0deg)";
-
-    for (let i = 0; i < item.length; i++) {
-      item[i].style.marginLeft = "0";
-    }
-
-    for (let i = 0; i < item2.length; i++) {
-      item2[i].style.width = "17rem";
-    }
-
-    for (let i = 0; i < item3.length; i++) {
-      item3[i].classList.toggle("app__tooltip");
-    }
-
-    click = true;
+  }else{
+    content.classList.add("active");
+    sidebar.classList.add("nav__toggled");
   }
+
+  postSidebarSession(sidebar_extended);
+  sidebar_extended = !sidebar_extended;
 }
+
+function getCookie(name) {
+  var cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    var cookies = document.cookie.split(';');
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = jQuery.trim(cookies[i]);
+      // Does this cookie string begin with the name we want?
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+async function postSidebarSession(value) {
+  let response = await fetch('/apiv1/session/sidebar_extended/', {
+    method: 'POST',
+    credentials: "same-origin",
+    headers: {
+      "X-CSRFToken": getCookie("csrftoken"),
+      "Accept": "application/json",
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      'value': value,
+    }),
+  });
+}
+mostrar();

@@ -56,10 +56,9 @@ class CreateCompanyForm(forms.ModelForm):
         """Crear usuario y compañia"""
         data = self.cleaned_data
 
-        company_name = data['company_name']
+        company_name = data.pop('company_name')
 
         data.pop('password_confirmation')
-        data.pop('company_name')
 
         data['is_superuser'] = True
 

@@ -1,7 +1,13 @@
 {% load static %}
+{% load safe_js %}
+
 
 <script src="{% static 'js/bootstrap/jquery.min.js' %}"></script>
 <script src="{% static 'js/bootstrap/popper.min.js' %}"></script>
 <script src="{% static 'js/bootstrap/bootstrap.min.js' %}"></script>
 <script src="{% static 'js/material_lite/material.min.js' %}"></script>
 <script src="{% static 'js/vuejs/vue.js' %}"></script>
+<script >
+var sidebar_extended = {{request.session.sidebar_extended | safe_js}};
+
+</script>

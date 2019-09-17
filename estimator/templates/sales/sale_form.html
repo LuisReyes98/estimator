@@ -35,7 +35,7 @@
 
         <div>
             {{form.raw_materials.label_tag}}
-            <p> {% render_field form.raw_materials class+="selectpicker col-8 mx-4" multiple="" v-model="materials" data-live-search="true" title="Escoge los proveedores" %}</p>
+            <p> {% render_field form.raw_materials class+="selectpicker col-8 mx-4" multiple="" v-model="materials" data-live-search="true" title="Escoge las materias primas" %}</p>
         </div>
         <div class="app__background--gray-300 d-flex flex-column overflow-y-scroll materials__list">
             <div v-for="(item, index) in selected_materials()" class="p-4 border border-dark container"
@@ -53,12 +53,12 @@
                 </div>
                 <div class="row">
                     <div>
-                        <label :for="'local_coin' + index">Costo Modena Local </label>
-                        <input :id="'local_coin' + index" type="number" min="1" v-model="item.local_cost">
-                    </div>
-                    <div>
                         <label :for="'dollar_coin' + index">Costo Modena Dolar </label>
                         <input :id="'dollar_coin' + index" type="number" min="1" v-model="item.dollar_cost">
+                    </div>
+                    <div>
+                        <label :for="'local_coin' + index">Costo Modena Local </label>
+                        <input :id="'local_coin' + index" type="number" min="1" v-model="item.local_cost">
                     </div>
                 </div>
             </div>
@@ -94,7 +94,6 @@ var app = new Vue({
         raw_materials: {{ raw_materials | safe }},
         unit_system: {{unit_system | safe_js}},
         dolar_convertion_factor: 1,
-        // selected_materials: [],
     },
     methods: {
         selected_materials: function() {
