@@ -29,6 +29,7 @@ class ProviderListView(LoginRequiredMixin, ListView):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
+        context["current_page"] = "providers"
         context["company"] = self.request.user.company
         return context
 
@@ -43,6 +44,7 @@ class ProviderCreateView(LoginRequiredMixin, CreateView):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
+        context["current_page"] = "providers"
         context["company"] = self.request.user.company
         context["form_url"] = reverse_lazy('raw_materials:new_provider')
         return context
@@ -72,6 +74,8 @@ class ProviderUpdateView(LoginRequiredMixin, UpdateView):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
+        context["current_page"] = "providers"
+
         context["company"] = self.request.user.company
         context["form_url"] = reverse_lazy(
             'raw_materials:update_provider',
@@ -120,6 +124,7 @@ class RawMaterialCreateView(LoginRequiredMixin, CreateView):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
+        context["current_page"] = "materials"
         context["company"] = self.request.user.company
         context["form_url"] = reverse_lazy('raw_materials:new_material')
         return context
