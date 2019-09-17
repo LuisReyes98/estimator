@@ -21,7 +21,7 @@ class ProviderListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         new_context = Provider.objects.filter(
-            company=self.request.user.company,
+            company=self.request.user.company.pk,
         )
         return new_context
 
@@ -98,7 +98,7 @@ class RawMaterialListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         new_context = RawMaterial.objects.filter(
-            company=self.request.user.company,
+            company=self.request.user.company.pk,
         )
         return new_context
 
@@ -108,6 +108,13 @@ class RawMaterialCreateView(LoginRequiredMixin, CreateView):
     template_name = "raw_materials/raw_material_form.html"
     success_url = reverse_lazy('raw_materials:materials')
     form_class = RawMaterialForm
+
+    def get_form_kwargs(self):
+        form_kwargs = super(RawMaterialCreateView, self).get_form_kwargs()
+
+        form_kwargs['user'] = self.request.user
+
+        return form_kwargs
 
     def get_context_data(self, **kwargs):
         """User and profile to context"""
@@ -138,6 +145,13 @@ class RawMaterialUpdateView(LoginRequiredMixin, UpdateView):
         if self.get_object().company.pk != self.request.user.company.pk:
             return redirect('raw_materials:materials')
         return super().get(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        form_kwargs = super(RawMaterialUpdateView, self).get_form_kwargs()
+
+        form_kwargs['user'] = self.request.user
+
+        return form_kwargs
 
     def get_context_data(self, **kwargs):
         """Usuarios, compañia, y url al formulario"""

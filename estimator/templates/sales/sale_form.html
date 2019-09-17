@@ -35,7 +35,7 @@
 
         <div>
             {{form.raw_materials.label_tag}}
-            <p> {% render_field form.raw_materials class+="selectpicker col-8 mx-4" multiple="" v-model="materials" data-live-search="true" title="Escoge los proveedores" %}</p>
+            <p> {% render_field form.raw_materials class+="selectpicker col-8 mx-4" multiple="" v-model="materials" data-live-search="true" title="Escoge las materias primas" %}</p>
         </div>
         <div class="app__background--gray-300 d-flex flex-column overflow-y-scroll materials__list">
             <div v-for="(item, index) in selected_materials()" class="p-4 border border-dark container"
@@ -94,7 +94,6 @@ var app = new Vue({
         raw_materials: {{ raw_materials | safe }},
         unit_system: {{unit_system | safe_js}},
         dolar_convertion_factor: 1,
-        // selected_materials: [],
     },
     methods: {
         selected_materials: function() {

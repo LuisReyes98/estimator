@@ -36,11 +36,16 @@ class RawMaterialForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user')
         super(RawMaterialForm, self).__init__(*args, **kwargs)
 
         self.fields['days_to_expire'].initial = self.instance.days_to_expire
         self.fields['months_to_expire'].initial = self.instance.months_to_expire
         self.fields['years_to_expire'].initial = self.instance.years_to_expire
+
+        self.fields['providers'].queryset = Provider.objects.filter(
+            company=user.company.pk,
+        )
 
     class Meta:
         model = RawMaterial
@@ -65,7 +70,6 @@ class RawMaterialForm(forms.ModelForm):
     def save(self, commit=True):
         """Metodo de guardar materia prima """
         instance = super(RawMaterialForm, self).save(commit=False)
-        self.save_m2m()
         data = self.cleaned_data
 
         expiration_time = {
@@ -77,4 +81,5 @@ class RawMaterialForm(forms.ModelForm):
 
         if commit:
             instance.save()
+            self.save_m2m()
         return instance
