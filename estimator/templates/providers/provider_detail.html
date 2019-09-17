@@ -1,19 +1,56 @@
-{% extends 'layouts/base.html' %}
-
+{% extends 'layouts/base_app.html' %}
 {% block content %}
-<a href="{% url 'raw_materials:providers' %}"> Volver</a>
-
-<h1>
-    Proveedor individual
-</h1>
-<p>Nombre</p>
-<p>{{object.name}}</p>
-<p>Compañia</p>
-<p>{{object.company}}</p>
-<a  href="{% url 'raw_materials:update_provider'  object.pk  %}">
-    editar
-</a>
-<a  href="{% url 'raw_materials:delete_provider'  object.pk %}">
-    eliminar
-</a>
+{{ block.super }}
+<div class="page-content" id="content">
+    <div class="container-fluid">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <a href="{% url 'raw_materials:providers' %}"
+                   title="Volver"
+                   class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    <i class="mdi mdi-arrow-left"></i>
+                </a>
+                <h4 class="text-center font-weight-bold text-uppercase">
+                    Proveedor
+                </h4>
+            </div>
+        </div>
+        <div class="row mb-3 pt-3 pb-3 app__border--gray-200">
+            <div class="col">
+                <div class="container app__vertical_border--deep_blue">
+                    <div class="row">
+                        <div class="col-4 app__text--deep_blue font-italic">
+                            <p>Nombre</p>
+                        </div>
+                        <div class="col-8 font-weight-bold">
+                            <p>{{object.name}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4 app__text--deep_blue font-italic">
+                            <p class="mb-0">Compañía</p>
+                        </div>
+                        <div class="col-8 font-weight-bold">
+                            <p class="mb-0">{{object.company}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col">
+                            <a href="{% url 'raw_materials:update_provider'  object.pk  %}"
+                            class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                editar
+                            </a>
+                            <a href="{% url 'raw_materials:delete_provider'  object.pk %}"
+                            class="rounded-pill app__button button--red mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                eliminar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}

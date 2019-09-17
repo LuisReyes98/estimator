@@ -19,23 +19,93 @@
         color: map-get($project_colors, "light_gray");
 
         &:hover {
-        color: map-get($project_colors, "red");
+          color: map-get($project_colors, "red");
         }
       }
 
+      &.button--back {
+        i {
+          position: absolute;
+          font-size: 26px;
+          left: 9%;
+          bottom: -9%;
+        }
+
+        &:hover {
+          text-decoration: none;
+          color: map-get($project_colors, "cyan");
+        }
+      }
     }
+
+    &.button--fab {
+      min-width: 36px;
+      width: 36px;
+      height: 36px;
+      i {
+        position: absolute;
+        left: 17%;
+        bottom: 4%;
+
+        &.mdi-eye {
+          left: 18%;
+        }
+
+        &.mdi-delete {
+          left: 18%;
+        }
+      }
+    }
+
+    &:hover {
+      text-decoration: none;
+    }
+
     &:active {
       box-shadow: none !important;
     }
 
     &.button--cyan {
-      background-color: map-get($project_colors, light_cyan);
+      background-color: map-get($project_colors, "light_cyan");
       //   border-color: $cyan;
       color: white;
 
       &:hover {
         background-color: map-get($project_colors, "cyan");
         // border-color: $cyan;
+        color: white;
+        transition: all ease 0.2s;
+      }
+    }
+
+    &.button--blue {
+      background-color: map-get($project_colors, "deep_blue");
+      color: white;
+
+      &:hover {
+        background-color: map-get($project_colors, "dark_blue");
+        color: white;
+        transition: all ease 0.2s;
+      }
+    }
+
+    &.button--red {
+      background-color: map-get($project_colors, "red");
+      color: white;
+
+      &:hover {
+        background-color: map-get($project_colors, "dark_red");
+        color: white;
+        transition: all ease 0.2s;
+      }
+    }
+
+    &.button--green {
+      background-color: map-get($project_colors, "cyan");
+      color: white;
+
+      &:hover {
+        background-color: map-get($project_colors, "dark_cyan");
         color: white;
         transition: all ease 0.2s;
       }

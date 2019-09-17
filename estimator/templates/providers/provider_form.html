@@ -1,35 +1,73 @@
-{% extends 'layouts/base.html' %}
+{% extends 'layouts/base_app.html' %}
 {% load widget_tweaks %}
 
 {% block content %}
-<h1>
-{% if editing %}
-    Editar proveedor
-{% else %}
-    Crear proveedor
-{% endif %}
-</h1>
-<a href="{% url 'raw_materials:providers' %}"> Volver</a>
-
-<form action="{{form_url}}" method="POST" >
-    {% csrf_token %}
-    {{ form.name.label_tag }}
-    {% render_field form.name %}
-    <input type="hidden" name="company" value="{{company.pk}}" >
-    <button type="submit">
-        Crear
-    </button>
-    {% if editing %}
-        <a  href="{% url 'raw_materials:provider'  provider.pk  %}">
-            detalle
-        </a>
-        <a  href="{% url 'raw_materials:delete_provider'  provider.pk  %}">
-            eliminar
-        </a>
-    {% else %}
-        <a href="{% url 'raw_materials:providers' %}"> 
-            Cancelar
-        </a>
-    {% endif %}
-</form>
+{{ block.super }}
+<div class="page-content" id="content">
+    <div class="container-fluid">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <a href="{% url 'raw_materials:providers' %}"
+                   title="Volver"
+                   class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    <i class="mdi mdi-arrow-left"></i>
+                </a>
+                <h4 class="text-center font-weight-bold text-uppercase">
+                {% if editing %}
+                    Editar proveedor
+                {% else %}
+                    Crear proveedor
+                {% endif %}
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card app__background--gray-200">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <form action="{{form_url}}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% render_field form.name class+="mdl-textfield__input" %}
+                                        <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder">
+                                            <i class="mdi mdi-account mr-1"></i>{{ form.name.label }}
+                                        </label>
+                                        <input type="hidden" name="company" value="{{company.pk}}">
+                                    </div>
+                                </div>
+                                <div class="col m-auto text-center">
+                                    <button class="rounded-pill app__button button--fab button--green mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                            title="Continuar"
+                                            type="submit">
+                                        <i class="mdi mdi-check"></i>
+                                    </button>
+                                    {% if editing %}
+                                        <a href="{% url 'raw_materials:provider' provider.pk %}"
+                                           class="rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                           title="Detalles">
+                                            <i class="mdi mdi-eye"></i>
+                                        </a>
+                                        <a href="{% url 'raw_materials:delete_provider' provider.pk %}"
+                                           class="rounded-pill app__button button--fab button--red mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                           title="Eliminar">
+                                            <i class="mdi mdi-delete"></i>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'raw_materials:providers' %}"
+                                           class="rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                           title="Cancelar">
+                                            <i class="mdi mdi-close"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
