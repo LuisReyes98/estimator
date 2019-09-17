@@ -56,4 +56,12 @@ $project_colors: (
   .app__vertical_border--#{$name + ""} {
     border-left: 2px solid $color;
   }
+
+  .app__border_top--#{$name + ""} {
+    border-top: 2px solid $color;
+  }
+
+  .app__border_bottom--#{$name + ""} {
+    border-bottom: 2px solid $color;
+  }
 }
