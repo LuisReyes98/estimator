@@ -59,6 +59,9 @@
     .nav-item{
       width: 17rem;
     }
+    .nav--menu {
+      width: 17rem;
+    }
     .app__nav--link{
       &::before{
         content: none;
@@ -81,6 +84,9 @@
       }
 
       .nav-item{
+        width: 50px;
+      }
+      .nav--menu{
         width: 50px;
       }
 
@@ -127,7 +133,7 @@
     }
 
     .nav--menu {
-      min-width: 17rem !important;
+      // min-width: 17rem !important;
 
       li {
         overflow: hidden;
@@ -135,7 +141,7 @@
         transition: all 0.4s;
 
         a {
-          min-width: 17rem !important;
+          min-width: 17rem ;
         }
 
         &:hover {

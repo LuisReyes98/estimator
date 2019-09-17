@@ -2,7 +2,6 @@ function mostrar() {
   let content = document.getElementById("content");
   let sidebar = document.getElementById("sidebar");
 
-  
   if (sidebar_extended) {
     content.classList.remove("active");
     sidebar.classList.remove("nav__toggled");
