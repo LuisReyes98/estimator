@@ -11,6 +11,8 @@ class HomeView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         # context["title"] = "Bienvenido"
         context["user"] = self.request.user
+        context["current_page"] = "home"
+
 
         return context
 
