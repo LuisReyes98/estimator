@@ -28,13 +28,13 @@
                         <div class="container-fluid">
                             <form action="{{form_url}}" method="POST">
                                 {% csrf_token %}
+                                <input type="hidden" name="company" value="{{company.pk}}">
                                 <div class="form-group">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                         {% render_field form.name class+="mdl-textfield__input" %}
                                         <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder">
                                             <i class="mdi mdi-account mr-1"></i>{{ form.name.label }}
                                         </label>
-                                        <input type="hidden" name="company" value="{{company.pk}}">
                                     </div>
                                 </div>
                                 <div class="col m-auto text-center">

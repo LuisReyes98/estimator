@@ -10,108 +10,157 @@
 
 {% block content %}
 {{block.super}}
-<div  class="page-content" id="content">
-    <h1>
-        {% if editing %}
-            Edita materia prima
-        {% else %}
-            Crear Materia Prima
-        {% endif %}
-    </h1>
-    <a href="{% url 'raw_materials:materials' %}">Volver</a>
-    <form action="{{form_url}}" method="POST">
-        {% if form.non_field_errors %}
-            {% for error in form.non_field_errors %}
-                <div class="d-flex flex-row align-items-center">
-                    <i class="mdi mdi-alert"></i>
-                    <p class="app__form--error text-danger mb-0">
-                        {{ error }}
-                    </p>
+<div class="page-content" id="content">
+    <div class="container-fluid">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <a href="{% url 'raw_materials:materials' %}"
+                   title="Volver"
+                   class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    <i class="mdi mdi-arrow-left"></i>
+                </a>
+                <h4 class="text-center font-weight-bold text-uppercase">
+                    {% if editing %}
+                        Editar Materia Prima
+                    {% else %}
+                        Crear Materia Prima
+                    {% endif %}
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card app__background--gray-200">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <form action="{{form_url}}" method="POST">
+                                {% csrf_token %}
+                                <input type="hidden" name="company" value="{{company.pk}}">
+                                <div class="col pl-3 pr-1 app__vertical_border--red">
+                                    {% if form.non_field_errors %}
+                                        {% for error in form.non_field_errors %}
+                                            <div class="d-flex flex-row align-items-center">
+                                                <i class="mdi mdi-alert"></i>
+                                                <p class="app__form--error text-danger mb-0">
+                                                    {{ error }}
+                                                </p>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% render_field form.name class+="mdl-textfield__input" %}
+                                        <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="">
+                                            <i class="mdi mdi-textbox"></i>{{ form.name.label }}
+                                        </label>
+                                        <span class="mdl-textfield__error text-danger">
+                                            {% for error in form.name.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        {{ form.providers.label_tag }}
+                                        {% render_field form.providers class+="selectpicker" multiple="" data-live-search="true" title="Escoge los proveedores" %}
+                                        {% for error in form.providers.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="rom-group">
+                                    <div>
+                                        {{ form.measurement_unit.label_tag }}
+                                        {% render_field form.measurement_unit %}
+                            
+                                        {% for error in form.measurement_unit.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        {{ form.can_expire.label_tag }}
+                                        {% render_field form.can_expire %}
+                            
+                                        {% for error in form.can_expire.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        {{ form.days_to_expire.label_tag }}
+                                        {% render_field form.days_to_expire %}
+                            
+                                        {% for error in form.days_to_expire.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="from-group">
+                                    <div>
+                                        {{ form.months_to_expire.label_tag }}
+                                        {% render_field form.months_to_expire %}
+                                        {% for error in form.months_to_expire.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        {{ form.years_to_expire.label_tag }}
+                                        {% render_field form.years_to_expire %}
+                                        {% for error in form.years_to_expire.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div>
+                                        {{ form.is_imported.label_tag }}
+                                        {% render_field form.is_imported %}
+                                        {% for error in form.is_imported.errors %}
+                                        {{ error }}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="col m-auto text-center">
+                                    <div class="d-flex flex-row justify-content-center">
+                                        <button class="m-1 rounded-pill app__button button--fab button--green mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                                title="Continuar"
+                                                type="submit">
+                                            <i class="mdi mdi-check"></i>
+                                        </button>
+                                        {% if editing %}
+                                            <a href="{% url 'raw_materials:material'  object.pk  %}"
+                                            class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                            title="Detalles">
+                                                <i class="mdi mdi-eye"></i>
+                                            </a>
+                                            <a href="{% url 'raw_materials:delete_material'  object.pk  %}"
+                                            class="m-1 rounded-pill app__button button--fab button--red mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                            title="Eliminar">
+                                                <i class="mdi mdi-delete"></i>
+                                            </a>
+                                        {% else %}
+                                            <a href="{% url 'raw_materials:materials' %}"
+                                               class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                               title="Cancelar">
+                                                <i class="mdi mdi-close"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-            {% endfor %}
-        {% endif %}
-        <input type="hidden" name="company" value="{{company.pk}}" >
-        {% csrf_token %}
-
-        <div >
-            {{ form.name.label_tag }}
-            {% render_field form.name %}
-            {% for error in form.name.errors %}
-                {{ error }}
-            {% endfor %}
+            </div>
         </div>
-
-        <div>
-            {{ form.providers.label_tag }}
-            {% render_field form.providers class+="selectpicker" multiple="" data-live-search="true" title="Escoge los proveedores" %}
-            {% for error in form.providers.errors %}
-                {{ error }}
-            {% endfor %}
-        </div>
-
-        <div>
-            {{ form.measurement_unit.label_tag }}
-            {% render_field form.measurement_unit %}
-
-            {% for error in form.measurement_unit.errors %}
-                {{ error }}
-            {% endfor %}
-        </div>
-
-        <div>
-            {{ form.can_expire.label_tag }}
-            {% render_field form.can_expire %}
-
-            {% for error in form.can_expire.errors %}
-                {{ error }}
-            {% endfor %}
-        </div>
-
-        <div>
-            {{ form.days_to_expire.label_tag }}
-            {% render_field form.days_to_expire %}
-
-            {% for error in form.days_to_expire.errors %}
-                {{ error }}
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.months_to_expire.label_tag }}
-            {% render_field form.months_to_expire %}
-            {% for error in form.months_to_expire.errors %}
-                {{ error }}
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.years_to_expire.label_tag }}
-            {% render_field form.years_to_expire %}
-            {% for error in form.years_to_expire.errors %}
-                {{ error }}
-            {% endfor %}
-        </div>
-        <div>
-            {{ form.is_imported.label_tag }}
-            {% render_field form.is_imported %}
-            {% for error in form.is_imported.errors %}
-                {{ error }}
-            {% endfor %}
-        </div>
-        <button type="submit">
-            {% if editing %}
-                Guardar
-            {% else %}
-                Crear
-            {% endif %}
-        </button>
-        {% if editing %}
-            <a  href="{% url 'raw_materials:material'  object.pk  %}">
-                detalle
-            </a>
-            <a  href="{% url 'raw_materials:delete_material'  object.pk  %}">
-                eliminar
-            </a>
-        {% endif %}
-    </form>
+    </div>
 </div>
 {% endblock content %}
 
