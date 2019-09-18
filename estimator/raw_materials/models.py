@@ -11,7 +11,7 @@ class Provider(TimeStampFields):
     # Campos propios
     # Nombre
     name = models.CharField(
-        translate("Name"),
+        "Nombre",
         max_length=50,
         blank=False,
     )
@@ -19,7 +19,7 @@ class Provider(TimeStampFields):
     # Referencias
     company = models.ForeignKey(
         "users.Company",
-        verbose_name=translate("Company"),
+        verbose_name="Compañía",
         on_delete=models.CASCADE
     )
 
@@ -99,7 +99,7 @@ class RawMaterial(TimeStampFields):
     # Muchos proveedores
     providers = models.ManyToManyField(
         Provider,
-        verbose_name=translate("Providers"),
+        verbose_name="Proveedores",
         through="MaterialProvider",
         through_fields=('raw_material', 'provider'),
     )
@@ -153,6 +153,11 @@ class RawMaterial(TimeStampFields):
             days = self.time_to_expire.days
             return self.extract_year_months_from_days(days)
         return 0
+
+    @property
+    def unit_name(self):
+        units = dict(self.MEASUREMENT_UNITS)
+        return units[self.measurement_unit]
 
     def __str__(self):
         return self.name

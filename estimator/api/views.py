@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
 
 
-class SessionVariablesView(LoginRequiredMixin, View):
+class SessionVariablesAPI(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         # Get el valor de la variable de sesion del nombre del url
