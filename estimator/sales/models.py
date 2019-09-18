@@ -9,11 +9,13 @@ class Sale(TimeStampFields):
     # campos propios
 
     total_cost_dollar = models.FloatField(
-        "Costo total en dolares"
+        "Costo total en dolares",
+        blank=True,
     )
 
     total_cost_local = models.FloatField(
         "Costo total en la moneda local",
+        blank=False,
     )
 
     # Referencias
@@ -84,6 +86,18 @@ class MaterialSaleRelation(TimeStampFields):
         verbose_name="Venta",
         on_delete=models.CASCADE,
         related_name="sold_materials",
+    )
+
+    class Meta:
+        pass
+
+
+class DolarPrice(TimeStampFields):
+
+    dollar_price = models.FloatField(
+        "Precio del dolar",
+        blank=False,
+        null=False,
     )
 
     class Meta:

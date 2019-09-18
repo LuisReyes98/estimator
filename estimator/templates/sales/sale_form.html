@@ -21,24 +21,35 @@
             Creando Venta
         {% endif %}
     </h1>
-    <form action="" method="POST">
+    {% if form.non_field_errors %}
+    {% for error in form.non_field_errors %}
+        <div class="d-flex flex-row align-items-center">
+            <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+            <p class="app__form--error text-danger mb-0 ml-3">
+                {{ error }}
+            </p>
+        </div>
+    {% endfor %}
+{% endif %}
+{% comment %} Formulario  {% endcomment %}
+    <form id="sale_form" ref="form" action="{{form_url}}" method="POST" >
         {% csrf_token %}
         <input type="hidden" name="company" value="{{company.pk}}" >
         {% if not user.is_superuser %}
             <input type="hidden" name="company_user" value="{{company_user.pk}}" >
         {% endif %}
         <div>
-            <label for="id_dolar_converion">Costo del dolar en moneda local</label>
-            <input type="number" v-model="dolar_convertion_factor" placeholder="Costo local del dolar">
+            {{form.dolar_price.label_tag}}
+            {% render_field form.dolar_price v-model="dolar_price" %}
+
         </div>
-        {% comment %} <span class="mdl-button">Obtener en bolivares</span> {% endcomment %}
 
         <div>
             {{form.raw_materials.label_tag}}
-            <p> {% render_field form.raw_materials class+="selectpicker col-8 mx-4" multiple="" v-model="materials" data-live-search="true" title="Escoge las materias primas" %}</p>
+            <p> {% render_field form.raw_materials  v-model="materials" class+="selectpicker col-8 mx-4" multiple="" data-live-search="true" title="Escoge las materias primas" %}</p>
         </div>
         <div class="app__background--gray-300 d-flex flex-column overflow-y-scroll materials__list">
-            <div v-for="(item, index) in selected_materials()" class="p-4 border border-dark container"
+            <div v-for="(item, index) in selectedMaterials" class="p-4 border border-dark container"
                 :key="index">
                 <div class="row">
                     <p class="col-5">
@@ -52,12 +63,16 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div>
-                        <label :for="'dollar_coin' + index">Costo Modena Dolar </label>
+                    <div class="col-4">
+                        <label :for="'bought_in_dollars' + index">Se compro en dolares</label>
+                        <input :id="'bought_in_dollars' + index" type="checkbox" v-model="item.bought_in_dollars">
+                    </div>
+                    <div class="col-4">
+                        <label :for="'dollar_coin' + index">Costo Individual Dolar </label>
                         <input :id="'dollar_coin' + index" type="number" min="1" v-model="item.dollar_cost">
                     </div>
-                    <div>
-                        <label :for="'local_coin' + index">Costo Modena Local </label>
+                    <div class="col-4">
+                        <label :for="'local_coin' + index">Costo Individual Local </label>
                         <input :id="'local_coin' + index" type="number" min="1" v-model="item.local_cost">
                     </div>
                 </div>
@@ -65,6 +80,11 @@
 
         </div>
 
+        <span> Si este no es el costo final cambielo a mano</span>
+        <div>
+            <label for="">Costos finales manuales</label>
+            <input type="text">
+        </div>
         <div>
             {{form.total_cost_dollar.label_tag}}
             <p> {% render_field form.total_cost_dollar%}</p>
@@ -75,7 +95,11 @@
             <p> {% render_field form.total_cost_local%}</p>
         </div>
 
-        <input type="hidden" name="sold_materials[]" >
+        <input type="hidden" name="raw_materials_json" :value="parsedMaterials" >
+        {% comment %} {% for error in form.raw_materials_json.errors %}
+            {{ error }}
+        {% endfor %} {% endcomment %}
+        <button type="submit" > Guardar</button>
     </form>
 
 </div>
@@ -91,12 +115,27 @@ var app = new Vue({
     el: '#app',
     data: {
         materials: [],
+        dolar_price: document.getElementById('id_dolar_price').value,
         raw_materials: {{ raw_materials | safe }},
         unit_system: {{unit_system | safe_js}},
         dolar_convertion_factor: 1,
     },
     methods: {
-        selected_materials: function() {
+        get_total_cost: function(){
+
+        },
+        onSubmit: function(){
+            //this.parseAllMaterials();
+            console.log("Intento de submit");
+            //document.getElementById("sale_form").submit()
+            this.$refs.form.submit();
+        }
+    },
+    computed: {
+        parsedMaterials: function(){
+            return JSON.stringify(this.selectedMaterials);
+        },
+        selectedMaterials: function() {
             let selected = Array(this.materials.length)
             let self = this;
             for (let i = 0; i < this.materials.length; i++) {
@@ -106,9 +145,7 @@ var app = new Vue({
             }
             return selected
         },
-        get_total_cost: function(){
 
-        }
     }
 });
 
