@@ -8,7 +8,7 @@ from raw_materials.models import RawMaterial
 class SaleForm(forms.ModelForm):
 
     dolar_price = forms.FloatField(
-        label="Precio del dolar",
+        label="Precio del dolar en moneda local",
         min_value=0,
         required=True,
     )

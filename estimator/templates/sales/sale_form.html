@@ -32,7 +32,7 @@
     {% endfor %}
 {% endif %}
 {% comment %} Formulario  {% endcomment %}
-    <form id="sale_form" ref="form" action="{{form_url}}" method="POST" >
+    <form id="sale_form" ref="form" action="{{form_url}}" method="POST" @submit.prevent="onSubmit" >
         {% csrf_token %}
         <input type="hidden" name="company" value="{{company.pk}}" >
         {% if not user.is_superuser %}
@@ -40,20 +40,20 @@
         {% endif %}
         <div>
             {{form.dolar_price.label_tag}}
-            {% render_field form.dolar_price v-model="dolar_price" %}
+            {% render_field form.dolar_price v-model="dolar_price" step="0.001" %}
 
         </div>
 
         <div>
             {{form.raw_materials.label_tag}}
-            <p> {% render_field form.raw_materials  v-model="materials" class+="selectpicker col-8 mx-4" multiple="" data-live-search="true" title="Escoge las materias primas" %}</p>
+            <p> {% render_field form.raw_materials  v-model="materials" @change="buildMaterials" class+="selectpicker col-8 mx-4" multiple="" data-live-search="true" title="Escoge las materias primas" %}</p>
         </div>
-        <div class="app__background--gray-300 d-flex flex-column overflow-y-scroll materials__list">
-            <div v-for="(item, index) in selectedMaterials" class="p-4 border border-dark container"
+        <div id="materials_group" class="app__background--gray-300 d-flex flex-column overflow-y-scroll materials__list">
+            <div v-for="(item, index) in formMaterials" class="p-4 border border-dark container"
                 :key="index">
                 <div class="row">
                     <p class="col-5">
-                        Nombre: [[item.name]]
+                        Nombre: [[item.name]] [[item.invalid]]
                     </p>
 
                     <div class="col-5">
@@ -64,16 +64,32 @@
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <label :for="'bought_in_dollars' + index">Se compro en dolares</label>
-                        <input :id="'bought_in_dollars' + index" type="checkbox" v-model="item.bought_in_dollars">
+                        <label :for="'isBoughtInDollars' + index">Se compro en dolares</label>
+                        <input :id="'isBoughtInDollars' + index" type="checkbox" v-model="item.isBoughtInDollars">
                     </div>
-                    <div class="col-4">
-                        <label :for="'dollar_coin' + index">Costo Individual Dolar </label>
-                        <input :id="'dollar_coin' + index" type="number" min="1" v-model="item.dollar_cost">
+                    <div class="col-8 row" v-show="item.isBoughtInDollars" >
+                        <div class="col-5">
+                            <label :for="'dollar_coin_' + index">Costo Individual Dolar </label>
+                            <input :id="'dollar_coin_' + index" type="number" min="0" step="0.001" v-model="item.dollar_cost">
+                        </div>
+                        <div class="col-5">
+                            <p>
+                                <b>Costo local: </b>
+                                [[item.calculateLocalCost() | roundDecimals(3)]]
+                            </p>
+                        </div>
                     </div>
-                    <div class="col-4">
-                        <label :for="'local_coin' + index">Costo Individual Local </label>
-                        <input :id="'local_coin' + index" type="number" min="1" v-model="item.local_cost">
+                    <div class="col-8 row" v-show="!item.isBoughtInDollars" >
+                        <div class="col-5">
+                            <p>
+                                <b>Costo dolar: </b>
+                                [[item.calculateDolarCost() | roundDecimals(3)]]
+                            </p>
+                        </div>
+                        <div class="col-5">
+                            <label :for="'local_coin_' + index">Costo Individual Local </label>
+                            <input :id="'local_coin_' + index" class="border" :class="{ 'border-danger': item.invalid && !item.isLocalCostValid() }" type="number" min="0" step="0.001" v-model="item.local_cost">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -83,16 +99,32 @@
         <span> Si este no es el costo final cambielo a mano</span>
         <div>
             <label for="">Costos finales manuales</label>
-            <input type="text">
+            <input type="checkbox" v-model="manualFinalCosts" >
         </div>
-        <div>
-            {{form.total_cost_dollar.label_tag}}
-            <p> {% render_field form.total_cost_dollar%}</p>
+
+        <div v-if="manualFinalCosts" >
+            <div>
+                {{form.total_cost_dollar.label_tag}}
+                <p> {% render_field form.total_cost_dollar%}</p>
+            </div>
+            <div>
+                {{form.total_cost_local.label_tag}}
+                <p> {% render_field form.total_cost_local%}</p>
+            </div>
         </div>
-        
-        <div>
-            {{form.total_cost_local.label_tag}}
-            <p> {% render_field form.total_cost_local%}</p>
+
+        <div v-else >
+            <div>
+                <label for="">Costo final dolares</label>
+                <p>[[totalCostDolar | roundDecimals(3) ]]</p>
+                <input type="hidden" name="total_cost_dollar" :value="totalCostDolar">
+            </div>
+            <div>
+                <label for="">Costo final local</label>
+                <p>[[totalCostLocal | roundDecimals(3) ]]</p>
+                <input type="hidden" name="total_cost_local" :value="totalCostLocal" >
+
+            </div>
         </div>
 
         <input type="hidden" name="raw_materials_json" :value="parsedMaterials" >
@@ -110,42 +142,148 @@
     {{block.super}}
     <script src="{% static 'js/bootstrap_select/bootstrap-select.min.js' %}"></script>
 <script>
+class RawMaterial{
+    constructor(pk, name, amount, measurement_unit, isBoughtInDollars, dollar_cost, local_cost) {
+        this.pk = pk;
+        this.name = name;
+        this.amount = amount;
+        this.measurement_unit = measurement_unit;
+        this.isBoughtInDollars = isBoughtInDollars;
+        this.dollar_cost = dollar_cost;
+        this.local_cost = local_cost;
+        this.invalid = false;
+    }
+    isAmountValid(){
+        let isValid = true;
+        if (! parseInt(this.amount) >= 1) {
+            isValid = false;
+        }
+        return isValid;
+    }
+    isDollarCostValid(){
+        let isValid = true;
+        if(this.isBoughtInDollars && !parseInt(this.dollar_cost) >= 1) {
+            isValid = false;
+        }
+        return isValid;
+    }
+    isLocalCostValid(){
+        let isValid = true;
+        if (!this.isBoughtInDollars && !parseInt(this.local_cost) >= 1) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
+
+    isValid() {
+        let isValid = true;
+        if (! parseInt(this.amount) >= 1) {
+            isValid = false;
+        }else if(this.isBoughtInDollars && !parseInt(this.dollar_cost) >= 1) {
+            isValid = false;
+        }else if (!this.isBoughtInDollars && !parseInt(this.local_cost) >= 1) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    calculateLocalCost(){
+        return this.dollar_cost * parseFloat(app.dolar_price);
+    }
+
+    calculateDolarCost(){
+        return this.local_cost / parseFloat(app.dolar_price);
+    }
+}
+
+
 var app = new Vue({
     delimiters: ['[[', ']]'],
     el: '#app',
     data: {
         materials: [],
+        formMaterials: [],
+        manualFinalCosts: false,
         dolar_price: document.getElementById('id_dolar_price').value,
         raw_materials: {{ raw_materials | safe }},
         unit_system: {{unit_system | safe_js}},
-        dolar_convertion_factor: 1,
     },
     methods: {
-        get_total_cost: function(){
-
-        },
         onSubmit: function(){
-            //this.parseAllMaterials();
-            console.log("Intento de submit");
-            //document.getElementById("sale_form").submit()
-            this.$refs.form.submit();
-        }
-    },
-    computed: {
-        parsedMaterials: function(){
-            return JSON.stringify(this.selectedMaterials);
+            if (this.areMaterialsValid()) {
+                console.log("Intento de submit");
+                //this.$refs.form.submit();
+            }else{
+                //app.$forceUpdate();
+                console.log("No es valido");
+            }
         },
-        selectedMaterials: function() {
+        areMaterialsValid: function () {
+            let valid = true;
+            this.formMaterials.forEach(function(el){
+                if (! el.isValid()) {
+                    valid = el.isValid();
+                    el.invalid = true;
+                }
+            });
+            return valid;
+        },
+        buildMaterials: function() {
             let selected = Array(this.materials.length)
             let self = this;
             for (let i = 0; i < this.materials.length; i++) {
-                selected[i] = this.raw_materials.find(function(el) {
+                let value;
+                value = this.formMaterials.find(function (el) {
                     return el.pk === parseInt(self.materials[i]);
                 });
+                if (!value) {
+                    value = this.raw_materials.find(function(el) {
+                        return el.pk === parseInt(self.materials[i]);
+                    });
+                }
+                if (value instanceof RawMaterial) {
+                    selected[i] = value;
+                }else{
+                    selected[i] = new RawMaterial(
+                        value.pk,
+                        value.name,
+                        1,
+                        value.measurement_unit,
+                        false,
+                        1,
+                        1
+                    );
+                }
             }
-            return selected
+            self.formMaterials = selected;
         },
 
+    },
+    computed: {
+        parsedMaterials: function(){
+            return JSON.stringify(this.formMaterials);
+        },
+        totalCostDolar: function() {
+            let totalCost = 0;
+            this.formMaterials.forEach(function (el) {
+                if (el.isBoughtInDollars) {
+                    totalCost += el.dollar_cost * el.amount;
+                } else {
+                    totalCost += el.calculateDolarCost() * el.amount;
+                }
+            });
+            return totalCost;
+        },
+        totalCostLocal: function() {
+            return this.totalCostDolar * this.dolar_price;
+        },
+
+    },
+    filters: {
+        roundDecimals: function (x, roundTo) {
+            return Number.parseFloat(x).toFixed(roundTo);
+        }
     }
 });
 
