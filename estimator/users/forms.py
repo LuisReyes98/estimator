@@ -39,9 +39,7 @@ class CreateCompanyForm(forms.ModelForm):
     # Logica de limpieza de datos
     def clean(self):
         """Verificando que las contraseñas coinciden"""
-
         data = super().clean()
-
         # Debido a que se necesita acceder a dos datos
         password = data['password']
         password_confirmation = data['password_confirmation']

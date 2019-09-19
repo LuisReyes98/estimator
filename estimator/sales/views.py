@@ -95,6 +95,14 @@ class SaleCreateView(CreateView):
         context["form_url"] = reverse_lazy('sales:new_sale')
         return context
 
+    def form_invalid(self, form):
+        """Si el formulario no es valido retorna el formulario y el contexto"""
+
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            raw_materials_string=form.data['raw_materials_json']
+        ))
+
 
 class SaleUpdateView(UpdateView):
     model = Sale

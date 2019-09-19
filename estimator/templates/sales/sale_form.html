@@ -16,9 +16,9 @@
 <div class="page-content sales__form" id="content">
     <h1>
         {% if editing %}
-            Editando Venta
+        Editando Venta
         {% else %}
-            Creando Venta
+        Creando Venta
         {% endif %}
     </h1>
     {% if form.non_field_errors %}
@@ -43,7 +43,6 @@
             {% render_field form.dolar_price v-model="dolar_price" step="0.001" %}
 
         </div>
-
         <div>
             {{form.raw_materials.label_tag}}
             <p> {% render_field form.raw_materials  v-model="materials" @change="buildMaterials" class+="selectpicker col-8 mx-4" multiple="" data-live-search="true" title="Escoge las materias primas" %}</p>
@@ -119,8 +118,8 @@
 
         <span> Si este no es el costo final cambielo a mano</span>
         <div>
-            <label for="">Costos finales manuales</label>
-            <input type="checkbox" v-model="manualFinalCosts" >
+            {{form.manual_costs.label_tag}}
+            {% render_field form.manual_costs v-model="manualFinalCosts" %}
         </div>
 
         <div v-if="manualFinalCosts" >
@@ -149,9 +148,7 @@
         </div>
 
         <input type="hidden" name="raw_materials_json" :value="parsedMaterials" >
-        {% comment %} {% for error in form.raw_materials_json.errors %}
-            {{ error }}
-        {% endfor %} {% endcomment %}
+
         <button type="submit" > Guardar</button>
     </form>
 
@@ -172,7 +169,6 @@ class RawMaterial{
         this.isBoughtInDollars = isBoughtInDollars;
         this.dollar_cost = dollar_cost;
         this.local_cost = local_cost;
-        this.invalid = false;
     }
     isAmountValid(){
         let num = Number.parseInt(this.amount);
@@ -205,7 +201,6 @@ class RawMaterial{
         return true;
     }
 
-
     isValid() {
         let isValid = true;
         if (! this.isAmountValid()) {
@@ -219,21 +214,51 @@ class RawMaterial{
     }
 
     calculateLocalCost(){
-        return this.dollar_cost * Number.parseFloat(app.dolar_price);
+        try {
+            return this.dollar_cost * Number.parseFloat(app.dolar_price);
+        } catch (error) {
+            return this.dollar_cost * {{form.dolar_price.value}};
+        }
     }
 
     calculateDolarCost(){
-        return this.local_cost / Number.parseFloat(app.dolar_price);
+        try {
+            return this.local_cost / Number.parseFloat(app.dolar_price);
+        } catch (error) {
+            return this.local_cost /  {{form.dolar_price.value}};
+        }
     }
 }
 
+function objectsToRawMaterials(entryObj){
+    let result = Array(entryObj.length);
+    entryObj.forEach(function(el,index) {
+        result[index] = new RawMaterial(
+            el.pk,
+            el.name,
+            el.amount, // amount
+            el.measurement_unit,
+            el.isBoughtInDollars, //isBoughtInDollars
+            el.dollar_cost, //dollar_cost
+            el.local_cost //local_cost
+        );
+    });
+    return result;
+}
+function selectedMaterials(entryObj){
+    let result = Array(entryObj.length);
+    entryObj.forEach(function(el,index) {
+        result[index] = el.pk.toString();
+    });
+    return result;
+}
 
 var app = new Vue({
     delimiters: ['[[', ']]'],
     el: '#app',
     data: {
-        materials: [],
-        formMaterials: [],
+        materials: {% if raw_materials_string %}selectedMaterials({{raw_materials_string | safe }}){% else %}[]{% endif %},
+        formMaterials: {% if raw_materials_string %}objectsToRawMaterials({{raw_materials_string | safe }}){% else %}[]{% endif %},
         manualFinalCosts: false,
         dolar_price: document.getElementById('id_dolar_price').value,
         raw_materials: {{ raw_materials | safe }},
@@ -252,13 +277,12 @@ var app = new Vue({
             this.formMaterials.forEach(function(el){
                 if (! el.isValid()) {
                     valid = el.isValid();
-                    el.invalid = true;
                 }
             });
             return valid;
         },
         buildMaterials: function() {
-            let selected = Array(this.materials.length)
+            let selected = Array(this.materials.length);
             let self = this;
             for (let i = 0; i < this.materials.length; i++) {
                 let value;
