@@ -187,4 +187,85 @@
   &__icon--alert {
     font-size: 30px;
   }
+
+  &__form {
+    &--textfield {
+      height: 100%;
+      padding-bottom: 20px;
+      display: flex;
+      align-items: center;
+
+      label {
+        font-size: 18px;
+        color: rgba(0, 0, 0, 0.26);
+        margin: 0;
+      }
+
+      .mdl-textfield__error {
+        visibility: visible;
+      }
+    }
+
+    &--select {
+      padding-bottom: 20px;
+
+      .dropdown {
+        width: 100% !important;
+
+        :focus {
+          box-shadow: none !important;
+        }
+
+        .btn {
+          &:focus {
+            outline: none !important;
+            outline-width: 0 !important;
+            box-shadow: none !important;
+            -moz-box-shadow: none !important;
+            -webkit-box-shadow: none !important;
+          }
+        }
+      }
+    }
+
+    &--switch {
+      // font-size: 18px;
+
+      :focus {
+        outline: none !important;
+        outline-width: 0 !important;
+        box-shadow: none !important;
+        -moz-box-shadow: none !important;
+        -webkit-box-shadow: none !important;
+      }
+
+      input:focus+
+      label {
+        &::before {
+          outline: none !important;
+          outline-width: 0 !important;
+          box-shadow: none !important;
+          -moz-box-shadow: none !important;
+          -webkit-box-shadow: none !important;
+          border-color: #adb5bd !important;
+        }
+      }
+
+      input:checked+
+      label {
+        &::before {
+          background-color: map-get($project_colors, "cyan") !important;
+          border-color: map-get($project_colors, "cyan") !important;
+        }
+      }
+    }
+  }
+}
+input:focus,
+input.form-control:focus {
+  outline: none !important;
+  outline-width: 0 !important;
+  box-shadow: none !important;
+  -moz-box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }

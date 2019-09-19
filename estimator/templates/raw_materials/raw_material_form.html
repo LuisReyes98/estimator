@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="row">
-            <div class="col">
+            <div class="col-12 col-lg-6 m-auto">
                 <div class="card app__background--gray-200">
                     <div class="card-body">
                         <div class="container-fluid">
@@ -61,34 +61,59 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <div>
-                                        {{ form.providers.label_tag }}
-                                        {% render_field form.providers class+="selectpicker" multiple="" data-live-search="true" title="Escoge los proveedores" %}
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <div class="app__form--textfield w-100">
+                                            <label class="" for="">
+                                                <i class="mdi mdi-textbox"></i>{{ form.providers.label }}
+                                            </label>
+                                        </div>
                                         {% for error in form.providers.errors %}
-                                        {{ error }}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {{ error }}
+                                            </span>
                                         {% endfor %}
                                     </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <div class="app__form--select w-100">
+                                            {% render_field form.providers class+="selectpicker" multiple="" data-live-search="true" title="Selecciona" %}
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="rom-group">
-                                    <div>
-                                        {{ form.measurement_unit.label_tag }}
-                                        {% render_field form.measurement_unit %}
-                            
+                                <div class="form-row">
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <div class="app__form--textfield w-100">
+                                            <label class="" for="">
+                                                <i class="mdi mdi-account-box-multiple"></i>{{ form.measurement_unit.label }}
+                                            </label>
+                                        </div>
                                         {% for error in form.measurement_unit.errors %}
-                                        {{ error }}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {{ error }}
+                                            </span>
                                         {% endfor %}
+                                    </div>
+                                    <div class="form-group col-md-6 col-sm-12">
+                                        <div class="app__form--select w-100">
+                                            {% render_field form.measurement_unit class+="selectpicker" data-live-search="true" title="Selecciona" %}
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div>
+                                    <div class="custom-control custom-switch app__form--switch">
+                                        {% render_field form.can_expire type="checkbox" class="custom-control-input" id="id_can_expire" %}
+                                        {% comment %} <input type="checkbox" class="custom-control-input" id="id_can_expire"> {% endcomment %}
+                                        <label class="custom-control-label" for="id_can_expire">{{ form.can_expire.label }}</label>
+                                    </div>
+                                    {% comment %} <div class="form-group col-6">
                                         {{ form.can_expire.label_tag }}
                                         {% render_field form.can_expire %}
-                            
-                                        {% for error in form.can_expire.errors %}
-                                        {{ error }}
-                                        {% endfor %}
-                                    </div>
+                                    </div> {% endcomment %}
+                                    {% for error in form.can_expire.errors %}
+                                        <span class="mdl-textfield__error text-danger">
+                                            {{ error }}
+                                        </span>
+                                    {% endfor %}
                                 </div>
                                 <div class="form-group">
                                     <div>
