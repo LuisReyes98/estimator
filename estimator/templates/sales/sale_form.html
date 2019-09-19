@@ -53,24 +53,38 @@
                 :key="index">
                 <div class="row">
                     <p class="col-5">
-                        Nombre: [[item.name]] [[item.invalid]]
+                        Nombre: [[item.name]]
                     </p>
 
                     <div class="col-5">
                         <label :for="'amount' + index">Cantidad </label>
-                        <input :id="'amount' + index" type="number" min="1" v-model="item.amount">
+                        <input
+                            :id="'amount' + index"
+                            type="number"
+                            min="1"
+                            v-model="item.amount"
+                            :class="{ 'border-danger': !item.isAmountValid()}"
+                        >
                         <p>[[ unit_system[item.measurement_unit] ]]</p>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-4">
-                        <label :for="'isBoughtInDollars' + index">Se compro en dolares</label>
-                        <input :id="'isBoughtInDollars' + index" type="checkbox" v-model="item.isBoughtInDollars">
+                        <label :for="'is_bought_in_dollars' + index">Se compro en dolares</label>
+                        <input :id="'is_bought_in_dollars' + index" type="checkbox" v-model="item.isBoughtInDollars" class="border">
                     </div>
                     <div class="col-8 row" v-show="item.isBoughtInDollars" >
                         <div class="col-5">
                             <label :for="'dollar_coin_' + index">Costo Individual Dolar </label>
-                            <input :id="'dollar_coin_' + index" type="number" min="0" step="0.001" v-model="item.dollar_cost">
+                            <input
+                                :id="'dollar_coin_' + index"
+                                type="number"
+                                min="0"
+                                step="0.001"
+                                v-model="item.dollar_cost"
+                                class="border"
+                                :class="{ 'border-danger': !item.isDollarCostValid()}"
+                            >
                         </div>
                         <div class="col-5">
                             <p>
@@ -88,9 +102,16 @@
                         </div>
                         <div class="col-5">
                             <label :for="'local_coin_' + index">Costo Individual Local </label>
-                            <input :id="'local_coin_' + index" class="border" :class="{ 'border-danger': item.invalid && !item.isLocalCostValid() }" type="number" min="0" step="0.001" v-model="item.local_cost">
+                            <input
+                                :id="'local_coin_' + index"
+                                class="border"
+                                :class="{ 'border-danger': !item.isLocalCostValid()}"
+                                type="number" min="0"
+                                step="0.001"
+                                v-model="item.local_cost">
                         </div>
                     </div>
+
                 </div>
             </div>
 
@@ -154,46 +175,55 @@ class RawMaterial{
         this.invalid = false;
     }
     isAmountValid(){
-        let isValid = true;
-        if (! parseInt(this.amount) >= 1) {
-            isValid = false;
+        let num = Number.parseInt(this.amount);
+        if(Number.isNaN(num)){
+            return false;
         }
-        return isValid;
+        if ( !(num >= 1)) {
+            return false;
+        }
+        return true;
     }
     isDollarCostValid(){
-        let isValid = true;
-        if(this.isBoughtInDollars && !parseInt(this.dollar_cost) >= 1) {
-            isValid = false;
+        let num = Number.parseFloat(this.dollar_cost);
+        if(Number.isNaN(num)){
+            return false;
         }
-        return isValid;
+        if (this.isBoughtInDollars && !(num > 0)) {
+            return false;
+        }
+        return true;
     }
     isLocalCostValid(){
-        let isValid = true;
-        if (!this.isBoughtInDollars && !parseInt(this.local_cost) >= 1) {
-            isValid = false;
+        let num = Number.parseFloat(this.local_cost);
+        if(Number.isNaN(num)){
+            return false;
         }
-        return isValid;
+        if (!this.isBoughtInDollars && !(num > 0)) {
+            return false;
+        }
+        return true;
     }
 
 
     isValid() {
         let isValid = true;
-        if (! parseInt(this.amount) >= 1) {
+        if (! this.isAmountValid()) {
             isValid = false;
-        }else if(this.isBoughtInDollars && !parseInt(this.dollar_cost) >= 1) {
+        }else if(! this.isDollarCostValid()) {
             isValid = false;
-        }else if (!this.isBoughtInDollars && !parseInt(this.local_cost) >= 1) {
+        }else if (! this.isLocalCostValid()) {
             isValid = false;
         }
         return isValid;
     }
 
     calculateLocalCost(){
-        return this.dollar_cost * parseFloat(app.dolar_price);
+        return this.dollar_cost * Number.parseFloat(app.dolar_price);
     }
 
     calculateDolarCost(){
-        return this.local_cost / parseFloat(app.dolar_price);
+        return this.local_cost / Number.parseFloat(app.dolar_price);
     }
 }
 
@@ -212,11 +242,9 @@ var app = new Vue({
     methods: {
         onSubmit: function(){
             if (this.areMaterialsValid()) {
-                console.log("Intento de submit");
-                //this.$refs.form.submit();
+                this.$refs.form.submit();
             }else{
-                //app.$forceUpdate();
-                console.log("No es valido");
+                window.scrollTo(0, 0);
             }
         },
         areMaterialsValid: function () {
@@ -248,11 +276,11 @@ var app = new Vue({
                     selected[i] = new RawMaterial(
                         value.pk,
                         value.name,
-                        1,
+                        1, // amount
                         value.measurement_unit,
-                        false,
-                        1,
-                        1
+                        false, //isBoughtInDollars
+                        1, //dollar_cost
+                        1 //local_cost
                     );
                 }
             }
