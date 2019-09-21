@@ -1,55 +1,60 @@
-{% extends 'layouts/base_app.html' %}
-
+{% extends 'layouts/base.html' %}
 
 {% block content %}
-{{block.super}}
-<div class="page-content" id="content">
-    <h1>
-        Eliminar materia prima
-    </h1>
-    <form method="post">
-        {% csrf_token %}
-        <p>Seguro de eliminar la siguiente materia "{{ object }}"?</p>
-        <button type="submit">SI</button>
-        <a href="{% url 'raw_materials:materials' %}">No</a>
-    </form>
-    <p>Nombre: {{object.name}}</p>
-    <p>Proveedores:
-        <ul>
-            {% for provider in object.providers.all %}
-                <li>{{provider}}</li>
-            {% endfor %}
-        </ul>
-    </p>
-    <p>Unidad de Medida: {{object.measurement_unit}}</p>
-    <p>Puede expirar: {% if object.can_expire %}Si{% else %}No{% endif %}</p>
-    <p>Tiempo para expirar:
-        {% if object.can_expire %}
-            {% if object.years_to_expire > 0  %}
-                {{ object.years_to_expire }} años
-            {% endif %}
-            {% if object.months_to_expire > 0 %}
-                {{ object.months_to_expire }} meses
-            {% endif %}
-            {% if object.days_to_expire > 0 %}
-                {{ object.days_to_expire }} días
-            {% endif %}
-        {% endif %}
-    </p>
-    <p>Es importado:
-        {% if object.is_imported %}
-            Si
-        {% else %}
-            No
-        {% endif %}
-    </p>
-    <a  href="{% url 'raw_materials:material'  object.pk  %}">
-        detalle
-    </a>
-    <a  href="{% url 'raw_materials:update_material'  object.pk  %}">
-        editar
-    </a>
-
+<div class="bg__black_gradient d-flex justify-content-center align-items-md-center align-items-start vh-100 overflow-y-scroll p-4">
+    <div class="card m-4" style="width: 25rem;">
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="row pb-3">
+                    <div class="col-12 m-auto">
+                        <h4 class="text-center font-weight-bold text-uppercase app__text--red">
+                            Eliminar Materia Prima
+                        </h4>
+                    </div>
+                </div>
+                <div class="row pb-3">
+                    <div class="col pt-1 pb-1">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="form-group text-center">
+                                <p class="">
+                                    Está seguro de eliminar a <span class="font-weight-bold">{{ object }}</span> de la lista?
+                                </p>
+                            </div>
+                            <div class="col m-auto text-center">
+                                <div class="d-flex flex-row justify-content-center">
+                                    <button title="Continuar"
+                                            class="m-1 rounded-pill app__button button--fab button--green mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect" type="submit">
+                                        <i class="mdi mdi-check"></i>
+                                    </button>
+                                    <a title="Cancelar"
+                                       class="m-1 rounded-pill app__button button--fab button--red mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                       href="{% url 'raw_materials:materials' %}">
+                                        <i class="mdi mdi-close"></i>
+                                    </a>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col p-0">
+                        <div class="d-flex flex-row justify-content-start">
+                            <a title="Detalles"
+                               class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                               href="{% url 'raw_materials:material'  object.pk  %}">
+                                <i class="mdi mdi-eye"></i>
+                            </a>
+                            </form>
+                            <a title="Editar"
+                               class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                               href="{% url 'raw_materials:update_material'  object.pk  %}">
+                                <i class="mdi mdi-pencil"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-
 {% endblock content %}

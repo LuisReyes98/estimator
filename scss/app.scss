@@ -212,9 +212,9 @@
       .dropdown {
         width: 100% !important;
 
-        :focus {
-          box-shadow: none !important;
-        }
+        // :focus {
+        //   box-shadow: none !important;
+        // }
 
         .btn {
           &:focus {
@@ -231,38 +231,35 @@
     &--switch {
       // font-size: 18px;
 
-      :focus {
-        outline: none !important;
-        outline-width: 0 !important;
-        box-shadow: none !important;
-        -moz-box-shadow: none !important;
-        -webkit-box-shadow: none !important;
-      }
+      // :focus {
+      //   outline: none !important;
+      //   outline-width: 0 !important;
+      //   box-shadow: none !important;
+      //   -moz-box-shadow: none !important;
+      //   -webkit-box-shadow: none !important;
+      // }
 
-      input:focus+
-      label {
+      input:focus + label {
         &::before {
-          outline: none !important;
-          outline-width: 0 !important;
-          box-shadow: none !important;
-          -moz-box-shadow: none !important;
-          -webkit-box-shadow: none !important;
-          border-color: #adb5bd !important;
+          // outline: none !important;
+          // outline-width: 0 !important;
+          // box-shadow: none !important;
+          // -moz-box-shadow: none !important;
+          // -webkit-box-shadow: none !important;
+          border-color: map-get($project_colors, "gray-500") !important;
         }
       }
 
-      input:checked+
-      label {
+      input:checked + label {
         &::before {
-          background-color: map-get($project_colors, "cyan") !important;
-          border-color: map-get($project_colors, "cyan") !important;
+          background-color: map-get($project_colors, "dark_blue") !important;
+          border-color: map-get($project_colors, "dark_blue") !important;
         }
       }
     }
   }
 }
-input:focus,
-input.form-control:focus {
+button:focus {
   outline: none !important;
   outline-width: 0 !important;
   box-shadow: none !important;

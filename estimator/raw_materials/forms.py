@@ -15,21 +15,21 @@ class RawMaterialForm(forms.ModelForm):
     """Formulario de la Materia Prima"""
 
     days_to_expire = forms.IntegerField(
-        label="Días para expirar",
+        label="Días",
         min_value=0,
         max_value=999,
         required=False
     )
 
     months_to_expire = forms.IntegerField(
-        label="Meses para expirar",
+        label="Meses",
         min_value=0,
         max_value=999,
         required=False
     )
 
     years_to_expire = forms.IntegerField(
-        label="Años para expirar",
+        label="Años",
         min_value=0,
         max_value=999,
         required=False
