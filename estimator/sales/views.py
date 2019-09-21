@@ -38,16 +38,23 @@ class CalendarView(LoginRequiredMixin, TemplateView):
 
         return some_dates
 
-    def get(self, request, *args, **kwargs):
+    # def get(self, request, *args, **kwargs):
 
-        """añadiendo variables al contexto en get"""
+    #     """añadiendo variables al contexto en get"""
+    #     context = super().get_context_data(**kwargs)
+
+    #     return self.render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        """Añadiendo variables al contexto """
         context = super().get_context_data(**kwargs)
         context["title"] = "Calendario"
         context["user"] = self.request.user
 
         context["predictions"] = self.exampleDates()
+        context["current_page"] = "calendar_sale"
 
-        return self.render_to_response(context)
+        return context
 
 
 class SaleDetailView(DetailView):
@@ -84,7 +91,6 @@ class SaleCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         context["company"] = self.request.user.company
-
         context["raw_materials"] = json.dumps(
             list(RawMaterial.objects.filter(
                 company=self.request.user.company,).values(
@@ -96,6 +102,7 @@ class SaleCreateView(CreateView):
         )
         context['unit_system'] = dict(RawMaterial.MEASUREMENT_UNITS)
         context["form_url"] = reverse_lazy('sales:new_material')
+        context["current_page"] = "calendar_sale"
 
         if not self.request.user.is_superuser:
             context["company_user"] = self.request.user.company_user
