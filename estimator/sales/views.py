@@ -17,6 +17,7 @@ from .forms import SaleForm
 from raw_materials.models import RawMaterial
 from .models import Sale
 
+# from .models import MaterialSaleRelation
 # Create your views here.
 
 
@@ -56,7 +57,13 @@ class SaleDetailView(DetailView):
 
 class SaleListView(ListView):
     model = Sale
-    template_name = ".html"
+    template_name = "sales/sales_list.html"
+
+    def get_queryset(self):
+        new_context = Sale.objects.filter(
+            company=self.request.user.company.pk,
+        ).order_by('-created')
+        return new_context
 
 
 class SaleCreateView(CreateView):

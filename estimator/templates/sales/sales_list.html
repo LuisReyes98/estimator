@@ -1,0 +1,33 @@
+{% extends 'layouts/base_app.html' %}
+{% block content %}
+{{block.super}}
+
+<div class="page-content" id="content">
+    <h1>Listado de ventas</h1>
+    {% for sale in object_list %}
+        <div class="border border-dark">
+            <p>
+                Fecha {{sale.created}}
+            </p>
+            <p>
+                Total dolar {{sale.total_cost_dollar}}
+            </p>
+            <p>
+                Total local {{sale.total_cost_local}}
+            </p>
+
+            <div>
+                <p>Materias primas</p>
+                <ul>
+                    {% for relation in sale.materials_sale_relation %}
+                        <li>Nombre {{relation.raw_material.name}}</li>
+                        <li>Cantidad {{ relation.amount}}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+{% endblock content %}

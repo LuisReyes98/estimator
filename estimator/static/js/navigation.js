@@ -43,6 +43,7 @@ async function postSidebarSession(value) {
     body: JSON.stringify({
       'value': value,
     }),
-  });
+  }).then()
+  .catch(error => {});
 }
 mostrar();

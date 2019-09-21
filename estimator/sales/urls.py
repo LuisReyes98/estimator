@@ -15,4 +15,9 @@ urlpatterns = [
         view=views.SaleCreateView.as_view(),
         name='new_sale'
     ),
+    path(
+        route='sales_list/',
+        view=views.SaleListView.as_view(),
+        name='sales_list'
+    ),
 ]

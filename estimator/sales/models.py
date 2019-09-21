@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as translate
 from estimator.model_mixins import TimeStampFields
+from django.urls import reverse_lazy
+
 # Modelos para las ventas
 
 
@@ -46,11 +48,18 @@ class Sale(TimeStampFields):
         verbose_name = "Venta"
         verbose_name_plural = "Ventas"
 
+    @property
+    def materials_sale_relation(self):
+        """ Obtener el elemento que une a la venta con la materia prima """
+        return MaterialSaleRelation.objects.filter(
+            sale=self.pk,
+        )
+
     def __str__(self):
         return '%s %d' % (self._meta.verbose_name, self.pk)
 
     # def get_absolute_url(self):
-    #     return reverse("Sale_detail", kwargs={"pk": self.pk})
+    #     return reverse_lazy("Sale_detail", kwargs={"pk": self.pk})
 
 
 class MaterialSaleRelation(TimeStampFields):

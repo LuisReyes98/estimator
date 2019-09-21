@@ -8,7 +8,7 @@ from django.utils.translation import gettext as _
 
 class SaleForm(forms.ModelForm):
 
-    dolar_price = forms.FloatField(
+    dollar_price = forms.FloatField(
         label="Precio del dolar en moneda local",
         min_value=0,
         required=True,
@@ -28,9 +28,9 @@ class SaleForm(forms.ModelForm):
         user = kwargs.pop('user')
         super(SaleForm, self).__init__(*args, **kwargs)
         try:
-            self.fields['dolar_price'].initial = DolarPrice.objects.latest('created').dollar_price
+            self.fields['dollar_price'].initial = DolarPrice.objects.latest('created').dollar_price
         except Exception:
-            self.fields['dolar_price'].initial = 1
+            self.fields['dollar_price'].initial = 1
 
         self.fields['raw_materials'].queryset = RawMaterial.objects.filter(
             company=user.company.pk,
@@ -64,21 +64,21 @@ class SaleForm(forms.ModelForm):
                     },
                 ))
 
-            if float(val['dollar_cost']) < 0:
+            if float(val['cost_dollar']) < 0:
                 errors.append(forms.ValidationError(
                     _('Costo en dolar no valido: %(value)s'),
                     code='invalid',
                     params={
-                        'value': val['dollar_cost'],
+                        'value': val['cost_dollar'],
                     },
                 ))
 
-            if float(val['local_cost']) < 0:
+            if float(val['cost_local']) < 0:
                 errors.append(forms.ValidationError(
                     _('Costo local no valido: %(value)s'),
                     code='invalid',
                     params={
-                        'value': val['local_cost'],
+                        'value': val['cost_local'],
                     },
                 ))
         if errors:
@@ -89,15 +89,36 @@ class SaleForm(forms.ModelForm):
     def save(self, commit=True):
         """Metodo de guardar Una Compra"""
         instance = super(SaleForm, self).save(commit=False)
+        # print(str(instance))
         data = self.cleaned_data
         # print(data)
-        # raw_materials_json = json.loads(data['raw_materials_json'])
-        # for x in raw_materials_json:
-        #     print(x)
+        dollar_price = DolarPrice(dollar_price=data.pop('dollar_price'))
+        # print(dollar_price)
+
+        raw_materials_json = json.loads(data['raw_materials_json'])
+        materials_sale_relation = []
+        for raw_material in data['raw_materials']:
+            temp = next(
+                    (item for item in raw_materials_json if item["raw_material_pk"] == raw_material.pk),
+                    None
+                )
+            temp.pop('isBoughtInDollars')
+            temp.pop('name')
+            temp.pop('measurement_unit')
+            temp.pop('raw_material_pk')
+            temp['raw_material'] = raw_material
+            materials_sale_relation.append(
+                MaterialSaleRelation(**temp)
+            )
+        # print(materials_sale_relation)
 
         if commit:
-            print('Intento de guardar')
-            pass
-            # instance.save()
+            dollar_price.save()
+            instance.save()
+
+            for el in materials_sale_relation:
+                # Saving the many to many
+                el.sale = instance
+                el.save()
             # self.save_m2m()
         return instance
