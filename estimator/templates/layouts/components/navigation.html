@@ -39,7 +39,7 @@
       <a
         href="{% url 'home' %}"
         class="{% if current_page == "home" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
-               app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+              app__nav--link nav-link d-flex flex-row align-items-center pl-0"
         data-toggle="Inicio"
       >
         <i class="mdi mdi-home"></i>
@@ -49,7 +49,7 @@
     <li class="nav-item">
       <a
         href="{% url 'sales:calendar' %}"
-        class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+        class="{% if current_page == "calendar_sale" %} app__text--cyan {% else %} app__text--light_gray {% endif %}app__nav--link nav-link d-flex flex-row align-items-center pl-0"
         data-toggle="Calendario Predictor"
       >
         <i class="mdi mdi-calendar"></i>

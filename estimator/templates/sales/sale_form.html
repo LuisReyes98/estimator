@@ -39,8 +39,8 @@
             <input type="hidden" name="company_user" value="{{company_user.pk}}" >
         {% endif %}
         <div>
-            {{form.dolar_price.label_tag}}
-            {% render_field form.dolar_price v-model="dolar_price" step="0.001" %}
+            {{form.dollar_price.label_tag}}
+            {% render_field form.dollar_price v-model="dollar_price" step="0.001" %}
 
         </div>
         <div>
@@ -80,7 +80,7 @@
                                 type="number"
                                 min="0"
                                 step="0.001"
-                                v-model="item.dollar_cost"
+                                v-model="item.cost_dollar"
                                 class="border"
                                 :class="{ 'border-danger': !item.isDollarCostValid()}"
                             >
@@ -107,7 +107,7 @@
                                 :class="{ 'border-danger': !item.isLocalCostValid()}"
                                 type="number" min="0"
                                 step="0.001"
-                                v-model="item.local_cost">
+                                v-model="item.cost_local">
                         </div>
                     </div>
 
@@ -159,99 +159,12 @@
 {% block javascript %}
     {{block.super}}
     <script src="{% static 'js/bootstrap_select/bootstrap-select.min.js' %}"></script>
+    <script src="{% static 'js/sales/sales_form/class.js' %}"></script>
+    <script src="{% static 'js/sales/sales_form/functions.js' %}"></script>
+
 <script>
-class RawMaterial{
-    constructor(pk, name, amount, measurement_unit, isBoughtInDollars, dollar_cost, local_cost) {
-        this.pk = pk;
-        this.name = name;
-        this.amount = amount;
-        this.measurement_unit = measurement_unit;
-        this.isBoughtInDollars = isBoughtInDollars;
-        this.dollar_cost = dollar_cost;
-        this.local_cost = local_cost;
-    }
-    isAmountValid(){
-        let num = Number.parseInt(this.amount);
-        if(Number.isNaN(num)){
-            return false;
-        }
-        if ( !(num >= 1)) {
-            return false;
-        }
-        return true;
-    }
-    isDollarCostValid(){
-        let num = Number.parseFloat(this.dollar_cost);
-        if(Number.isNaN(num)){
-            return false;
-        }
-        if (this.isBoughtInDollars && !(num > 0)) {
-            return false;
-        }
-        return true;
-    }
-    isLocalCostValid(){
-        let num = Number.parseFloat(this.local_cost);
-        if(Number.isNaN(num)){
-            return false;
-        }
-        if (!this.isBoughtInDollars && !(num > 0)) {
-            return false;
-        }
-        return true;
-    }
 
-    isValid() {
-        let isValid = true;
-        if (! this.isAmountValid()) {
-            isValid = false;
-        }else if(! this.isDollarCostValid()) {
-            isValid = false;
-        }else if (! this.isLocalCostValid()) {
-            isValid = false;
-        }
-        return isValid;
-    }
-
-    calculateLocalCost(){
-        try {
-            return this.dollar_cost * Number.parseFloat(app.dolar_price);
-        } catch (error) {
-            return this.dollar_cost * {{form.dolar_price.value}};
-        }
-    }
-
-    calculateDolarCost(){
-        try {
-            return this.local_cost / Number.parseFloat(app.dolar_price);
-        } catch (error) {
-            return this.local_cost /  {{form.dolar_price.value}};
-        }
-    }
-}
-
-function objectsToRawMaterials(entryObj){
-    let result = Array(entryObj.length);
-    entryObj.forEach(function(el,index) {
-        result[index] = new RawMaterial(
-            el.pk,
-            el.name,
-            el.amount, // amount
-            el.measurement_unit,
-            el.isBoughtInDollars, //isBoughtInDollars
-            el.dollar_cost, //dollar_cost
-            el.local_cost //local_cost
-        );
-    });
-    return result;
-}
-function selectedMaterials(entryObj){
-    let result = Array(entryObj.length);
-    entryObj.forEach(function(el,index) {
-        result[index] = el.pk.toString();
-    });
-    return result;
-}
+var initial_dolar_price = {{form.dollar_price.value | safe}};
 
 var app = new Vue({
     delimiters: ['[[', ']]'],
@@ -260,7 +173,7 @@ var app = new Vue({
         materials: {% if raw_materials_string %}selectedMaterials({{raw_materials_string | safe }}){% else %}[]{% endif %},
         formMaterials: {% if raw_materials_string %}objectsToRawMaterials({{raw_materials_string | safe }}){% else %}[]{% endif %},
         manualFinalCosts: false,
-        dolar_price: document.getElementById('id_dolar_price').value,
+        dollar_price: document.getElementById('id_dollar_price').value,
         raw_materials: {{ raw_materials | safe }},
         unit_system: {{unit_system | safe_js}},
     },
@@ -303,8 +216,8 @@ var app = new Vue({
                         1, // amount
                         value.measurement_unit,
                         false, //isBoughtInDollars
-                        1, //dollar_cost
-                        1 //local_cost
+                        1, //cost_dollar
+                        1 //cost_local
                     );
                 }
             }
@@ -320,7 +233,7 @@ var app = new Vue({
             let totalCost = 0;
             this.formMaterials.forEach(function (el) {
                 if (el.isBoughtInDollars) {
-                    totalCost += el.dollar_cost * el.amount;
+                    totalCost += el.cost_dollar * el.amount;
                 } else {
                     totalCost += el.calculateDolarCost() * el.amount;
                 }
@@ -328,7 +241,7 @@ var app = new Vue({
             return totalCost;
         },
         totalCostLocal: function() {
-            return this.totalCostDolar * this.dolar_price;
+            return this.totalCostDolar * this.dollar_price;
         },
 
     },

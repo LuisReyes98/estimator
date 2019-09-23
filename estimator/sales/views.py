@@ -16,8 +16,7 @@ from sales.objects import Prediction
 from .forms import SaleForm
 from raw_materials.models import RawMaterial
 from .models import Sale
-
-# Create your views here.
+from django.shortcuts import redirect
 
 
 class CalendarView(LoginRequiredMixin, TemplateView):
@@ -37,26 +36,50 @@ class CalendarView(LoginRequiredMixin, TemplateView):
 
         return some_dates
 
-    def get(self, request, *args, **kwargs):
-
-        """añadiendo variables al contexto en get"""
+    def get_context_data(self, **kwargs):
+        """Añadiendo variables al contexto """
         context = super().get_context_data(**kwargs)
         context["title"] = "Calendario"
         context["user"] = self.request.user
 
         context["predictions"] = self.exampleDates()
+        context["current_page"] = "calendar_sale"
 
-        return self.render_to_response(context)
+        return context
 
 
 class SaleDetailView(DetailView):
     model = Sale
-    template_name = ".html"
+    template_name = "sales/sale_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().company.pk != self.request.user.company.pk:
+            return redirect('sales:sales_list')
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """Contexto de detalle de materia prima"""
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "materials"
+        return context
 
 
 class SaleListView(ListView):
     model = Sale
-    template_name = ".html"
+    template_name = "sales/sales_list.html"
+
+    def get_queryset(self):
+        new_context = Sale.objects.filter(
+            company=self.request.user.company.pk,
+        ).order_by('-created')
+        return new_context
+
+    def get_context_data(self, **kwargs):
+        """Añadiendo variables al contexto """
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "calendar_sale"
+
+        return context
 
 
 class SaleCreateView(CreateView):
@@ -77,7 +100,6 @@ class SaleCreateView(CreateView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         context["company"] = self.request.user.company
-
         context["raw_materials"] = json.dumps(
             list(RawMaterial.objects.filter(
                 company=self.request.user.company,).values(
@@ -89,6 +111,7 @@ class SaleCreateView(CreateView):
         )
         context['unit_system'] = dict(RawMaterial.MEASUREMENT_UNITS)
         context["form_url"] = reverse_lazy('sales:new_material')
+        context["current_page"] = "calendar_sale"
 
         if not self.request.user.is_superuser:
             context["company_user"] = self.request.user.company_user

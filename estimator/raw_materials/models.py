@@ -162,8 +162,8 @@ class RawMaterial(TimeStampFields):
     def __str__(self):
         return self.name
 
-    # def get_absolute_url(self):
-    #     return reverse("RawMaterial_detail", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse_lazy("raw_materials:material", kwargs={"pk": self.pk})
 
 
 class MaterialProvider(models.Model):

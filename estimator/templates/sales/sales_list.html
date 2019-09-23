@@ -1,0 +1,48 @@
+{% extends 'layouts/base_app.html' %}
+{% block content %}
+{{block.super}}
+
+<div class="page-content" id="content">
+    <h1>Listado de ventas</h1>
+    <table>
+        <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Total dolares</th>
+                <th scope="col">Total local</th>
+                <th scope="col">Materias primas</th>
+    
+                <th scope="col" class="text-center">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        
+            {% for sale in object_list %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{sale.created}}</td>
+                    <td>
+                        {{sale.total_cost_dollar}}
+                    </td>
+                    <td>
+                        {{sale.total_cost_local}}
+                    </td>
+                    <td>
+                        {% for relation in sale.materials_sale_relation %}
+                            <li>{{ relation.amount}} {{relation.raw_material.measurement_unit}} {{relation.raw_material.name}}</li>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <a href="{% url 'sales:sale' sale.pk %}">Ver</a>
+                        <a href="">Editar</a>
+                        <a href="">Eliminar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock content %}

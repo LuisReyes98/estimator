@@ -7,7 +7,8 @@
 
 <link rel="stylesheet" href="{% static 'css/fullcalendar/core.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/fullcalendar/daygrid.min.css' %}">
-{% comment %} <link rel="stylesheet" href="{% static 'css/fullcalendar/bootstrap.min.css' %}"> {% endcomment %}
+{% comment %}
+<link rel="stylesheet" href="{% static 'css/fullcalendar/bootstrap.min.css' %}"> {% endcomment %}
 
 {% endblock head %}
 
@@ -21,21 +22,21 @@
                     Calendario
                 </h3>
             </div>
-            <p>
-            </p>
         </div>
         <div class="row mb-3 pt-3 pb-3 app__border--gray-200">
             <div class="col">
                 <a href="{% url 'sales:new_sale' %}"
-                   class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                     Crear Venta
                 </a>
+                <a href="{% url 'sales:sales_list' %}">Listado de ventas</a>
                 <a href="#"
-                   class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                     Realizar Predicción
                 </a>
             </div>
         </div>
+
         <div class="row vh-100">
             <div class="p-4 col-12" style="height: 95%;">
                 <div class="fc-custom" id="calendar"></div>
