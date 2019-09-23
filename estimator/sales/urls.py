@@ -20,4 +20,9 @@ urlpatterns = [
         view=views.SaleListView.as_view(),
         name='sales_list'
     ),
+    path(
+        route='<int:pk>/',
+        view=views.SaleDetailView.as_view(),
+        name='sale'
+    ),
 ]

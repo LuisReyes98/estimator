@@ -16,9 +16,7 @@ from sales.objects import Prediction
 from .forms import SaleForm
 from raw_materials.models import RawMaterial
 from .models import Sale
-
-# from .models import MaterialSaleRelation
-# Create your views here.
+from django.shortcuts import redirect
 
 
 class CalendarView(LoginRequiredMixin, TemplateView):
@@ -38,13 +36,6 @@ class CalendarView(LoginRequiredMixin, TemplateView):
 
         return some_dates
 
-    # def get(self, request, *args, **kwargs):
-
-    #     """añadiendo variables al contexto en get"""
-    #     context = super().get_context_data(**kwargs)
-
-    #     return self.render_to_response(context)
-
     def get_context_data(self, **kwargs):
         """Añadiendo variables al contexto """
         context = super().get_context_data(**kwargs)
@@ -59,7 +50,18 @@ class CalendarView(LoginRequiredMixin, TemplateView):
 
 class SaleDetailView(DetailView):
     model = Sale
-    template_name = ".html"
+    template_name = "sales/sale_detail.html"
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().company.pk != self.request.user.company.pk:
+            return redirect('sales:sale')
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        """Contexto de detalle de materia prima"""
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "materials"
+        return context
 
 
 class SaleListView(ListView):
@@ -71,6 +73,13 @@ class SaleListView(ListView):
             company=self.request.user.company.pk,
         ).order_by('-created')
         return new_context
+
+    def get_context_data(self, **kwargs):
+        """Añadiendo variables al contexto """
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "calendar_sale"
+
+        return context
 
 
 class SaleCreateView(CreateView):

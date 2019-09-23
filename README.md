@@ -11,7 +11,7 @@ Proyecto de Tesis
 
 ## Requerimientos
 
-- Python 3.6.8
+- Python 3.6.8 o superior
 
 ## Considerar
 
