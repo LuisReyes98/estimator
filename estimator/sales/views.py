@@ -54,7 +54,7 @@ class SaleDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         if self.get_object().company.pk != self.request.user.company.pk:
-            return redirect('sales:sale')
+            return redirect('sales:sales_list')
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):

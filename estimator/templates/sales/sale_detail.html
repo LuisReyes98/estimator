@@ -4,7 +4,8 @@
 {{ block.super }}
 <div class="page-content" id="content">
     <h1>Venta individual</h1>
-    <p>Fecha {{object.created}}</p>
+    <p>Creado por {{sale.company.user}}</p>
+    <p>Fecha {{sale.created}}</p>
     <div>
         <ul>
             {% for relation in sale.materials_sale_relation %}
@@ -25,7 +26,7 @@
             {% endfor %}
         </ul>
     </div>
-    <p>Total dolares: {{object.total_cost_dollar}}</p>
-    <p>Total local: {{object.total_cost_local}}</p>
+    <p>Total dolares: {{sale.total_cost_dollar}}</p>
+    <p>Total local: {{sale.total_cost_local}}</p>
 </div>
 {% endblock content %}

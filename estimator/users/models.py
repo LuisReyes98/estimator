@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-from django.utils.translation import ugettext_lazy as translate
+from django.utils.translation import ugettext as translate
 from estimator.model_mixins import TimeStampFields
 
 # Modelos para el control de usuarios
@@ -73,7 +73,7 @@ class Company(TimeStampFields):
         AppUser,
         verbose_name=translate('User'),
         on_delete=models.CASCADE,
-        parent_link=True
+        parent_link=False
     )
 
     # Campos propios
@@ -99,14 +99,14 @@ class CompanyUser(TimeStampFields):
         AppUser,
         verbose_name=translate('User'),
         on_delete=models.CASCADE,
-        parent_link=True
+        parent_link=False
     )
 
     company = models.ForeignKey(  # Compañia a la que pertenece
         Company,
         verbose_name=translate('Company'),
         on_delete=models.CASCADE,
-        parent_link=True,
+        parent_link=False,
         blank=False,
         null=False,
     )
