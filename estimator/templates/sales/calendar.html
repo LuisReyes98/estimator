@@ -3,60 +3,74 @@
 {% load static %}
 
 {% block head %}
-    {{ block.super }}
+{{ block.super }}
 
-    <link rel="stylesheet" href="{% static 'css/fullcalendar/core.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/fullcalendar/daygrid.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/fullcalendar/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/fullcalendar/core.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/fullcalendar/daygrid.min.css' %}">
+{% comment %} <link rel="stylesheet" href="{% static 'css/fullcalendar/bootstrap.min.css' %}"> {% endcomment %}
 
 {% endblock head %}
 
 {% block content %}
-    {{ block.super }}
-    <div  class="page-content" id="content">
-        <div class="container">
-            <div class="row">
-                <h2>Calendario</h2>
-                <p>
-                    <a href="{% url 'sales:new_sale' %}">Crear Venta</a>
-                    <a href="#">Realizar prediccion</a>
-                </p>
+{{ block.super }}
+<div class="page-content" id="content">
+    <div class="container-fluid">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <h3 class="text-center font-weight-bold text-uppercase">
+                    Calendario
+                </h3>
             </div>
-            <div class="row vh-100">
-                <div class="p-4 col-12" style="height: 95%;">
-                    <div class="fc-custom" id="calendar"></div>
-                </div>
-            </div>
-            {% for prediction in predictions %}
-                <div id="{{prediction.pk}}" class="calendar_box d-none">
-                    Para el {{prediction.date}} se estima
-                </div>
-            
-            {% endfor %}
+            <p>
+            </p>
         </div>
+        <div class="row mb-3 pt-3 pb-3 app__border--gray-200">
+            <div class="col">
+                <a href="{% url 'sales:new_sale' %}"
+                   class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    Crear Venta
+                </a>
+                <a href="#"
+                   class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    Realizar Predicción
+                </a>
+            </div>
+        </div>
+        <div class="row vh-100">
+            <div class="p-4 col-12" style="height: 95%;">
+                <div class="fc-custom" id="calendar"></div>
+            </div>
+        </div>
+        {% for prediction in predictions %}
+        <div id="{{prediction.pk}}" class="calendar_box d-none">
+            Para el {{prediction.date}} se estima
+        </div>
+
+        {% endfor %}
     </div>
+</div>
 
 {% endblock content %}
 
 
 {% block javascript %}
-    {{ block.super }}
+{{ block.super }}
 
-    <script src="{% static 'js/fullcalendar/core.min.js' %}"></script>
-    <script src="{% static 'js/fullcalendar/locales-all.min.js' %}"></script>
-    <script src="{% static 'js/fullcalendar/daygrid.min.js' %}"></script>
-    <script src="{% static 'js/fullcalendar/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/fullcalendar/core.min.js' %}"></script>
+<script src="{% static 'js/fullcalendar/locales-all.min.js' %}"></script>
+<script src="{% static 'js/fullcalendar/daygrid.min.js' %}"></script>
+<script src="{% static 'js/fullcalendar/bootstrap.min.js' %}"></script>
 
 <script>
     var mydate = {{ predictions | safe_js }};
 
     var template = document.getElementById('lorem');
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
 
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
-            plugins: [ 'bootstrap', 'dayGrid' ],
+            plugins: ['bootstrap', 'dayGrid'],
             themeSystem: 'bootstrap',
             bootstrapFontAwesome: {
                 close: 'fa-times',
@@ -87,5 +101,6 @@
     });
 
 </script>
+<script src="{% static 'js/calendar_custom.js' %}"></script>
 
 {% endblock javascript %}
