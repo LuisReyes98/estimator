@@ -1,0 +1,65 @@
+{% extends 'layouts/base_app.html' %}
+{% block content %}
+{{block.super}}
+<div class="page-content" id="content">
+
+    <div class="container-fluid">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <h3 class="text-center font-weight-bold text-uppercase">
+                    Lista de Usuarios
+                </h3>
+            </div>
+        </div>
+        <div class="row mb-3 pt-3 pb-3 app__border--gray-200">
+            <div class="col">
+                <a href="{% url 'users:create_company_user' %}"
+                    class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    Nuevo Usuario
+                </a>
+            </div>
+        </div>
+        <div class="row mb-3 pt-2 pb-2">
+            <div class="col-lg-10 col-md-12 m-auto">
+                <div class="table-responsive-sm">
+                    <table class="table table-sm table-hover" style="white-space: nowrap;">
+                        <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Correo</th>
+                                <th scope="col">Compañía</th>
+                                <th scope="col">Staff</th>
+                                <th scope="col" class="text-center">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cpuser in object_list %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ cpuser.user.firts_name }} {{cpuser.user.last_name}}</td>
+                                <td>{{ cpuser.user.email }}</td>
+                                <td>{{ cpuser.user.company }}</td>
+                                <td>{{ cpuser.user.is_staff }}</td>
+                                <td class="text-center" style="cursor: default;">
+                                    <a href=""
+                                       class="app__button--icon" title="Detalles">
+                                        <i class="mdi mdi-eye"></i></a>
+                                    <a href=""
+                                       class="app__button--icon" title="Editar">
+                                        <i class="mdi mdi-pencil"></i></a>
+                                    <a href=""
+                                       class="app__button--icon icon--trash" title="Eliminar">
+                                        <i class="mdi mdi-trash-can"></i></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

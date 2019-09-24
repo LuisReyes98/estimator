@@ -26,4 +26,16 @@ urlpatterns = [
         view=views.RegisterCompanyView.as_view(),
         name='signup',
     ),
+
+    path(
+        route='company_users_list/',
+        view=views.CompanyUserListView.as_view(),
+        name='company_users_list',
+    ),
+
+    path(
+        route='company_users_new/',
+        view=views.CompanyUserCreateView.as_view(),
+        name='create_company_user',
+    ),
 ]

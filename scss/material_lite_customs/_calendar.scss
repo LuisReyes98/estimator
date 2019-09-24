@@ -4,3 +4,8 @@
     // @extend .mdl-button--raised ;
     // @extend .mdl-js-ripple-effect ;
 }
+.calendar {
+    &-title {
+        font-size: 1.4rem !important;
+    }
+}

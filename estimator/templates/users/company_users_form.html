@@ -1,0 +1,177 @@
+{% extends 'layouts/base_app.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+{{ block.super }}
+<div class="page-content" id="content">
+    <div class="container-fluid">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <a href="{% url 'users:company_users_list' %}"
+                   title="Volver"
+                   class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    <i class="mdi mdi-arrow-left"></i>
+                </a>
+                <h4 class="text-center font-weight-bold text-uppercase">
+                {% if editing %}
+                    Editar Usuario
+                {% else %}
+                    Crear Usuario
+                {% endif %}
+                </h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-4 m-auto">
+                <div class="card app__background--gray-200">
+                    {% if form.non_field_errors %}
+                                {% for error in form.non_field_errors %}
+                                    <div class="d-flex flex-row align-items-center">
+                                        <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+                                        <p class="app__form--error text-danger mb-0 ml-3">
+                                            {{ error }}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <form  method="POST" action="{{form_url}}" >
+                            {% csrf_token %}
+                            <input type="hidden" name="company" value="{{company.pk}}">
+                            <div class="form-group">
+                                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                    {% if form.email.errors %}
+                                        {% render_field form.email class+="mdl-textfield__input" type="email" id="id_email" %}
+                                        <span class="mdl-textfield__error text-danger">
+                                            {% for error in form.email.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </span>
+                                    {% else %}
+                                        {% render_field form.email class+="mdl-textfield__input" type="email" id="id_email" %}
+                                    {% endif %}
+                                    <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="id_email">
+                                        <i class="mdi mdi-email mr-1"></i>{{ form.email.label }}
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.first_name.errors %}
+                                            {% render_field form.first_name class+="mdl-textfield__input" type="text" id="id_first_name" %}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {% for error in form.first_name.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </span>
+                                        {% else %}
+                                            {% render_field form.first_name class+="mdl-textfield__input" type="text" id="id_first_name" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="id_first_name">
+                                            <i class="mdi mdi-textbox mr-1"></i>{{ form.first_name.label }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6 col-sm-12">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.last_name.errors %}
+                                            {% render_field form.last_name class+="mdl-textfield__input" type="text" id="id_last_name" %}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {% for error in form.last_name.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </span>
+                                        {% else %}
+                                            {% render_field form.last_name class+="mdl-textfield__input" type="text" id="id_last_name" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="id_last_name">
+                                            <i class="mdi mdi-textbox mr-1"></i>{{ form.last_name.label }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.password.errors %}
+                                            {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {% for error in form.password.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </span>
+                                        {% else %}
+                                            {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="id_password">
+                                            <i class="mdi mdi-textbox-password mr-1"></i>{{ form.password.label }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12 col-sm-12">
+                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                        {% if form.password_confirmation.errors %}
+                                            {% render_field form.password_confirmation class+="mdl-textfield__input" id="id_password_confirmation" %}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {% for error in form.password_confirmation.errors %}
+                                                    {{ error }}
+                                                {% endfor %}
+                                            </span>
+                                        {% else %}
+                                            {% render_field form.password_confirmation class+="mdl-textfield__input" id="id_password_confirmation" %}
+                                        {% endif %}
+                                        <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="id_password_confirmation">
+                                            <i class="mdi mdi-textbox-password mr-1"></i>{{ form.password_confirmation.label }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    <div class="custom-control custom-switch app__form--switch">
+                                        {% render_field form.is_staff type="checkbox" class="custom-control-input" id="id_is_staff" %}
+                                        <label class="custom-control-label" for="id_is_staff">{{ form.is_staff.label }}</label>
+                                        {% for error in form.is_staff.errors %}
+                                            <span class="mdl-textfield__error text-danger">
+                                                {{ error }}
+                                            </span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            <div class="col m-auto text-center">
+                                <div class="d-flex flex-row justify-content-center">
+                                    <button class="m-1 rounded-pill app__button button--fab button--green mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                            title="Continuar"
+                                            type="submit">
+                                        <i class="mdi mdi-check"></i>
+                                    </button>
+                                    {% if editing %}
+                                        {% comment %} <a href="{% url 'raw_materials:provider' provider.pk %}"
+                                           class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                           title="Detalles">
+                                            <i class="mdi mdi-eye"></i>
+                                        </a>
+                                        <a href="{% url 'raw_materials:delete_provider' provider.pk %}"
+                                           class="m-1 rounded-pill app__button button--fab button--red mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                           title="Eliminar">
+                                            <i class="mdi mdi-delete"></i>
+                                        </a> {% endcomment %}
+                                    {% else %}
+                                        <a href="{% url 'users:company_users_list' %}"
+                                           class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                           title="Cancelar">
+                                            <i class="mdi mdi-close"></i>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

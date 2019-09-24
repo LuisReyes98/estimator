@@ -1,7 +1,7 @@
 
 <!-- Vertical navbar -->
 <div class="vertical-nav app__navigation" id="sidebar" style="z-index: 100;">
-  <div class="py-4 px-3 mb-4">
+  <div class="py-4 px-3 mb-0">
     <a href="#" class="nav--button" id="arrow" onclick="mostrar()">
       <i class="mdi mdi-arrow-left"></i>
     </a>
@@ -39,7 +39,7 @@
       <a
         href="{% url 'home' %}"
         class="{% if current_page == "home" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
-              app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+               app__nav--link nav-link d-flex flex-row align-items-center pl-0"
         data-toggle="Inicio"
       >
         <i class="mdi mdi-home"></i>
@@ -49,7 +49,8 @@
     <li class="nav-item">
       <a
         href="{% url 'sales:calendar' %}"
-        class="{% if current_page == "calendar_sale" %} app__text--cyan {% else %} app__text--light_gray {% endif %}app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+        class="{% if current_page == "calendar_sale" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
+               app__nav--link nav-link d-flex flex-row align-items-center pl-0"
         data-toggle="Calendario Predictor"
       >
         <i class="mdi mdi-calendar"></i>
@@ -74,7 +75,7 @@
                app__nav--link nav-link d-flex flex-row align-items-center pl-0"
         data-toggle="Proveedores"
       >
-        <i class="mdi mdi-account"></i>
+        <i class="mdi mdi-bus-multiple"></i>
         Proveedores
       </a>
     </li>
@@ -86,6 +87,17 @@
       >
         <i class="mdi mdi-chart-bar"></i>
         Gráficas y Estadísticas
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        href="{% url 'users:company_users_list' %}"
+        class="{% if current_page == "company_users" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
+               app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+        data-toggle="Usuarios"
+      >
+        <i class="mdi mdi-account-group"></i>
+        Usuarios
       </a>
     </li>
     <li class="nav-item">
