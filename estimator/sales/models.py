@@ -1,8 +1,7 @@
 from django.db import models
-from django.utils.translation import ugettext_lazy as translate
+from django.utils.translation import ugettext as _
 from estimator.model_mixins import TimeStampFields
 from django.urls import reverse_lazy
-
 # Modelos para las ventas
 
 
@@ -24,7 +23,7 @@ class Sale(TimeStampFields):
     company = models.ForeignKey(  # Si la registra el superusuario
         'users.Company',
         on_delete=models.SET_NULL,
-        parent_link=True,
+        parent_link=False,
         blank=True,
         null=True,
     )
@@ -32,7 +31,7 @@ class Sale(TimeStampFields):
     company_user = models.ForeignKey(  # Si la registra un admin
         'users.CompanyUser',
         on_delete=models.SET_NULL,
-        parent_link=True,
+        parent_link=False,
         blank=True,
         null=True,
     )
@@ -95,6 +94,13 @@ class MaterialSaleRelation(TimeStampFields):
         verbose_name="Venta",
         on_delete=models.CASCADE,
         related_name="sold_materials",
+    )
+
+    provider = models.ForeignKey(
+        "raw_materials.Provider",
+        verbose_name=_("Proveedor"),
+        on_delete=models.SET_NULL,
+        null=True
     )
 
     class Meta:

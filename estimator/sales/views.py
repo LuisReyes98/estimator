@@ -134,4 +134,10 @@ class SaleUpdateView(UpdateView):
 
 class SaleDeleteView(DeleteView):
     model = Sale
-    template_name = ".html"
+    template_name = "sales/sale_delete.html"
+    success_url = reverse_lazy('sales:sales_list')
+
+    def get(self, request, *args, **kwargs):
+        if self.get_object().company.pk != self.request.user.company.pk:
+            return redirect('sales:sales_list')
+        return super().get(request, *args, **kwargs)

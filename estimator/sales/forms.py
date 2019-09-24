@@ -51,7 +51,6 @@ class SaleForm(forms.ModelForm):
         """Verificando que las materias primas tengan un formato correcto"""
         data = super().clean()
         raw_materials_json = json.loads(data['raw_materials_json'])
-        # print(data)
         errors = []
 
         for val in raw_materials_json:
@@ -89,11 +88,8 @@ class SaleForm(forms.ModelForm):
     def save(self, commit=True):
         """Metodo de guardar Una Compra"""
         instance = super(SaleForm, self).save(commit=False)
-        # print(str(instance))
         data = self.cleaned_data
-        # print(data)
         dollar_price = DolarPrice(dollar_price=data.pop('dollar_price'))
-        # print(dollar_price)
 
         raw_materials_json = json.loads(data['raw_materials_json'])
         materials_sale_relation = []
@@ -120,5 +116,4 @@ class SaleForm(forms.ModelForm):
                 # Saving the many to many
                 el.sale = instance
                 el.save()
-            # self.save_m2m()
         return instance
