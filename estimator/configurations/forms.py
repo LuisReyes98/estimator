@@ -46,19 +46,22 @@ class CompanyUserForm (forms.ModelForm):
 
         return data
 
-    def save(self):
+    def save(self, commit=True):
         """Logica de guardado guardando usuario"""
-        print("Guardando")
-
+        instance = super(CompanyUserForm, self).save(commit=False)
         data = self.cleaned_data
 
         data.pop('password_confirmation')
-        company = data.pop('company')
+        company_pk = data.pop('company')
         data['is_superuser'] = False
-        #import pdb; pdb.set_trace()
-        user = AppUser.objects.create_user(**data)
-        user.save()
-        company_user_temp = CompanyUser(user=user, company=Company.objects.get(pk=company))
-        company_user_temp.save()
-        # company = Company(user=user, company_name=company_name)
-        # company.save()
+
+        if commit:
+            user = AppUser.objects.create_user(**data)
+            user.save()
+            company_user = CompanyUser(
+                user=user,
+                company=Company.objects.get(pk=company_pk)
+            )
+            company_user.save()
+
+        return instance
