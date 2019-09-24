@@ -1,0 +1,45 @@
+{% extends 'layouts/base_app.html' %}
+
+{% block content %}
+{{block.super}}
+<div class="page-content" id="content">
+
+
+    <form method="POST">
+        {% csrf_token %}
+        <p class="">
+            Está seguro de eliminar a esta venta, para siempre ?
+        </p>
+        <div class="p-2 m-2 app__background--gray-100 rounded">
+            <p>Creado por {{sale.company.user}}</p>
+            <p>Fecha {{sale.created}}</p>
+            <div>
+                <ul>
+                    {% for relation in sale.materials_sale_relation %}
+                        <li>
+                            <p>
+                                {{ relation.amount}} {{relation.raw_material.measurement_unit}} {{relation.raw_material.name}}
+                            </p>
+                            <p>
+                                Precio de 1 {{relation.raw_material.measurement_unit}}
+                                <p>
+                                    Dolares: {{ relation.cost_dollar}}
+                                </p>
+                                <p>
+                                    Local: {{ relation.cost_local}}
+                                </p>
+                            </p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <p>Total dolares: {{sale.total_cost_dollar}}</p>
+            <p>Total local: {{sale.total_cost_local}}</p>
+        </div>
+        <button type="submit"class="bg-danger text-white mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" >
+            Si Eliminar
+        </button>
+    </form>
+</div>
+
+{% endblock content %}

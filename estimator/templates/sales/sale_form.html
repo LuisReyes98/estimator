@@ -68,6 +68,10 @@
                     </div>
                 </div>
                 <div class="row">
+                    <label for="">Proveedor</label>
+                    <input type="text">
+                </div>
+                <div class="row">
                     <div class="col-4">
                         <label :for="'is_bought_in_dollars' + index">Se compro en dolares</label>
                         <input :id="'is_bought_in_dollars' + index" type="checkbox" v-model="item.isBoughtInDollars" class="border">

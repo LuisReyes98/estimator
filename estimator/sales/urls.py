@@ -25,4 +25,9 @@ urlpatterns = [
         view=views.SaleDetailView.as_view(),
         name='sale'
     ),
+    path(
+        route="delete/<int:pk>/",
+        view=views.SaleDeleteView.as_view(),
+        name="delete_sale"
+    )
 ]
