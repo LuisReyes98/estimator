@@ -1,11 +1,70 @@
-.fc-next-button{
-    // @extend .mdl-button ;
-    // @extend .mdl-js-button ;
-    // @extend .mdl-button--raised ;
-    // @extend .mdl-js-ripple-effect ;
+.fc-next-button {
+  // @extend .mdl-button ;
+  // @extend .mdl-js-button ;
+  // @extend .mdl-button--raised ;
+  // @extend .mdl-js-ripple-effect ;
 }
 .calendar {
-    &-title {
-        font-size: 1.4rem !important;
+  &-title {
+    font-size: 1.4rem !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
     }
+
+    &:hover {
+      text-decoration: none;
+      color: map-get($project_colors, "dark_blue");
+    }
+  }
+
+  &-button_year {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    &:hover {
+      text-decoration: none;
+      color: map-get($project_colors, "dark_blue");
+    }
+  }
+
+  &-container_fc-right {
+    display: flex;
+  }
+
+  &-button_today {
+    padding: 0px;
+    background-color: rgba(0, 0, 0, 0) !important;
+    border: none !important;
+    color: map-get($project_colors, "deep_blue") !important;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0) !important;
+      color: map-get($project_colors, "dark_blue") !important;
+    }
+
+    &[disabled] {
+      color: map-get($project_colors, "gray-400") !important;
+    }
+  }
 }
