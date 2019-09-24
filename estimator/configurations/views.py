@@ -9,7 +9,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from users.models import CompanyUser
-from users.forms import CreateCompanyUserForm
+from .forms import CompanyUserForm
 # Create your views here.
 
 
@@ -34,7 +34,7 @@ class CompanyUserCreateView(LoginRequiredMixin, CreateView):
     model = CompanyUser
     template_name = "settings/company_users_form.html"
     success_url = reverse_lazy('settings:company_users_list')
-    form_class = CreateCompanyUserForm
+    form_class = CompanyUserForm
 
     # def get_form_kwargs(self):
     #     form_kwargs = super(CompanyUserCreateView, self).get_form_kwargs()

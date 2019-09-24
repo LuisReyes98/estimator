@@ -93,7 +93,7 @@ class Company(TimeStampFields):
 
 
 class CompanyUser(TimeStampFields):
-    """ Company User model user model """
+    """ Modelo de usuario miembro de una empresa"""
     # Referencias
     user = models.OneToOneField(  # Autenticacion de usuario
         AppUser,
