@@ -7,7 +7,7 @@
     <div class="container-fluid">
         <div class="row pt-3 pb-3">
             <div class="col">
-                <a href="{% url 'users:company_users_list' %}"
+                <a href="{% url 'settings:company_users_list' %}"
                    title="Volver"
                    class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
                     <i class="mdi mdi-arrow-left"></i>
@@ -158,7 +158,7 @@
                                             <i class="mdi mdi-delete"></i>
                                         </a> {% endcomment %}
                                     {% else %}
-                                        <a href="{% url 'users:company_users_list' %}"
+                                        <a href="{% url 'settings:company_users_list' %}"
                                            class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
                                            title="Cancelar">
                                             <i class="mdi mdi-close"></i>

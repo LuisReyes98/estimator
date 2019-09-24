@@ -51,4 +51,11 @@ urlpatterns = [
             namespace="api"
         )
     ),
+    path(
+        'settings/',
+        include(
+            ('configurations.urls', 'configurations'),
+            namespace="settings"
+        )
+    ),
 ]

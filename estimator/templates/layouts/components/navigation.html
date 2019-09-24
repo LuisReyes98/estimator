@@ -89,7 +89,7 @@
         Gráficas y Estadísticas
       </a>
     </li>
-    <li class="nav-item">
+    {% comment %} <li class="nav-item">
       <a
         href="{% url 'users:company_users_list' %}"
         class="{% if current_page == "company_users" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
@@ -99,7 +99,7 @@
         <i class="mdi mdi-account-group"></i>
         Usuarios
       </a>
-    </li>
+    </li> {% endcomment %}
     <li class="nav-item">
       <a
         href="{% url 'users:logout' %}"
@@ -111,7 +111,7 @@
       </a>
     </li>
   </ul>
-  <a href="#" class="nav--settings">
+  <a href="{% url 'settings:company_users_list' %}" class="nav--settings">
     <i class="mdi mdi-settings"></i>
   </a>
 </div>

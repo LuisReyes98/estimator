@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'raw_materials',
     'sales',
     'predictions',
+    'configurations',
     'graphics_statistics',
     'filters',
     'api',
