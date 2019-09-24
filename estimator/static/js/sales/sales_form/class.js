@@ -1,5 +1,5 @@
 class RawMaterial{
-    constructor(raw_material_pk, name, amount, measurement_unit, isBoughtInDollars, cost_dollar, cost_local) {
+    constructor(raw_material_pk, name, amount, measurement_unit, isBoughtInDollars, cost_dollar, cost_local, provider, providers_list) {
         this.raw_material_pk = raw_material_pk;
         this.name = name;
         this.amount = amount;
@@ -7,6 +7,8 @@ class RawMaterial{
         this.isBoughtInDollars = isBoughtInDollars;
         this.cost_dollar = cost_dollar;
         this.cost_local = cost_local;
+        this.provider = provider;
+        this.providers_list = providers_list;
     }
     isAmountValid(){
         let num = Number.parseInt(this.amount);
@@ -38,6 +40,17 @@ class RawMaterial{
         }
         return true;
     }
+    isProviderValid(){
+        self = this;
+        let val = this.providers_list.find(function (el) {
+            return el.pk === parseInt(self.provider);
+        });
+        if (val) {
+            return true;
+        }else{
+            return false;
+        }
+    }
 
     isValid() {
         let isValid = true;
@@ -46,6 +59,8 @@ class RawMaterial{
         }else if(! this.isDollarCostValid()) {
             isValid = false;
         }else if (! this.isLocalCostValid()) {
+            isValid = false;
+        } else if (!this.isProviderValid()) {
             isValid = false;
         }
         return isValid;

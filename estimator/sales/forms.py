@@ -2,7 +2,7 @@ import json
 
 from django import forms
 from .models import Sale, MaterialSaleRelation, DolarPrice
-from raw_materials.models import RawMaterial
+from raw_materials.models import RawMaterial, Provider
 from django.utils.translation import gettext as _
 
 
@@ -102,7 +102,10 @@ class SaleForm(forms.ModelForm):
             temp.pop('name')
             temp.pop('measurement_unit')
             temp.pop('raw_material_pk')
+            temp.pop('providers_list')
+            provider_pk = temp.pop('provider')
             temp['raw_material'] = raw_material
+            temp['provider'] = Provider.objects.get(pk=provider_pk)
             materials_sale_relation.append(
                 MaterialSaleRelation(**temp)
             )

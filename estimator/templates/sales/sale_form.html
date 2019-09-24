@@ -68,8 +68,11 @@
                     </div>
                 </div>
                 <div class="row">
-                    <label for="">Proveedor</label>
-                    <input type="text">
+                    <label :for="'provider_' + index">Proveedor</label>
+                    <select :id="'provider_' + index" v-model="item.provider">
+                        <option value="0">Escoge un proveedor</option>
+                        <option v-for="prov in item.providers_list" :value="prov.pk">[[prov.name]]</option>
+                    </select>
                 </div>
                 <div class="row">
                     <div class="col-4">
@@ -221,9 +224,12 @@ var app = new Vue({
                         value.measurement_unit,
                         false, //isBoughtInDollars
                         1, //cost_dollar
-                        1 //cost_local
+                        1, //cost_local
+                        0, //provider
+                        Array.from(value.providers),
                     );
                 }
+                console.log(selected[i])
             }
             self.formMaterials = selected;
         },

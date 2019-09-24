@@ -14,7 +14,7 @@ from django.views.generic import (
 
 from sales.objects import Prediction
 from .forms import SaleForm
-from raw_materials.models import RawMaterial
+from raw_materials.models import RawMaterial, Provider
 from .models import Sale
 from django.shortcuts import redirect
 
@@ -95,20 +95,30 @@ class SaleCreateView(CreateView):
 
         return form_kwargs
 
+    def get_material_providers_json(self, company):
+        """Cargando los proveedores de materia prima"""
+        result = list(RawMaterial.objects.filter(
+                company=self.request.user.company,).values(
+                    'measurement_unit',
+                    'name',
+                    'pk',
+                ))
+        for counter, value in enumerate(result):
+            result[counter]['providers'] = list(Provider.objects.filter(
+                rawmaterial=value['pk'],).values(
+                    'name',
+                    'pk',
+                ))
+        return json.dumps(list(result), cls=DjangoJSONEncoder)
+
     def get_context_data(self, **kwargs):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         context["company"] = self.request.user.company
-        context["raw_materials"] = json.dumps(
-            list(RawMaterial.objects.filter(
-                company=self.request.user.company,).values(
-                    'measurement_unit',
-                    'name',
-                    'pk',
-                )
-            ), cls=DjangoJSONEncoder
-        )
+        raw_materials = self.get_material_providers_json(self.request.user.company)
+
+        context["raw_materials"] = raw_materials
         context['unit_system'] = dict(RawMaterial.MEASUREMENT_UNITS)
         context["form_url"] = reverse_lazy('sales:new_material')
         context["current_page"] = "calendar_sale"
