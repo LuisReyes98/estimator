@@ -29,7 +29,7 @@
                                 <th scope="col">Nombre</th>
                                 <th scope="col">Correo</th>
                                 <th scope="col">Compañía</th>
-                                <th scope="col">Staff</th>
+                                <th scope="col">Administrador</th>
                                 <th scope="col" class="text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -37,18 +37,27 @@
                             {% for cpuser in object_list %}
                             <tr>
                                 <th scope="row">{{ forloop.counter }}</th>
-                                <td>{{ cpuser.user.firts_name }} {{cpuser.user.last_name}}</td>
+                                <td>{{ cpuser.user.first_name }} {{cpuser.user.last_name}}</td>
                                 <td>{{ cpuser.user.email }}</td>
                                 <td>{{ cpuser.company }}</td>
-                                <td>{{ cpuser.user.is_staff }}</td>
+                                <td>
+                                    {% if cpuser.user.is_staff %}
+                                        <i class="mdi mdi-check app__text--cyan"></i>
+                                    {% else %}
+                                        <i class="mdi mdi-cancel text-danger"></i>
+                                    {% endif %}
+                                </td>
                                 <td class="text-center" style="cursor: default;">
-                                    <a href=""
+                                    <a href="{% url 'settings:company_user' cpuser.pk %}"
                                        class="app__button--icon" title="Detalles">
                                         <i class="mdi mdi-eye"></i></a>
-                                    <a href=""
+                                    <a href="{% url 'settings:update_company_user' cpuser.pk %}"
                                        class="app__button--icon" title="Editar">
                                         <i class="mdi mdi-pencil"></i></a>
-                                    <a href=""
+                                    <a href="{% url 'settings:update_password_company_user' cpuser.pk %}"
+                                       class="app__button--icon" title="Cambiar Contraseña">
+                                        <i class="mdi mdi-key-change"></i></a>
+                                    <a href="{% url 'settings:delete_company_user' cpuser.pk %}"
                                        class="app__button--icon icon--trash" title="Eliminar">
                                         <i class="mdi mdi-trash-can"></i></a>
                                 </td>

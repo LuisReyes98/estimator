@@ -5,13 +5,13 @@
     <div class="container-fluid app__background_gradient--cyan app__viewport">
         <div class="row pt-3 pb-3">
             <div class="col">
-                <a href="{% url 'raw_materials:materials' %}"
+                <a href="{% url 'settings:company_users_list' %}"
                    title="Volver"
                    class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
                     <i class="mdi mdi-arrow-left"></i>
                 </a>
                 <h4 class="text-center font-weight-bold text-uppercase">
-                    Materia Prima
+                    Usuario
                 </h4>
             </div>
         </div>
@@ -23,78 +23,40 @@
                             <p>Nombre</p>
                         </div>
                         <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <p>{{object.name}}</p>
+                            <p>{{object.user.first_name}}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p class="">Proveedores</p>
+                            <p>Apellido</p>
                         </div>
                         <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <ul class="list-unstyled">
-                                {% for provider in object.providers.all %}
-                                <li class="font-weight-bold {% if object.providers.all|length > 1 %} small {% endif %}">{{provider}}</li>
-                                {% endfor %}
-                            </ul>
+                            <p>{{object.user.last_name}}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p class="">Unidad de Medida</p>
+                            <p>Correo</p>
                         </div>
                         <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <p class="">
-                                <span class="badge badge-secondary rounded-pill text-uppercase">{{object.unit_name}}</span>
-                            </p>
+                            <p>{{object.user.email}}</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p class="">¿Expira?</p>
+                            <p>Compañía</p>
                         </div>
                         <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <p class="text-uppercase">
-                                {% if object.can_expire %}
-                                    <i class="mdi mdi-check pr-1 app__text--cyan"></i>Sí
-                                {% else %}
-                                    <i class="mdi mdi-cancel pr-1 text-danger"></i>No
-                                {% endif %}
-                            </p>
+                            <p>{{object.company}}</p>
                         </div>
                     </div>
-                    {% if object.can_expire %}
-                        <div class="row">
-                            <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                                <p class="">Tiempo de Expiración</p>
-                            </div>
-                            <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                                <p class="">
-                                    {% if object.years_to_expire == 1  %}
-                                        {{ object.years_to_expire }} año
-                                    {% elif object.years_to_expire > 1 %}
-                                        {{ object.years_to_expire }} años
-                                    {% endif %}
-                                    {% if object.months_to_expire == 1 %}
-                                        {{ object.months_to_expire }} mes
-                                    {% elif object.months_to_expire > 1 %}
-                                        {{ object.months_to_expire }} meses
-                                    {% endif %}
-                                    {% if object.days_to_expire == 1 %}
-                                        {{ object.days_to_expire }} día
-                                    {% elif object.days_to_expire > 1 %}
-                                        {{ object.days_to_expire }} días
-                                    {% endif %}
-                                </p>
-                            </div>
-                        </div>
-                    {% endif %}
                     <div class="row">
                         <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p class="mb-0">¿Es Importado?</p>
+                            <p class="mb-0">Administrador</p>
                         </div>
                         <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
                             <p class="mb-0 text-uppercase">
-                                {% if object.is_imported %}
+                                {% if object.user.is_staff %}
                                     <i class="mdi mdi-check pr-1 app__text--cyan"></i>Sí
                                 {% else %}
                                     <i class="mdi mdi-cancel pr-1 text-danger"></i>No
@@ -106,11 +68,15 @@
                 <div class="container">
                     <div class="row mt-4">
                         <div class="col">
-                            <a href="{% url 'raw_materials:update_material'  object.pk  %}"
+                            <a href="{% url 'settings:update_company_user' object.pk %}"
                             class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                                 editar
                             </a>
-                            <a href="{% url 'raw_materials:delete_material'  object.pk %}"
+                            <a href="{% url 'settings:update_password_company_user' object.pk %}"
+                            class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                cambiar contraseña
+                            </a>
+                            <a href="{% url 'settings:delete_company_user' object.pk %}"
                             class="m-1 rounded-pill app__button button--red mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                                 eliminar
                             </a>

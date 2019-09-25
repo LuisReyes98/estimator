@@ -13,7 +13,7 @@
                     <i class="mdi mdi-arrow-left"></i>
                 </a>
                 <h4 class="text-center font-weight-bold text-uppercase">
-                    Crear Usuario
+                    Editar Usuario
                 </h4>
             </div>
         </div>
@@ -94,42 +94,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12 col-sm-12">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                                        {% if form.password.errors %}
-                                            {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
-                                            <span class="mdl-textfield__error text-danger">
-                                                {% for error in form.password.errors %}
-                                                    {{ error }}
-                                                {% endfor %}
-                                            </span>
-                                        {% else %}
-                                            {% render_field form.password class+="mdl-textfield__input" id="id_password" %}
-                                        {% endif %}
-                                        <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="id_password">
-                                            <i class="mdi mdi-textbox-password mr-1"></i>{{ form.password.label }}
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-12 col-sm-12">
-                                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                                        {% if form.password_confirmation.errors %}
-                                            {% render_field form.password_confirmation class+="mdl-textfield__input" id="id_password_confirmation" %}
-                                            <span class="mdl-textfield__error text-danger">
-                                                {% for error in form.password_confirmation.errors %}
-                                                    {{ error }}
-                                                {% endfor %}
-                                            </span>
-                                        {% else %}
-                                            {% render_field form.password_confirmation class+="mdl-textfield__input" id="id_password_confirmation" %}
-                                        {% endif %}
-                                        <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="id_password_confirmation">
-                                            <i class="mdi mdi-textbox-password mr-1"></i>{{ form.password_confirmation.label }}
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="form-group">
                                 <div class="custom-control custom-switch app__form--switch">
                                     {% render_field form.is_staff type="checkbox" class="custom-control-input" id="id_is_staff" %}
@@ -149,12 +113,21 @@
                                         <i class="mdi mdi-check"></i>
                                     </button>
                                     {% if editing %}
-                                    {% else %}
-                                        <a href="{% url 'settings:company_users_list' %}"
+                                        <a href="{% url 'settings:company_user' object.pk %}"
+                                           class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                           title="Detalles">
+                                            <i class="mdi mdi-eye"></i>
+                                        </a>
+                                        <a href="{% url 'settings:delete_company_user' object.pk %}"
+                                           class="m-1 rounded-pill app__button button--fab button--red mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                           title="Eliminar">
+                                            <i class="mdi mdi-delete"></i>
+                                        </a>
+                                        {% comment %} <a href="{% url 'settings:company_users_list' %}"
                                            class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
                                            title="Cancelar">
                                             <i class="mdi mdi-close"></i>
-                                        </a>
+                                        </a> {% endcomment %}
                                     {% endif %}
                                 </div>
                             </div>
