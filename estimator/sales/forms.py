@@ -26,7 +26,12 @@ class SaleForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.creator_user = kwargs.pop('user')
-        self.editing = kwargs.pop('editing')
+
+        try:
+            self.editing = kwargs.pop('editing')
+        except Exception:
+            self.editing = False
+
         super(SaleForm, self).__init__(*args, **kwargs)
         try:
             self.fields['dollar_price'].initial = kwargs['instance'].dollar_price.dollar_price
