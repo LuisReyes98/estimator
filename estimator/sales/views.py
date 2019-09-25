@@ -114,17 +114,12 @@ class SaleCreateView(CreateView):
     def get_context_data(self, **kwargs):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
-        context["user"] = self.request.user
-        context["company"] = self.request.user.company
         raw_materials = self.get_material_providers_json(self.request.user.company)
 
         context["raw_materials"] = raw_materials
         context['unit_system'] = dict(RawMaterial.MEASUREMENT_UNITS)
-        context["form_url"] = reverse_lazy('sales:new_material')
         context["current_page"] = "calendar_sale"
 
-        if not self.request.user.is_superuser:
-            context["company_user"] = self.request.user.company_user
         context["form_url"] = reverse_lazy('sales:new_sale')
         return context
 
@@ -139,7 +134,100 @@ class SaleCreateView(CreateView):
 
 class SaleUpdateView(UpdateView):
     model = Sale
-    template_name = ".html"
+    template_name = "sales/sale_form.html"
+    success_url = reverse_lazy("sales:calendar")
+    form_class = SaleForm
+
+    def form_invalid(self, form):
+        """Si el formulario no es valido retorna el formulario y el contexto"""
+
+        return self.render_to_response(self.get_context_data(
+            form=form,
+            raw_materials_string=form.data['raw_materials_json']
+        ))
+
+    def get_form_kwargs(self):
+        form_kwargs = super(SaleUpdateView, self).get_form_kwargs()
+
+        form_kwargs['user'] = self.request.user
+        form_kwargs['editing'] = True
+
+        return form_kwargs
+
+    def get_material_providers_json(self, company):
+        """Cargando los proveedores de materia prima"""
+        result = list(RawMaterial.objects.filter(
+                company=self.request.user.company,).values(
+                    'measurement_unit',
+                    'name',
+                    'pk',
+                ))
+        for counter, value in enumerate(result):
+            result[counter]['providers'] = list(Provider.objects.filter(
+                rawmaterial=value['pk'],).values(
+                    'name',
+                    'pk',
+                ))
+        return json.dumps(list(result), cls=DjangoJSONEncoder)
+
+    def build_material(self):
+        # import pdb; pdb.set_trace()
+        materials_obj = []
+        materials_values = []
+
+        for material in self.object.materials_sale_relation:
+            materials_values.append(material.raw_material.pk)
+            materials_obj.append({
+                'pk': material.pk,
+                'raw_material_pk': material.raw_material.pk,
+                'name': material.raw_material.name,
+                'amount': material.amount,
+                'measurement_unit': material.raw_material.measurement_unit,
+                'isBoughtInDollars': False,
+                'cost_dollar': material.cost_dollar,
+                'cost_local': material.cost_local,
+                'provider': material.provider.pk,
+                'providers_list': list(Provider.objects.filter(
+                    rawmaterial=material.pk,).values(
+                        'name',
+                        'pk',
+                )),
+            })
+            print(material)
+        return [
+            json.dumps(list(materials_obj), cls=DjangoJSONEncoder),
+            json.dumps(list(materials_values), cls=DjangoJSONEncoder),
+        ]
+
+    def get_context_data(self, **kwargs):
+        """User and profile to context"""
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_superuser:
+            company = self.request.user.company
+        else:
+            company = self.request.user.companyuser.company
+
+        raw_materials = self.get_material_providers_json(company)
+
+        # print(self.build_material())
+        temp = self.build_material()
+        form_materials = temp[0]
+        materials_values = temp[1]
+
+        context["raw_materials"] = raw_materials
+
+        context['materials_values'] = materials_values
+        context['form_materials'] = form_materials
+
+        context['unit_system'] = dict(RawMaterial.MEASUREMENT_UNITS)
+        context["current_page"] = "calendar_sale"
+        context["editing"] = True
+
+        context["form_url"] = reverse_lazy(
+            'sales:update_sale',
+            args=[self.object.pk]
+        )
+        return context
 
 
 class SaleDeleteView(DeleteView):

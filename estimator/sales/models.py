@@ -43,6 +43,13 @@ class Sale(TimeStampFields):
         through_fields=("sale", "raw_material")
     )
 
+    dollar_price = models.ForeignKey(
+        "DolarPrice",
+        verbose_name=_("Precio del dolar"),
+        on_delete=models.SET_NULL,
+        null=True,
+    )
+
     class Meta:
         verbose_name = "Venta"
         verbose_name_plural = "Ventas"
@@ -76,6 +83,11 @@ class MaterialSaleRelation(TimeStampFields):
 
     cost_local = models.FloatField(
         "Costo en la moneda local",
+    )
+
+    bought_in_dollars = models.BooleanField(
+        _("Comprado en dolares"),
+        default=False,
     )
 
     # Referencias
@@ -114,6 +126,9 @@ class DolarPrice(TimeStampFields):
         blank=False,
         null=False,
     )
+
+    def __str__(self):
+        return '%.2f' % (self.dollar_price)
 
     class Meta:
         pass

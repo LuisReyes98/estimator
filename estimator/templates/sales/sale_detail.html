@@ -6,6 +6,7 @@
     <h1>Venta individual</h1>
     <p>Creado por {{sale.company.user}}</p>
     <p>Fecha {{sale.created}}</p>
+    <p>Precio del Dolar:  <b>{{sale.dollar_price}}</b></p>
     <div>
         <ul>
             {% for relation in sale.materials_sale_relation %}

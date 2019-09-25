@@ -25,15 +25,23 @@ class SaleForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user')
+        self.creator_user = kwargs.pop('user')
+        self.editing = kwargs.pop('editing')
         super(SaleForm, self).__init__(*args, **kwargs)
         try:
-            self.fields['dollar_price'].initial = DolarPrice.objects.latest('created').dollar_price
+            self.fields['dollar_price'].initial = kwargs['instance'].dollar_price.dollar_price
         except Exception:
-            self.fields['dollar_price'].initial = 1
+            try:
+                self.fields['dollar_price'].initial = DolarPrice.objects.latest('created').dollar_price
+            except Exception:
+                self.fields['dollar_price'].initial = 1
+        if self.creator_user.is_superuser:
+            company = self.creator_user.company
+        else:
+            company = self.creator_user.companyuser.company
 
         self.fields['raw_materials'].queryset = RawMaterial.objects.filter(
-            company=user.company.pk,
+            company=company.pk,
         )
 
     class Meta:
@@ -41,8 +49,6 @@ class SaleForm(forms.ModelForm):
         fields = (
             "total_cost_dollar",
             "total_cost_local",
-            "company",
-            "company_user",
             "raw_materials"
         )
 
@@ -98,21 +104,30 @@ class SaleForm(forms.ModelForm):
                     (item for item in raw_materials_json if item["raw_material_pk"] == raw_material.pk),
                     None
                 )
-            temp.pop('isBoughtInDollars')
+            if not self.editing:
+                temp.pop('pk')
+
+            # temp.pop('bought_in_dollars')
             temp.pop('name')
             temp.pop('measurement_unit')
             temp.pop('raw_material_pk')
             temp.pop('providers_list')
+
             provider_pk = temp.pop('provider')
             temp['raw_material'] = raw_material
             temp['provider'] = Provider.objects.get(pk=provider_pk)
             materials_sale_relation.append(
                 MaterialSaleRelation(**temp)
             )
-        # print(materials_sale_relation)
+
+        if self.creator_user.is_superuser:
+            instance.company = self.creator_user.company
+        else:
+            instance.company_user = self.creator_user.companyuser
 
         if commit:
             dollar_price.save()
+            instance.dollar_price = dollar_price
             instance.save()
 
             for el in materials_sale_relation:

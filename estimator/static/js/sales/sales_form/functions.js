@@ -3,12 +3,15 @@ function objectsToRawMaterials(entryObj) {
     entryObj.forEach(function (el, index) {
         result[index] = new RawMaterial(
             el.pk,
+            el.raw_material_pk,
             el.name,
             el.amount, // amount
             el.measurement_unit,
-            el.isBoughtInDollars, //isBoughtInDollars
+            el.bought_in_dollars, //bought_in_dollars
             el.cost_dollar, //cost_dollar
-            el.cost_local //cost_local
+            el.cost_local, //cost_local
+            el.provider,
+            el.providers_list,
         );
     });
     return result;

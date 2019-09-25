@@ -26,6 +26,11 @@ urlpatterns = [
         name='sale'
     ),
     path(
+        route='update/<int:pk>/',
+        view=views.SaleUpdateView.as_view(),
+        name='update_sale'
+    ),
+    path(
         route="delete/<int:pk>/",
         view=views.SaleDeleteView.as_view(),
         name="delete_sale"

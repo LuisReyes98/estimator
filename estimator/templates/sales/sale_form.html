@@ -16,9 +16,9 @@
 <div class="page-content sales__form" id="content">
     <h1>
         {% if editing %}
-        Editando Venta
+            Editando Venta
         {% else %}
-        Creando Venta
+            Creando Venta
         {% endif %}
     </h1>
     {% if form.non_field_errors %}
@@ -34,10 +34,10 @@
 {% comment %} Formulario  {% endcomment %}
     <form id="sale_form" ref="form" action="{{form_url}}" method="POST" @submit.prevent="onSubmit" >
         {% csrf_token %}
-        <input type="hidden" name="company" value="{{company.pk}}" >
+        {% comment %} <input type="hidden" name="company" value="{{company.pk}}" >
         {% if not user.is_superuser %}
             <input type="hidden" name="company_user" value="{{company_user.pk}}" >
-        {% endif %}
+        {% endif %} {% endcomment %}
         <div>
             {{form.dollar_price.label_tag}}
             {% render_field form.dollar_price v-model="dollar_price" step="0.001" %}
@@ -77,9 +77,9 @@
                 <div class="row">
                     <div class="col-4">
                         <label :for="'is_bought_in_dollars' + index">Se compro en dolares</label>
-                        <input :id="'is_bought_in_dollars' + index" type="checkbox" v-model="item.isBoughtInDollars" class="border">
+                        <input :id="'is_bought_in_dollars' + index" type="checkbox" v-model="item.bought_in_dollars" class="border">
                     </div>
-                    <div class="col-8 row" v-show="item.isBoughtInDollars" >
+                    <div class="col-8 row" v-show="item.bought_in_dollars" >
                         <div class="col-5">
                             <label :for="'dollar_coin_' + index">Costo Individual Dolar </label>
                             <input
@@ -99,7 +99,7 @@
                             </p>
                         </div>
                     </div>
-                    <div class="col-8 row" v-show="!item.isBoughtInDollars" >
+                    <div class="col-8 row" v-show="!item.bought_in_dollars" >
                         <div class="col-5">
                             <p>
                                 <b>Costo dolar: </b>
@@ -177,8 +177,8 @@ var app = new Vue({
     delimiters: ['[[', ']]'],
     el: '#app',
     data: {
-        materials: {% if raw_materials_string %}selectedMaterials({{raw_materials_string | safe }}){% else %}[]{% endif %},
-        formMaterials: {% if raw_materials_string %}objectsToRawMaterials({{raw_materials_string | safe }}){% else %}[]{% endif %},
+        materials: {% if raw_materials_string %}selectedMaterials({{raw_materials_string | safe }}){% elif editing %}{{materials_values | safe}}{% else %}[]{% endif %},
+        formMaterials: {% if raw_materials_string %}objectsToRawMaterials({{raw_materials_string | safe }}){% elif editing %}objectsToRawMaterials({{form_materials | safe }}){% else %}[]{% endif %},
         manualFinalCosts: false,
         dollar_price: document.getElementById('id_dollar_price').value,
         raw_materials: {{ raw_materials | safe }},
@@ -222,7 +222,7 @@ var app = new Vue({
                         value.name,
                         1, // amount
                         value.measurement_unit,
-                        false, //isBoughtInDollars
+                        false, //bought_in_dollars
                         1, //cost_dollar
                         1, //cost_local
                         0, //provider
@@ -242,7 +242,7 @@ var app = new Vue({
         totalCostDolar: function() {
             let totalCost = 0;
             this.formMaterials.forEach(function (el) {
-                if (el.isBoughtInDollars) {
+                if (el.bought_in_dollars) {
                     totalCost += el.cost_dollar * el.amount;
                 } else {
                     totalCost += el.calculateDolarCost() * el.amount;

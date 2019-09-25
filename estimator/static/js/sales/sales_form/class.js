@@ -1,10 +1,11 @@
 class RawMaterial{
-    constructor(raw_material_pk, name, amount, measurement_unit, isBoughtInDollars, cost_dollar, cost_local, provider, providers_list) {
+    constructor(pk,raw_material_pk, name, amount, measurement_unit, bought_in_dollars, cost_dollar, cost_local, provider, providers_list) {
+        this.pk = pk;
         this.raw_material_pk = raw_material_pk;
         this.name = name;
         this.amount = amount;
         this.measurement_unit = measurement_unit;
-        this.isBoughtInDollars = isBoughtInDollars;
+        this.bought_in_dollars = bought_in_dollars;
         this.cost_dollar = cost_dollar;
         this.cost_local = cost_local;
         this.provider = provider;
@@ -25,7 +26,7 @@ class RawMaterial{
         if(Number.isNaN(num)){
             return false;
         }
-        if (this.isBoughtInDollars && !(num > 0)) {
+        if (this.bought_in_dollars && !(num > 0)) {
             return false;
         }
         return true;
@@ -35,7 +36,7 @@ class RawMaterial{
         if(Number.isNaN(num)){
             return false;
         }
-        if (!this.isBoughtInDollars && !(num > 0)) {
+        if (!this.bought_in_dollars && !(num > 0)) {
             return false;
         }
         return true;

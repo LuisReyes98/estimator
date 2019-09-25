@@ -35,7 +35,7 @@
                     </td>
                     <td>
                         <a href="{% url 'sales:sale' sale.pk %}">Ver</a>
-                        <a href="">Editar</a>
+                        <a href="{% url 'sales:update_sale' sale.pk %}">Editar</a>
                         <a href="{% url 'sales:delete_sale' sale.pk %}">Eliminar</a>
                     </td>
                 </tr>
