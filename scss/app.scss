@@ -1,4 +1,19 @@
 .app {
+  &__viewport {
+    min-height: 100vh;
+  }
+  &__background_gradient {
+    &--cyan {
+      background: rgb(189, 215, 245);
+      background: linear-gradient(
+        45deg,
+        rgba(189, 215, 245, 1) 0%,
+        rgba(217, 252, 255, 1) 45%,
+        rgba(255, 255, 255, 1) 100%
+      );
+    }
+  }
+
   &__button {
     .other__button {
       border-width: 2px;
@@ -42,7 +57,6 @@
           color: map-get($project_colors, "cyan");
         }
       }
-
     }
 
     &.button--fab {

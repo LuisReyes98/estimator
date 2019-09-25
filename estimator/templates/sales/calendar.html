@@ -34,7 +34,7 @@
                     Listado de ventas
                 </a>
                 <a href="#"
-                   class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                   class="m-1 rounded-pill app__button button--cyan mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                     Realizar Predicción
                 </a>
             </div>
@@ -46,10 +46,9 @@
             </div>
         </div>
         {% for prediction in predictions %}
-        <div id="{{prediction.pk}}" class="calendar_box d-none">
-            Para el {{prediction.date}} se estima
-        </div>
-
+            <div id="{{prediction.pk}}" class="calendar_box d-none">
+                Para el {{prediction.date}} se estima
+            </div>
         {% endfor %}
     </div>
 </div>

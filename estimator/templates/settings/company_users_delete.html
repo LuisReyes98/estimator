@@ -8,7 +8,7 @@
                 <div class="row pb-3">
                     <div class="col-12 m-auto">
                         <h4 class="text-center font-weight-bold text-uppercase app__text--red">
-                            Eliminar Materia Prima
+                            Eliminar Usuario
                         </h4>
                     </div>
                 </div>
@@ -18,7 +18,8 @@
                             {% csrf_token %}
                             <div class="form-group text-center">
                                 <p class="">
-                                    Está seguro de eliminar a <span class="font-weight-bold">{{ object }}</span> de la lista?
+                                    Está seguro de eliminar a <span class="font-weight-bold">{{ object.user }}</span>
+                                    con el correo <span class="font-weight-bold">{{ object.user.email }}</span> permanentemente?
                                 </p>
                             </div>
                             <div class="col m-auto text-center">
@@ -29,7 +30,7 @@
                                     </button>
                                     <a title="Cancelar"
                                        class="m-1 rounded-pill app__button button--fab button--red mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
-                                       href="{% url 'raw_materials:materials' %}">
+                                       href="{% url 'settings:company_users_list' %}">
                                         <i class="mdi mdi-close"></i>
                                     </a>
                                 </div>
@@ -41,13 +42,13 @@
                         <div class="d-flex flex-row justify-content-start">
                             <a title="Detalles"
                                class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
-                               href="{% url 'raw_materials:material'  object.pk  %}">
+                               href="{% url 'settings:company_user' object.pk %}">
                                 <i class="mdi mdi-eye"></i>
                             </a>
                             </form>
                             <a title="Editar"
                                class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
-                               href="{% url 'raw_materials:update_material'  object.pk  %}">
+                               href="{% url 'settings:update_company_user' object.pk %}">
                                 <i class="mdi mdi-pencil"></i>
                             </a>
                         </div>
