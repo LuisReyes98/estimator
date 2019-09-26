@@ -105,24 +105,35 @@ class SaleForm(forms.ModelForm):
         raw_materials_json = json.loads(data['raw_materials_json'])
         materials_sale_relation = []
         for raw_material in data['raw_materials']:
-            temp = next(
+            """Por cada materia prima seleccionada"""
+            data_to_save = next(
                     (item for item in raw_materials_json if item["raw_material_pk"] == raw_material.pk),
                     None
                 )
-            if not self.editing:
-                temp.pop('pk')
+            data_to_save.pop('name')
+            data_to_save.pop('measurement_unit')
+            data_to_save.pop('raw_material_pk')
+            data_to_save.pop('providers_list')
 
-            # temp.pop('bought_in_dollars')
-            temp.pop('name')
-            temp.pop('measurement_unit')
-            temp.pop('raw_material_pk')
-            temp.pop('providers_list')
+            provider_pk = data_to_save.pop('provider')
+            data_to_save['raw_material'] = raw_material
+            data_to_save['provider'] = Provider.objects.get(pk=provider_pk)
 
-            provider_pk = temp.pop('provider')
-            temp['raw_material'] = raw_material
-            temp['provider'] = Provider.objects.get(pk=provider_pk)
+            primary_key = data_to_save.pop('pk')
+
+            try:
+                relation = MaterialSaleRelation.objects.get(pk=primary_key)
+            except Exception:
+                relation = MaterialSaleRelation(**data_to_save)
+            else:
+                relation.amount = data_to_save['amount']
+                relation.cost_dollar = data_to_save['cost_dollar']
+                relation.cost_local = data_to_save['cost_local']
+                relation.bought_in_dollars = data_to_save['bought_in_dollars']
+                relation.provider = data_to_save['provider']
+
             materials_sale_relation.append(
-                MaterialSaleRelation(**temp)
+                relation
             )
 
         if self.creator_user.is_superuser:
@@ -139,4 +150,5 @@ class SaleForm(forms.ModelForm):
                 # Saving the many to many
                 el.sale = instance
                 el.save()
+                self.save_m2m()
         return instance

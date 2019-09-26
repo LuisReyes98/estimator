@@ -68,18 +68,24 @@ class RawMaterial{
     }
 
     calculateLocalCost(){
+        let value;
         try {
-            return this.cost_dollar * Number.parseFloat(app.dollar_price);
+            value = (this.cost_dollar * Number.parseFloat(app.dollar_price)).toFixed(3);
         } catch (error) {
-            return this.cost_dollar * initial_dolar_price;
+            value = this.cost_dollar * initial_dolar_price;
         }
+        this.cost_local = value;
+        return value;
     }
 
     calculateDolarCost(){
+        let value;
         try {
-            return this.cost_local / Number.parseFloat(app.dollar_price);
+            value = (this.cost_local / Number.parseFloat(app.dollar_price)).toFixed(3);
         } catch (error) {
-            return this.cost_local /  initial_dolar_price;
+            value = this.cost_local /  initial_dolar_price;
         }
+        this.cost_dollar = value;
+        return value;
     }
 }

@@ -12,6 +12,7 @@
             {% for relation in sale.materials_sale_relation %}
                 <li>
                     <p>
+                    <p>Se compro en dolares:  <b>{{relation.bought_in_dollars}}</b></p>
                         {{ relation.amount}} {{relation.raw_material.measurement_unit}} {{relation.raw_material.name}}
                     </p>
                     <p>Proveedor {{ relation.provider}}</p>
