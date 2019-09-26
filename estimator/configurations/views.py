@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import (
+    TemplateView,
     ListView,
     CreateView,
     DetailView,
@@ -12,6 +13,9 @@ from users.models import CompanyUser
 from .forms import CompanyUserForm, CompanyUserFormFields, CompanyUserFormPassword
 from django.contrib.auth.views import PasswordChangeView
 # Create your views here.
+
+class TemplateView(TemplateView):
+    template_name = "settings/settings.html"
 
 
 class CompanyUserListView(LoginRequiredMixin, ListView):
