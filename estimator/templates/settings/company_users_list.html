@@ -3,7 +3,7 @@
 {{block.super}}
 <div class="page-content" id="content">
 
-    <div class="container-fluid">
+    <div class="container-fluid app__background_gradient--pastel app__viewport">
         <div class="row pt-3 pb-3">
             <div class="col">
                 <h3 class="text-center font-weight-bold text-uppercase">
@@ -11,7 +11,7 @@
                 </h3>
             </div>
         </div>
-        <div class="row mb-3 pt-3 pb-3 app__border--gray-200">
+        <div class="row mb-3 pt-3 pb-3 app__border--gray-200 app__background--white">
             <div class="col">
                 <a href="{% url 'settings:create_company_user' %}"
                     class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
@@ -20,51 +20,53 @@
             </div>
         </div>
         <div class="row mb-3 pt-2 pb-2">
-            <div class="col-lg-10 col-md-12 m-auto">
-                <div class="table-responsive-sm">
-                    <table class="table table-sm table-hover" style="white-space: nowrap;">
-                        <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Correo</th>
-                                <th scope="col">Compañía</th>
-                                <th scope="col">Administrador</th>
-                                <th scope="col" class="text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for cpuser in object_list %}
-                            <tr>
-                                <th scope="row">{{ forloop.counter }}</th>
-                                <td>{{ cpuser.user.first_name }} {{cpuser.user.last_name}}</td>
-                                <td>{{ cpuser.user.email }}</td>
-                                <td>{{ cpuser.company }}</td>
-                                <td>
-                                    {% if cpuser.user.is_staff %}
-                                        <i class="mdi mdi-check app__text--cyan"></i>
-                                    {% else %}
-                                        <i class="mdi mdi-cancel text-danger"></i>
-                                    {% endif %}
-                                </td>
-                                <td class="text-center" style="cursor: default;">
-                                    <a href="{% url 'settings:company_user' cpuser.pk %}"
-                                       class="app__button--icon" title="Detalles">
-                                        <i class="mdi mdi-eye"></i></a>
-                                    <a href="{% url 'settings:update_company_user' cpuser.pk %}"
-                                       class="app__button--icon" title="Editar">
-                                        <i class="mdi mdi-pencil"></i></a>
-                                    <a href="{% url 'settings:update_password_company_user' cpuser.pk %}"
-                                       class="app__button--icon" title="Cambiar Contraseña">
-                                        <i class="mdi mdi-key-change"></i></a>
-                                    <a href="{% url 'settings:delete_company_user' cpuser.pk %}"
-                                       class="app__button--icon icon--trash" title="Eliminar">
-                                        <i class="mdi mdi-trash-can"></i></a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            <div class="col-12 m-auto">
+                <div class="app__background--white p-2 rounded">
+                    <div class="table-responsive-lg">
+                        <table class="table table-sm table-hover" style="white-space: nowrap;">
+                            <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Correo</th>
+                                    <th scope="col">Compañía</th>
+                                    <th scope="col">Administrador</th>
+                                    <th scope="col" class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for cpuser in object_list %}
+                                <tr>
+                                    <th scope="row">{{ forloop.counter }}</th>
+                                    <td>{{ cpuser.user.first_name }} {{cpuser.user.last_name}}</td>
+                                    <td>{{ cpuser.user.email }}</td>
+                                    <td>{{ cpuser.company }}</td>
+                                    <td>
+                                        {% if cpuser.user.is_staff %}
+                                            <i class="mdi mdi-check app__text--cyan"></i>
+                                        {% else %}
+                                            <i class="mdi mdi-cancel text-danger"></i>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center" style="cursor: default;">
+                                        <a href="{% url 'settings:company_user' cpuser.pk %}"
+                                           class="app__button--icon" title="Detalles">
+                                            <i class="mdi mdi-eye"></i></a>
+                                        <a href="{% url 'settings:update_company_user' cpuser.pk %}"
+                                           class="app__button--icon" title="Editar">
+                                            <i class="mdi mdi-pencil"></i></a>
+                                        <a href="{% url 'settings:update_password_company_user' cpuser.pk %}"
+                                           class="app__button--icon" title="Cambiar Contraseña">
+                                            <i class="mdi mdi-key-change"></i></a>
+                                        <a href="{% url 'settings:delete_company_user' cpuser.pk %}"
+                                           class="app__button--icon icon--trash" title="Eliminar">
+                                            <i class="mdi mdi-trash-can"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
