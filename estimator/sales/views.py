@@ -183,17 +183,17 @@ class SaleUpdateView(UpdateView):
                 'name': material.raw_material.name,
                 'amount': material.amount,
                 'measurement_unit': material.raw_material.measurement_unit,
-                'isBoughtInDollars': False,
+                'bought_in_dollars': material.bought_in_dollars,
                 'cost_dollar': material.cost_dollar,
                 'cost_local': material.cost_local,
                 'provider': material.provider.pk,
                 'providers_list': list(Provider.objects.filter(
-                    rawmaterial=material.pk,).values(
+                    rawmaterial=material.raw_material.pk,).values(
                         'name',
                         'pk',
                 )),
             })
-            print(material)
+            # print(materials_obj)
         return [
             json.dumps(list(materials_obj), cls=DjangoJSONEncoder),
             json.dumps(list(materials_values), cls=DjangoJSONEncoder),

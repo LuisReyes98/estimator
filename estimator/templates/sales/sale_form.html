@@ -79,7 +79,7 @@
                         <label :for="'is_bought_in_dollars' + index">Se compro en dolares</label>
                         <input :id="'is_bought_in_dollars' + index" type="checkbox" v-model="item.bought_in_dollars" class="border">
                     </div>
-                    <div class="col-8 row" v-show="item.bought_in_dollars" >
+                    <div class="col-8 row" v-if="item.bought_in_dollars" >
                         <div class="col-5">
                             <label :for="'dollar_coin_' + index">Costo Individual Dolar </label>
                             <input
@@ -97,14 +97,25 @@
                                 <b>Costo local: </b>
                                 [[item.calculateLocalCost() | roundDecimals(3)]]
                             </p>
+                            <input
+                                :id="'local_coin_' + index"
+                                :class="{ 'border-danger': !item.isLocalCostValid()}"
+                                type="hidden"
+                                v-model="item.cost_local"
+                            >
                         </div>
                     </div>
-                    <div class="col-8 row" v-show="!item.bought_in_dollars" >
+                    <div class="col-8 row" v-else >
                         <div class="col-5">
                             <p>
                                 <b>Costo dolar: </b>
                                 [[item.calculateDolarCost() | roundDecimals(3)]]
                             </p>
+                            <input
+                                :id="'dollar_coin_' + index"
+                                type="hidden"
+                                v-model="item.cost_dollar"
+                            >
                         </div>
                         <div class="col-5">
                             <label :for="'local_coin_' + index">Costo Individual Local </label>
@@ -204,22 +215,28 @@ var app = new Vue({
         buildMaterials: function() {
             let selected = Array(this.materials.length);
             let self = this;
+
             for (let i = 0; i < this.materials.length; i++) {
                 let value;
                 value = this.formMaterials.find(function (el) {
-                    return el.pk === parseInt(self.materials[i]);
+                    return el.raw_material_pk === parseInt(self.materials[i]);
                 });
+
                 if (!value) {
                     value = this.raw_materials.find(function(el) {
                         return el.pk === parseInt(self.materials[i]);
                     });
                 }
+                // console.log(value);
                 if (value instanceof RawMaterial) {
                     selected[i] = value;
                 }else{
+                    // console.log(value);
+
                     selected[i] = new RawMaterial(
-                        value.pk,
-                        value.name,
+                        0, // relation pk
+                        value.pk,// raw material pk
+                        value.name, // raw material name
                         1, // amount
                         value.measurement_unit,
                         false, //bought_in_dollars
@@ -229,14 +246,14 @@ var app = new Vue({
                         Array.from(value.providers),
                     );
                 }
-                console.log(selected[i])
+                // console.log(selected[i])
             }
             self.formMaterials = selected;
         },
-
     },
     computed: {
         parsedMaterials: function(){
+            // return JSON.stringify(this.formatFormMaterials());
             return JSON.stringify(this.formMaterials);
         },
         totalCostDolar: function() {

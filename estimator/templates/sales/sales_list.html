@@ -4,6 +4,10 @@
 
 <div class="page-content" id="content">
     <h1>Listado de ventas</h1>
+    <a href="{% url 'sales:new_sale' %}"
+        class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+        Crear Venta
+    </a>
     <table>
         <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
             <tr>
@@ -19,7 +23,7 @@
         <tbody>
         
             {% for sale in object_list %}
-                <tr>
+                <tr class="border border-dark">
                     <td>{{ forloop.counter }}</td>
                     <td>{{sale.created}}</td>
                     <td>
