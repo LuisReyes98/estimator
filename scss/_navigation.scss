@@ -23,8 +23,13 @@
     }
   }
 
+  &__focused_item {
+    @extend .app__vertical_border--cyan ;
+    padding-left: 13px !important;
+  }
+
   &__media {
-    border-left: solid 2px $light_cyan;
+    // border-left: solid 1px map-get($project_colors, "light_cyan");
   }
 
   &__tooltip:hover {
@@ -141,7 +146,7 @@
         transition: all 0.4s;
 
         a {
-          min-width: 17rem ;
+          min-width: 17rem;
         }
 
         &:hover {

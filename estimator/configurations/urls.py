@@ -7,6 +7,11 @@ from . import views
 
 users_urlpatterns = [
     path(
+        route='settings/',
+        view=views.TemplateView.as_view(),
+        name='settings',
+    ),
+    path(
         route='list/',
         view=views.CompanyUserListView.as_view(),
         name='company_users_list',

@@ -14,7 +14,9 @@
           <p class="mt-4 app__text--light_cyan">
             {{ user }}
             {% if user.is_superuser %}
-              <i class="mdi mdi-key text-warning ml-1"></i>
+              <i class="mdi mdi-key-variant app__text--yellow ml-1"></i>
+            {% elif user.is_staff %}
+              <i class="mdi mdi-key-variant text__text--cyan_alt ml-1"></i>
             {% endif %}
           </p>
           {% if user.company %}
@@ -38,7 +40,7 @@
     <li class="nav-item">
       <a
         href="{% url 'home' %}"
-        class="{% if current_page == "home" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
+        class="{% if current_page == "home" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
                app__nav--link nav-link d-flex flex-row align-items-center pl-0"
         data-toggle="Inicio"
       >
@@ -49,7 +51,7 @@
     <li class="nav-item">
       <a
         href="{% url 'sales:calendar' %}"
-        class="{% if current_page == "calendar_sale" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
+        class="{% if current_page == "calendar_sale" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
                app__nav--link nav-link d-flex flex-row align-items-center pl-0"
         data-toggle="Calendario Predictor"
       >
@@ -60,7 +62,7 @@
     <li class="nav-item">
       <a
         href="{% url 'raw_materials:materials' %}"
-        class="{% if current_page == "materials" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
+        class="{% if current_page == "materials" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
                app__nav--link nav-link d-flex flex-row align-items-center pl-0"
         data-toggle="Materia Prima"
       >
@@ -71,7 +73,7 @@
     <li class="nav-item">
       <a
         href="{% url 'raw_materials:providers' %}"
-        class="{% if current_page == "providers" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
+        class="{% if current_page == "providers" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
                app__nav--link nav-link d-flex flex-row align-items-center pl-0"
         data-toggle="Proveedores"
       >
@@ -112,7 +114,7 @@
     </li>
   </ul>
   <a
-    href="{% url 'settings:company_users_list' %}"
+    href="{% url 'settings:settings' %}"
     class="nav--settings"
     title="Opciones"
   >
