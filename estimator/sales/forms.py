@@ -40,13 +40,13 @@ class SaleForm(forms.ModelForm):
                 self.fields['dollar_price'].initial = DolarPrice.objects.latest('created').dollar_price
             except Exception:
                 self.fields['dollar_price'].initial = 1
-        if self.creator_user.is_superuser:
-            company = self.creator_user.company
-        else:
-            company = self.creator_user.companyuser.company
+        # if self.creator_user.is_superuser:
+        #     company = self.creator_user.company
+        # else:
+        #     company = self.creator_user.companyuser.company
 
         self.fields['raw_materials'].queryset = RawMaterial.objects.filter(
-            company=company.pk,
+            company=self.creator_user.safe_company.pk,
         )
 
     class Meta:
@@ -137,6 +137,8 @@ class SaleForm(forms.ModelForm):
             )
 
         if self.creator_user.is_superuser:
+            """Si es superusuario agrega la compañia de lo
+                contrario agrega el usuario"""
             instance.company = self.creator_user.company
         else:
             instance.company_user = self.creator_user.companyuser

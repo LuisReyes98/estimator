@@ -53,7 +53,7 @@ class SaleDetailView(DetailView):
     template_name = "sales/sale_detail.html"
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('sales:sales_list')
         return super().get(request, *args, **kwargs)
 
@@ -70,7 +70,7 @@ class SaleListView(ListView):
 
     def get_queryset(self):
         new_context = Sale.objects.filter(
-            company=self.request.user.company.pk,
+            company=self.request.user.safe_company.pk,
         ).order_by('-created')
         return new_context
 
@@ -98,7 +98,7 @@ class SaleCreateView(CreateView):
     def get_material_providers_json(self, company):
         """Cargando los proveedores de materia prima"""
         result = list(RawMaterial.objects.filter(
-                company=self.request.user.company,).values(
+                company=self.request.user.safe_company,).values(
                     'measurement_unit',
                     'name',
                     'pk',
@@ -114,7 +114,7 @@ class SaleCreateView(CreateView):
     def get_context_data(self, **kwargs):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
-        raw_materials = self.get_material_providers_json(self.request.user.company)
+        raw_materials = self.get_material_providers_json(self.request.user.safe_company)
 
         context["raw_materials"] = raw_materials
         context['unit_system'] = dict(RawMaterial.MEASUREMENT_UNITS)
@@ -157,7 +157,7 @@ class SaleUpdateView(UpdateView):
     def get_material_providers_json(self, company):
         """Cargando los proveedores de materia prima"""
         result = list(RawMaterial.objects.filter(
-                company=self.request.user.company,).values(
+                company=self.request.user.safe_company,).values(
                     'measurement_unit',
                     'name',
                     'pk',
@@ -171,7 +171,7 @@ class SaleUpdateView(UpdateView):
         return json.dumps(list(result), cls=DjangoJSONEncoder)
 
     def build_material(self):
-        # import pdb; pdb.set_trace()
+        """ A la hora de editar carga la materia prima en un formato legible por javascript """
         materials_obj = []
         materials_values = []
 
@@ -193,7 +193,6 @@ class SaleUpdateView(UpdateView):
                         'pk',
                 )),
             })
-            # print(materials_obj)
         return [
             json.dumps(list(materials_obj), cls=DjangoJSONEncoder),
             json.dumps(list(materials_values), cls=DjangoJSONEncoder),
@@ -202,12 +201,10 @@ class SaleUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_superuser:
-            company = self.request.user.company
-        else:
-            company = self.request.user.companyuser.company
 
-        raw_materials = self.get_material_providers_json(company)
+        raw_materials = self.get_material_providers_json(
+            self.request.user.safe_company
+        )
 
         # print(self.build_material())
         temp = self.build_material()
@@ -236,6 +233,6 @@ class SaleDeleteView(DeleteView):
     success_url = reverse_lazy('sales:sales_list')
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('sales:sales_list')
         return super().get(request, *args, **kwargs)

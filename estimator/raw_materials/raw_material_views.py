@@ -18,7 +18,7 @@ class RawMaterialListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         new_context = RawMaterial.objects.filter(
-            company=self.request.user.company.pk,
+            company=self.request.user.safe_company.pk,
         )
         return new_context
 
@@ -47,7 +47,7 @@ class RawMaterialCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         context["current_page"] = "materials"
-        context["company"] = self.request.user.company
+        context["company"] = self.request.user.safe_company
         context["form_url"] = reverse_lazy('raw_materials:new_material')
         return context
 
@@ -57,7 +57,7 @@ class RawMaterialDetailView(LoginRequiredMixin, DetailView):
     template_name = "raw_materials/raw_material_detail.html"
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('raw_materials:materials')
         return super().get(request, *args, **kwargs)
 
@@ -75,7 +75,7 @@ class RawMaterialUpdateView(LoginRequiredMixin, UpdateView):
     form_class = RawMaterialForm
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('raw_materials:materials')
         return super().get(request, *args, **kwargs)
 
@@ -89,7 +89,7 @@ class RawMaterialUpdateView(LoginRequiredMixin, UpdateView):
         """Usuarios, compañia, y url al formulario"""
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
-        context["company"] = self.request.user.company
+        context["company"] = self.request.user.safe_company
         context["form_url"] = reverse_lazy(
             'raw_materials:update_material',
             args=[self.object.pk]
@@ -105,6 +105,6 @@ class RawMaterialDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('raw_materials:materials')
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('raw_materials:materials')
         return super().get(request, *args, **kwargs)

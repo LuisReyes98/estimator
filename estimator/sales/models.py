@@ -64,8 +64,8 @@ class Sale(TimeStampFields):
     def __str__(self):
         return '%s %d' % (self._meta.verbose_name, self.pk)
 
-    # def get_absolute_url(self):
-    #     return reverse_lazy("Sale_detail", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse_lazy("sales:sale", kwargs={"pk": self.pk})
 
 
 class MaterialSaleRelation(TimeStampFields):
