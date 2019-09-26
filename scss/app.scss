@@ -7,13 +7,21 @@
     }
   }
   &__background_gradient {
-    &--cyan {
+    &--pastel {
       background: rgb(189, 215, 245);
       background: linear-gradient(
         45deg,
         rgba(189, 215, 245, 1) 0%,
         rgba(217, 252, 255, 1) 45%,
         rgba(255, 255, 255, 1) 100%
+      );
+    }
+    &--cyan {
+      background: rgb(106, 224, 202);
+      background: linear-gradient(
+        145deg,
+        rgba(106, 224, 202, 1) 0%,
+        rgba(26, 191, 171, 1) 100%
       );
     }
   }
