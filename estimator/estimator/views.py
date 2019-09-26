@@ -13,11 +13,4 @@ class HomeView(LoginRequiredMixin, TemplateView):
         context["user"] = self.request.user
         context["current_page"] = "home"
 
-
         return context
-
-    # def get(self, request, *args, **kwargs):
-    #     """añadiendo variables al contexto en get"""
-    #     context = super().get_context_data(**kwargs)
-
-    #     return self.render_to_response(context)

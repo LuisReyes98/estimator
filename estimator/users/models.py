@@ -61,6 +61,16 @@ class AppUser(AbstractUser, TimeStampFields):
         """Retorna el nombre completo del usuario"""
         return '%s %s' % (self.first_name, self.last_name)
 
+    @property
+    def safe_company(self):
+        """Retorna la compañia sin importar el contexto o tipo de usuario"""
+        try:
+            company = self.company
+        except Exception:
+            company = self.companyuser.company
+
+        return company
+
     def __str__(self):
         # Retorna el nombre completo del usuario
         return self.full_name
