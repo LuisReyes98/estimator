@@ -1,7 +1,7 @@
 import json
 
 from django import forms
-from .models import Sale, MaterialSaleRelation, DolarPrice
+from .models import Sale, MaterialSaleRelation, DolarPrice, SaleFile
 from raw_materials.models import RawMaterial, Provider
 from django.utils.translation import gettext as _
 
@@ -152,9 +152,21 @@ class SaleForm(forms.ModelForm):
         return instance
 
 
-class UploadSaleFileForm(forms.Form):
-    pass
-    sale_file = forms.FileField(
-        label=_("Informe de "),
-        required=True
-    )
+class SaleFileForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.creator_company = kwargs.pop('company')
+
+        super(SaleFileForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = SaleFile
+        fields = ("sale_upload",)
+
+    def save(self, commit=True):
+        instance = super(SaleFileForm, self).save(commit=False)
+
+        instance.company = self.creator_company
+
+        if commit:
+            instance.save()

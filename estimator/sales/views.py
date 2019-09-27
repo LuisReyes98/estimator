@@ -14,7 +14,7 @@ from django.views.generic import (
     FormView)
 
 # from sales.objects import Prediction
-from .forms import SaleForm, UploadSaleFileForm
+from .forms import SaleForm, SaleFileForm
 from raw_materials.models import RawMaterial, Provider
 from .models import Sale
 from django.shortcuts import redirect
@@ -240,5 +240,8 @@ class SaleDeleteView(DeleteView):
 
 
 class SaleUploadFileView(FormView):
+
     template_name = "sales/file_upload.html"
-    form_class = UploadSaleFileForm
+    form_class = SaleFileForm
+
+    success_url = reverse_lazy('sales:calendar')

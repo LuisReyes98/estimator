@@ -34,10 +34,7 @@
 {% comment %} Formulario  {% endcomment %}
     <form id="sale_form" ref="form" action="{{form_url}}" method="POST" @submit.prevent="onSubmit" >
         {% csrf_token %}
-        {% comment %} <input type="hidden" name="company" value="{{company.pk}}" >
-        {% if not user.is_superuser %}
-            <input type="hidden" name="company_user" value="{{company_user.pk}}" >
-        {% endif %} {% endcomment %}
+
         <div>
             {{form.dollar_price.label_tag}}
             {% render_field form.dollar_price v-model="dollar_price" step="0.001" %}
