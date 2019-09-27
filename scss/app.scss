@@ -309,6 +309,26 @@
         }
       }
     }
+    &--check {
+      input:focus + label {
+        &::before {
+          // outline: none !important;
+          // outline-width: 0 !important;
+          // box-shadow: none !important;
+          // -moz-box-shadow: none !important;
+          // -webkit-box-shadow: none !important;
+          border-color: map-get($project_colors, "gray-500") !important;
+        }
+      }
+
+      input:checked + label {
+        &::before {
+          background-color: map-get($project_colors, "dark_blue") !important;
+          border-color: map-get($project_colors, "dark_blue") !important;
+        }
+      }
+    }
+
     &--print {
       label {
         font-size: 16px;
@@ -347,4 +367,7 @@ button:focus {
   box-shadow: none !important;
   -moz-box-shadow: none !important;
   -webkit-box-shadow: none !important;
+}
+.form-control:focus {
+  border-color: map-get($project_colors, "deep_blue") !important;
 }

@@ -18,7 +18,7 @@
             <input
                 :id="'amount' + index" type="number" min="1" v-model="item.amount"
                 :class="{ 'border-danger': !item.isAmountValid()}"
-                class="w-100"
+                class="form-control w-100"
             >
         </div>
         <div class="col-12 col-md-4">
@@ -26,7 +26,7 @@
                 Proveedor
             </label>
             <br>
-            <select class="w-100" :id="'provider_' + index" v-model="item.provider">
+            <select class="selectpicker" :id="'provider_' + index" v-model="item.provider">
                 <option value="0">Selecciona</option>
                 <option v-for="prov in item.providers_list" :value="prov.pk">[[prov.name]]</option>
             </select>
@@ -34,14 +34,18 @@
     </div>
     <div class="row pb-1">
         <div class="col-12 col-md-4">
-            <input
-                :id="'is_bought_in_dollars' + index" type="checkbox"
-                v-model="item.bought_in_dollars"
-                class=""
-            >
-            <label class="app__text--gray-600" :for="'is_bought_in_dollars' + index">
-                Se compró en dolares
-            </label>
+            <div class="custom-control custom-checkbox app__form--check">
+                <input
+                    :id="'is_bought_in_dollars' + index" type="checkbox"
+                    v-model="item.bought_in_dollars"
+                    class="custom-control-input"
+                >
+                <label
+                    class="custom-control-label app__text--gray-600"
+                    :for="'is_bought_in_dollars' + index">
+                    Se compró en dolares
+                </label>
+            </div>
         </div>
         <div class="col-12 col-md-8" v-if="item.bought_in_dollars">
             <div class="container-fluid p-0">
@@ -53,7 +57,7 @@
                         <input
                             :id="'dollar_coin_' + index" type="number" min="0" step="0.001"
                             v-model="item.cost_dollar"
-                            class="w-100"
+                            class="form-control w-100"
                             :class="{ 'border-danger': !item.isDollarCostValid()}"
                         >
                     </div>
@@ -82,7 +86,7 @@
                         </label>
                         <input
                             :id="'local_coin_' + index"
-                            class="w-100"
+                            class="form-control w-100"
                             :class="{ 'border-danger': !item.isLocalCostValid()}"
                             type="number" min="0" step="0.001" v-model="item.cost_local"
                         >
