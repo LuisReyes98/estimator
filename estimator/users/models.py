@@ -123,7 +123,7 @@ class CompanyUser(TimeStampFields):
 
     def __str__(self):
         # Retornar el nombre de la compañia y nombre del usuario
-        return '%s: %s' % (self.company.company_name, self.user.username)
+        return '%s' % (self.user.full_name)
 
     class Meta:
         verbose_name = translate("Company User")
