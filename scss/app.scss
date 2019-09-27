@@ -348,3 +348,14 @@ button:focus {
   -moz-box-shadow: none !important;
   -webkit-box-shadow: none !important;
 }
+.reset_select_picker{
+  button{
+    &:focus {
+      outline: none !important;
+      outline-width: 0 !important;
+      box-shadow: none !important;
+      -moz-box-shadow: none !important;
+      -webkit-box-shadow: none !important;
+    }
+  }
+}

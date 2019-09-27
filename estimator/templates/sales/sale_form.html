@@ -258,10 +258,17 @@ var app = new Vue({
 
             self.formMaterials = selected;
             self.updateMdl();
+            self.updateSelectPicker();
+
         },
         updateMdl: function(){
             setTimeout(function () {
                 componentHandler.upgradeAllRegistered();
+            },0);
+        },
+        updateSelectPicker: function(){
+            setTimeout(function () {
+                $('.selectpicker').selectpicker();
             },0);
         }
     },
