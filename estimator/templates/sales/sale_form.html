@@ -10,83 +10,170 @@
 
 {% endblock head %}
 
-
 {% block content %}
 {{block.super}}
 <div class="page-content sales__form" id="content">
-    <h1>
-        {% if editing %}
-            Editando Venta
-        {% else %}
-            Creando Venta
-        {% endif %}
-    </h1>
-    {% if form.non_field_errors %}
-    {% for error in form.non_field_errors %}
-        <div class="d-flex flex-row align-items-center">
-            <i class="app__icon--alert mdi mdi-alert text-danger"></i>
-            <p class="app__form--error text-danger mb-0 ml-3">
-                {{ error }}
-            </p>
-        </div>
-    {% endfor %}
-{% endif %}
-{% comment %} Formulario  {% endcomment %}
-    <form id="sale_form" ref="form" action="{{form_url}}" method="POST" @submit.prevent="onSubmit" >
-        {% csrf_token %}
-        {% comment %} <input type="hidden" name="company" value="{{company.pk}}" >
-        {% if not user.is_superuser %}
-            <input type="hidden" name="company_user" value="{{company_user.pk}}" >
-        {% endif %} {% endcomment %}
-        <div>
-            {{form.dollar_price.label_tag}}
-            {% render_field form.dollar_price v-model="dollar_price" step="0.001" %}
-
-        </div>
-        <div>
-            {{form.raw_materials.label_tag}}
-            <p> {% render_field form.raw_materials  v-model="materials" @change="buildMaterials" class+="selectpicker col-8 mx-4" multiple="" data-live-search="true" title="Escoge las materias primas" %}</p>
-        </div>
-        <div id="materials_group" class="app__background--gray-300 d-flex flex-column overflow-y-scroll materials__list">
-            {% include 'sales/_selected_sale.html' %}
-
-        </div>
-
-        <span> Si este no es el costo final cambielo a mano</span>
-        <div>
-            {{form.manual_costs.label_tag}}
-            {% render_field form.manual_costs v-model="manualFinalCosts" %}
-        </div>
-
-        <div v-if="manualFinalCosts" >
-            <div>
-                {{form.total_cost_dollar.label_tag}}
-                <p> {% render_field form.total_cost_dollar%}</p>
-            </div>
-            <div>
-                {{form.total_cost_local.label_tag}}
-                <p> {% render_field form.total_cost_local%}</p>
+    <div class="container-fluid app__background_gradient--pastel app__viewport">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <a href="{% url 'sales:calendar' %}"
+                   title="Volver"
+                   class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    <i class="mdi mdi-arrow-left"></i>
+                </a>
+                <h4 class="text-center font-weight-bold text-uppercase">
+                    {% if editing %}
+                        Editar Venta
+                    {% else %}
+                        Crear Venta
+                    {% endif %}
+                </h4>
             </div>
         </div>
-
-        <div v-else >
-            <div>
-                <label for="">Costo final dolares</label>
-                <p>[[totalCostDolar | roundDecimals(3) ]]</p>
-                <input type="hidden" name="total_cost_dollar" :value="totalCostDolar">
-            </div>
-            <div>
-                <label for="">Costo final local</label>
-                <p>[[totalCostLocal | roundDecimals(3) ]]</p>
-                <input type="hidden" name="total_cost_local" :value="totalCostLocal" >
-
+        <div class="row mb-3 pt-3 pb-3 pl-2 pr-2 app__border--gray-200 app__background--white">
+            <div class="col pl-3 pr-1 app__vertical_border--red">
+                <div class="d-flex flex-row align-items-center">
+                    <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+                    <p class="app__form--error text-danger mb-0 ml-3">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur, corrupti nisi omnis quae similique aliquid aspernatur ipsam nam numquam facilis accusantium. Qui quaerat ipsam quibusdam quia mollitia consequuntur, totam delectus!
+                    </p>
+                </div>
+                <div class="d-flex flex-row align-items-center">
+                    <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+                    <p class="app__form--error text-danger mb-0 ml-3">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Consequuntur, corrupti nisi omnis quae similique aliquid aspernatur ipsam nam numquam facilis accusantium. Qui quaerat ipsam quibusdam quia mollitia consequuntur, totam delectus!
+                    </p>
+                </div>
+                {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                        <div class="d-flex flex-row align-items-center">
+                            <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+                            <p class="app__form--error text-danger mb-0 ml-3">
+                                {{ error }}
+                            </p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
             </div>
         </div>
-
-        <input type="hidden" name="raw_materials_json" :value="parsedMaterials" >
-
-        <button type="submit" > Guardar</button>
-    </form>
+        {% comment %} Formulario  {% endcomment %}
+        <div class="row pb-3">
+            <div class="col-12 col-lg-10 m-auto">
+                <div class="card app__background--gray-100 shadow">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <form id="sale_form" ref="form" action="{{form_url}}" method="POST" @submit.prevent="onSubmit" >
+                                {% csrf_token %}
+                                {% comment %} <input type="hidden" name="company" value="{{company.pk}}" >
+                                {% if not user.is_superuser %}
+                                    <input type="hidden" name="company_user" value="{{company_user.pk}}" >
+                                {% endif %} {% endcomment %}
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
+                                        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                            {% render_field form.dollar_price class+="mdl-textfield__input" v-model="dollar_price" step="0.001" %}
+                                            <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="">
+                                                <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                {{form.dollar_price.label_tag}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-3 col-sm-12">
+                                        <div class="app__form--textfield w-100">
+                                            <label class="" for="">
+                                                <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                {{form.raw_materials.label_tag}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-9 col-sm-12">
+                                        <div class="app__form--select w-100">
+                                            {% render_field form.raw_materials v-model="materials" @change="buildMaterials" class+="selectpicker col-10 mx-4" multiple="" data-live-search="true" title="Selecciona" %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="materials_group" class="mb-2 pt-2 pr-2 pl-2 app__border--gray-200 d-flex flex-column overflow-y-scroll materials__list">
+                                    {% include 'sales/_selected_sale.html' %}
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class="col-form-label app__text--deep_blue">
+                                        Si este no es el costo final esperado, ingrese la cantidad manualmente
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-switch app__form--switch">
+                                        {% render_field form.manual_costs v-model="manualFinalCosts" type="checkbox" class="custom-control-input" id="id_cost" %}
+                                        <label for="id_cost" class="custom-control-label">
+                                            {{form.manual_costs.label_tag}}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div v-if="manualFinalCosts">
+                                    <div class="form-row">
+                                        <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
+                                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                                {% render_field form.total_cost_dollar class+="mdl-textfield__input" %}
+                                                <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="">
+                                                    <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                    {{form.total_cost_dollar.label_tag}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
+                                            <div class="app__form--print">
+                                                <label class="" for="">
+                                                    <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                    {{form.total_cost_local.label_tag}}
+                                                </label>
+                                                {% render_field form.total_cost_local class+="_form-input" %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div class="form-row">
+                                        <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
+                                            <div class="app__form--print">
+                                                <input type="hidden" name="total_cost_dollar" :value="totalCostDolar">
+                                                <label class="" for="">
+                                                    <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                    Costo final dolares
+                                                </label>
+                                                <p class="pl-1">[[totalCostDolar | roundDecimals(3) ]]</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
+                                            <div class="app__form--print">
+                                                <input type="hidden" name="total_cost_local" :value="totalCostLocal" >
+                                                <label class="" for="">
+                                                    <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                    Costo final local
+                                                </label>
+                                                <p class="pl-1">[[totalCostLocal | roundDecimals(3) ]]</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col m-auto text-center">
+                                    <button type="submit"
+                                            class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                        Guardar
+                                    </button>
+                                    <input type="hidden" name="raw_materials_json" :value="parsedMaterials" >
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 

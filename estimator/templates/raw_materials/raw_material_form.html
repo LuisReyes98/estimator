@@ -28,7 +28,7 @@
                 </h4>
             </div>
         </div>
-        <div class="row">
+        <div class="row pb-3">
             <div class="col-12 col-lg-6 m-auto">
                 <div class="card app__background--gray-200">
                     <div class="card-body">
@@ -51,7 +51,7 @@
                                 <div class="form-group">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                         {% render_field form.name class+="mdl-textfield__input" %}
-                                        <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="">
+                                        <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="">
                                             <i class="mdi mdi-textbox mr-1"></i>{{ form.name.label }}
                                         </label>
                                         <span class="mdl-textfield__error text-danger">
@@ -122,7 +122,7 @@
                                         <div class="form-group col-12 col-md-4">
                                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                                 {% render_field form.years_to_expire class+="mdl-textfield__input" %}
-                                                <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="">
+                                                <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="">
                                                     <i class="mdi mdi-calendar mr-1"></i>{{ form.years_to_expire.label }}
                                                 </label>
                                                 {% for error in form.years_to_expire.errors %}
@@ -135,7 +135,7 @@
                                         <div class="form-group col-12 col-md-4">
                                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                                 {% render_field form.months_to_expire class+="mdl-textfield__input" %}
-                                                <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="">
+                                                <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="">
                                                     <i class="mdi mdi-calendar mr-1"></i>{{ form.months_to_expire.label }}
                                                 </label>
                                                 {% for error in form.months_to_expire.errors %}
@@ -148,7 +148,7 @@
                                         <div class="form-group col-12 col-md-4">
                                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                                 {% render_field form.days_to_expire class+="mdl-textfield__input" %}
-                                                <label class="mdl-textfield__label focused__color__deep_blue material_fix label_placeholder" for="">
+                                                <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="">
                                                     <i class="mdi mdi-calendar mr-1"></i>{{ form.days_to_expire.label }}
                                                 </label>
                                                 {% for error in form.days_to_expire.errors %}

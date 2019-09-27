@@ -1,57 +1,106 @@
-<div v-for="(item, index) in formMaterials" class="p-4 border border-dark container" :key="index">
-    <div class="row">
-        <p class="col-5">
-            Nombre: [[item.name]]
-        </p>
-
-        <div class="col-5">
-            <label :for="'amount' + index">Cantidad </label>
-            <input :id="'amount' + index" type="number" min="1" v-model="item.amount"
-                :class="{ 'border-danger': !item.isAmountValid()}">
-            <p>[[ unit_system[item.measurement_unit] ]]</p>
+<div v-for="(item, index) in formMaterials" class="container-fluid mb-2 p-3 app__background--white border" :key="index">
+    <div class="row pb-1">
+        <div class="col-12 col-md-4">
+            <label class="app__text--gray-600" for="">
+                Nombre
+            </label>
+            <p class="font-weight-bold w-100">
+                [[item.name]]
+            </p>
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="app__text--gray-600" :for="'amount' + index">
+                Cantidad en 
+                <span class="badge badge-secondary rounded-pill text-uppercase">
+                    [[ unit_system[item.measurement_unit] ]]
+                </span>
+            </label>
+            <input
+                :id="'amount' + index" type="number" min="1" v-model="item.amount"
+                :class="{ 'border-danger': !item.isAmountValid()}"
+                class="w-100"
+            >
+        </div>
+        <div class="col-12 col-md-4">
+            <label class="app__text--gray-600" :for="'provider_' + index">
+                Proveedor
+            </label>
+            <br>
+            <select class="w-100" :id="'provider_' + index" v-model="item.provider">
+                <option value="0">Selecciona</option>
+                <option v-for="prov in item.providers_list" :value="prov.pk">[[prov.name]]</option>
+            </select>
         </div>
     </div>
-    <div class="row">
-        <label :for="'provider_' + index">Proveedor</label>
-        <select :id="'provider_' + index" v-model="item.provider">
-            <option value="0">Escoge un proveedor</option>
-            <option v-for="prov in item.providers_list" :value="prov.pk">[[prov.name]]</option>
-        </select>
-    </div>
-    <div class="row">
-        <div class="col-4">
-            <label :for="'is_bought_in_dollars' + index">Se compro en dolares</label>
-            <input :id="'is_bought_in_dollars' + index" type="checkbox" v-model="item.bought_in_dollars" class="border">
+    <div class="row pb-1">
+        <div class="col-12 col-md-4">
+            <input
+                :id="'is_bought_in_dollars' + index" type="checkbox"
+                v-model="item.bought_in_dollars"
+                class=""
+            >
+            <label class="app__text--gray-600" :for="'is_bought_in_dollars' + index">
+                Se compró en dolares
+            </label>
         </div>
-        <div class="col-8 row" v-if="item.bought_in_dollars">
-            <div class="col-5">
-                <label :for="'dollar_coin_' + index">Costo Individual Dolar </label>
-                <input :id="'dollar_coin_' + index" type="number" min="0" step="0.001" v-model="item.cost_dollar"
-                    class="border" :class="{ 'border-danger': !item.isDollarCostValid()}">
-            </div>
-            <div class="col-5">
-                <p>
-                    <b>Costo local: </b>
-                    [[item.calculateLocalCost() | roundDecimals(3)]]
-                </p>
-                <input :id="'local_coin_' + index" :class="{ 'border-danger': !item.isLocalCostValid()}" type="hidden"
-                    v-model="item.cost_local">
+        <div class="col-12 col-md-8" v-if="item.bought_in_dollars">
+            <div class="container-fluid p-0">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label class="app__text--gray-600" :for="'dollar_coin_' + index">
+                            Costo Individual Dolar
+                        </label>
+                        <input
+                            :id="'dollar_coin_' + index" type="number" min="0" step="0.001"
+                            v-model="item.cost_dollar"
+                            class="w-100"
+                            :class="{ 'border-danger': !item.isDollarCostValid()}"
+                        >
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <p class="app__text--gray-600">
+                            Costo Local: 
+                            <span class="text-dark font-weight-bold">
+                                [[item.calculateLocalCost() | roundDecimals(3)]]
+                            </span>
+                        </p>
+                        <input
+                            :id="'local_coin_' + index"
+                            :class="{ 'border-danger': !item.isLocalCostValid()}" type="hidden"
+                            v-model="item.cost_local"
+                        >
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-8 row" v-else>
-            <div class="col-5">
-                <p>
-                    <b>Costo dolar: </b>
-                    [[item.calculateDolarCost() | roundDecimals(3)]]
-                </p>
-                <input :id="'dollar_coin_' + index" type="hidden" v-model="item.cost_dollar">
-            </div>
-            <div class="col-5">
-                <label :for="'local_coin_' + index">Costo Individual Local </label>
-                <input :id="'local_coin_' + index" class="border" :class="{ 'border-danger': !item.isLocalCostValid()}"
-                    type="number" min="0" step="0.001" v-model="item.cost_local">
+        <div class="col-12 col-md-8" v-else>
+            <div class="container-fluid p-0">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <label class="app__text--gray-600" :for="'local_coin_' + index">
+                            Costo Individual Local
+                        </label>
+                        <input
+                            :id="'local_coin_' + index"
+                            class="w-100"
+                            :class="{ 'border-danger': !item.isLocalCostValid()}"
+                            type="number" min="0" step="0.001" v-model="item.cost_local"
+                        >
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <p class="app__text--gray-600">
+                            Costo Dolar: 
+                            <span class="text-dark font-weight-bold">
+                                [[item.calculateDolarCost() | roundDecimals(3)]]
+                            </span>
+                        </p>
+                        <input
+                            :id="'dollar_coin_' + index" type="hidden"
+                            v-model="item.cost_dollar"
+                        >
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
