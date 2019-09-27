@@ -26,7 +26,7 @@
                 Proveedor
             </label>
             <br>
-            <select class="selectpicker" :id="'provider_' + index" v-model="item.provider">
+            <select class="w-100 selectpicker reset_select_picker" data-live-search="true" :id="'provider_' + index" v-model="item.provider">
                 <option value="0">Selecciona</option>
                 <option v-for="prov in item.providers_list" :value="prov.pk">[[prov.name]]</option>
             </select>

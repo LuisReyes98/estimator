@@ -104,12 +104,14 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="custom-control custom-switch app__form--switch">
-                                        {% render_field form.manual_costs v-model="manualFinalCosts" type="checkbox" class="custom-control-input" id="id_cost" %}
+                                        {% render_field form.manual_costs v-model="manualFinalCosts" type="checkbox" class="custom-control-input" id="id_cost" @click="updateMdl" %}
                                         <label for="id_cost" class="custom-control-label">
                                             {{form.manual_costs.label_tag}}
                                         </label>
                                     </div>
                                 </div>
+
+
                                 <div v-if="manualFinalCosts">
                                     <div class="form-row">
                                         <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
@@ -134,6 +136,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <div v-else>
                                     <div class="form-row">
                                         <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
@@ -160,6 +164,8 @@
                                         </div>
                                     </div>
                                 </div>
+
+
                                 <div class="col m-auto text-center">
                                     <button type="submit"
                                             class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
@@ -232,12 +238,9 @@ var app = new Vue({
                         return el.pk === parseInt(self.materials[i]);
                     });
                 }
-                // console.log(value);
                 if (value instanceof RawMaterial) {
                     selected[i] = value;
                 }else{
-                    // console.log(value);
-
                     selected[i] = new RawMaterial(
                         0, // relation pk
                         value.pk,// raw material pk
@@ -251,10 +254,23 @@ var app = new Vue({
                         Array.from(value.providers),
                     );
                 }
-                // console.log(selected[i])
             }
+
             self.formMaterials = selected;
+            self.updateMdl();
+            self.updateSelectPicker();
+
         },
+        updateMdl: function(){
+            setTimeout(function () {
+                componentHandler.upgradeAllRegistered();
+            },0);
+        },
+        updateSelectPicker: function(){
+            setTimeout(function () {
+                $('.selectpicker').selectpicker();
+            },0);
+        }
     },
     computed: {
         parsedMaterials: function(){
