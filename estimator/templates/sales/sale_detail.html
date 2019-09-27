@@ -4,7 +4,16 @@
 {{ block.super }}
 <div class="page-content" id="content">
     <h1>Compra individual</h1>
-    <p>Creado por {{sale.company.user}}</p>
+    <p>
+        Creado por
+        <b>
+            {% if sale.company_user %}
+                {{sale.company_user}}
+            {% else %}
+                {{sale.company.user}}
+            {% endif %}
+        </b>
+    </p>
     <p>Fecha {{sale.created}}</p>
     <p>Precio del Dolar:  <b>{{sale.dollar_price}}</b></p>
     <div>
