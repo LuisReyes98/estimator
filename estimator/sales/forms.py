@@ -1,7 +1,7 @@
 import json
 
 from django import forms
-from .models import Sale, MaterialSaleRelation, DolarPrice
+from .models import Sale, MaterialSaleRelation, DolarPrice, SaleFile
 from raw_materials.models import RawMaterial, Provider
 from django.utils.translation import gettext as _
 
@@ -40,13 +40,9 @@ class SaleForm(forms.ModelForm):
                 self.fields['dollar_price'].initial = DolarPrice.objects.latest('created').dollar_price
             except Exception:
                 self.fields['dollar_price'].initial = 1
-        if self.creator_user.is_superuser:
-            company = self.creator_user.company
-        else:
-            company = self.creator_user.companyuser.company
 
         self.fields['raw_materials'].queryset = RawMaterial.objects.filter(
-            company=company.pk,
+            company=self.creator_user.safe_company.pk,
         )
 
     class Meta:
@@ -91,6 +87,11 @@ class SaleForm(forms.ModelForm):
                         'value': val['cost_local'],
                     },
                 ))
+            if int(val['provider']) == 0:
+                errors.append(forms.ValidationError(
+                    _('Proveedor no valido'),
+                    code='invalid',
+                ))
         if errors:
             raise forms.ValidationError(errors)
 
@@ -122,23 +123,27 @@ class SaleForm(forms.ModelForm):
             primary_key = data_to_save.pop('pk')
 
             try:
+                # Editando
                 relation = MaterialSaleRelation.objects.get(pk=primary_key)
             except Exception:
+                # Creando
                 relation = MaterialSaleRelation(**data_to_save)
+                print(data_to_save)
             else:
+                # Continua la edicion
+                pass
                 relation.amount = data_to_save['amount']
                 relation.cost_dollar = data_to_save['cost_dollar']
                 relation.cost_local = data_to_save['cost_local']
                 relation.bought_in_dollars = data_to_save['bought_in_dollars']
                 relation.provider = data_to_save['provider']
-
+            print(relation)
             materials_sale_relation.append(
                 relation
             )
 
-        if self.creator_user.is_superuser:
-            instance.company = self.creator_user.company
-        else:
+        instance.company = self.creator_user.safe_company
+        if not self.creator_user.is_superuser:
             instance.company_user = self.creator_user.companyuser
 
         if commit:
@@ -147,8 +152,29 @@ class SaleForm(forms.ModelForm):
             instance.save()
 
             for el in materials_sale_relation:
-                # Saving the many to many
+                # Guardando mucho a muchos
                 el.sale = instance
                 el.save()
-                self.save_m2m()
+
+            self.save_m2m()
         return instance
+
+
+class SaleFileForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.creator_company = kwargs.pop('company')
+
+        super(SaleFileForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = SaleFile
+        fields = ("sale_upload",)
+
+    def save(self, commit=True):
+        instance = super(SaleFileForm, self).save(commit=False)
+
+        instance.company = self.creator_company
+
+        if commit:
+            instance.save()

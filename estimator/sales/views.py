@@ -10,10 +10,11 @@ from django.views.generic import (
     DetailView,
     ListView,
     TemplateView,
-    UpdateView)
+    UpdateView,
+    FormView)
 
-from sales.objects import Prediction
-from .forms import SaleForm
+# from sales.objects import Prediction
+from .forms import SaleForm, SaleFileForm
 from raw_materials.models import RawMaterial, Provider
 from .models import Sale
 from django.shortcuts import redirect
@@ -22,19 +23,19 @@ from django.shortcuts import redirect
 class CalendarView(LoginRequiredMixin, TemplateView):
     template_name = "sales/calendar.html"
 
-    def exampleDates(self):
-        now = datetime.now()
-        some_dates = []
+    # def exampleDates(self):
+    #     now = datetime.now()
+    #     some_dates = []
 
-        for i in range(10):
-            some_dates.append(
-                Prediction(
-                    date=(now - timedelta(days=i)).strftime("%m/%d/%Y"),
-                    pk=i,
-                ).__dict__
-            )
+    #     for i in range(10):
+    #         some_dates.append(
+    #             Prediction(
+    #                 date=(now - timedelta(days=i)).strftime("%m/%d/%Y"),
+    #                 pk=i,
+    #             ).__dict__
+    #         )
 
-        return some_dates
+    #     return some_dates
 
     def get_context_data(self, **kwargs):
         """Añadiendo variables al contexto """
@@ -42,7 +43,7 @@ class CalendarView(LoginRequiredMixin, TemplateView):
         context["title"] = "Calendario"
         context["user"] = self.request.user
 
-        context["predictions"] = self.exampleDates()
+        # context["predictions"] = self.exampleDates()
         context["current_page"] = "calendar_sale"
 
         return context
@@ -53,7 +54,7 @@ class SaleDetailView(DetailView):
     template_name = "sales/sale_detail.html"
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('sales:sales_list')
         return super().get(request, *args, **kwargs)
 
@@ -70,7 +71,7 @@ class SaleListView(ListView):
 
     def get_queryset(self):
         new_context = Sale.objects.filter(
-            company=self.request.user.company.pk,
+            company=self.request.user.safe_company.pk,
         ).order_by('-created')
         return new_context
 
@@ -98,7 +99,7 @@ class SaleCreateView(CreateView):
     def get_material_providers_json(self, company):
         """Cargando los proveedores de materia prima"""
         result = list(RawMaterial.objects.filter(
-                company=self.request.user.company,).values(
+                company=self.request.user.safe_company,).values(
                     'measurement_unit',
                     'name',
                     'pk',
@@ -114,7 +115,7 @@ class SaleCreateView(CreateView):
     def get_context_data(self, **kwargs):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
-        raw_materials = self.get_material_providers_json(self.request.user.company)
+        raw_materials = self.get_material_providers_json(self.request.user.safe_company)
 
         context["raw_materials"] = raw_materials
         context['unit_system'] = dict(RawMaterial.MEASUREMENT_UNITS)
@@ -157,7 +158,7 @@ class SaleUpdateView(UpdateView):
     def get_material_providers_json(self, company):
         """Cargando los proveedores de materia prima"""
         result = list(RawMaterial.objects.filter(
-                company=self.request.user.company,).values(
+                company=self.request.user.safe_company,).values(
                     'measurement_unit',
                     'name',
                     'pk',
@@ -171,7 +172,7 @@ class SaleUpdateView(UpdateView):
         return json.dumps(list(result), cls=DjangoJSONEncoder)
 
     def build_material(self):
-        # import pdb; pdb.set_trace()
+        """ A la hora de editar carga la materia prima en un formato legible por javascript """
         materials_obj = []
         materials_values = []
 
@@ -193,7 +194,6 @@ class SaleUpdateView(UpdateView):
                         'pk',
                 )),
             })
-            # print(materials_obj)
         return [
             json.dumps(list(materials_obj), cls=DjangoJSONEncoder),
             json.dumps(list(materials_values), cls=DjangoJSONEncoder),
@@ -202,12 +202,10 @@ class SaleUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
-        if self.request.user.is_superuser:
-            company = self.request.user.company
-        else:
-            company = self.request.user.companyuser.company
 
-        raw_materials = self.get_material_providers_json(company)
+        raw_materials = self.get_material_providers_json(
+            self.request.user.safe_company
+        )
 
         # print(self.build_material())
         temp = self.build_material()
@@ -236,6 +234,21 @@ class SaleDeleteView(DeleteView):
     success_url = reverse_lazy('sales:sales_list')
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('sales:sales_list')
         return super().get(request, *args, **kwargs)
+
+
+class SaleUploadFileView(FormView):
+
+    template_name = "sales/file_upload.html"
+    form_class = SaleFileForm
+
+    success_url = reverse_lazy('sales:calendar')
+
+    def get_form_kwargs(self):
+        form_kwargs = super(SaleUploadFileView, self).get_form_kwargs()
+
+        form_kwargs['company'] = self.request.user.safe_company
+
+        return form_kwargs

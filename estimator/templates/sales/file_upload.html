@@ -1,0 +1,15 @@
+{% extends 'layouts/base_app.html' %}
+
+{% block content %}
+{{ block.super }}
+<div class="page-content" id="content">
+    <h1>Cargar de Compras por archivos</h1>
+    <h3>Instrucciones de cargar de archivo</h3>
+    <form action="{% url 'sales:upload_file' %}" method="POST">
+        {% csrf_token %}
+        {{form}}
+
+        <button type="submit" >Guardar</button>
+    </form>
+</div>
+{% endblock content %}

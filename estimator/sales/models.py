@@ -64,8 +64,8 @@ class Sale(TimeStampFields):
     def __str__(self):
         return '%s %d' % (self._meta.verbose_name, self.pk)
 
-    # def get_absolute_url(self):
-    #     return reverse_lazy("Sale_detail", kwargs={"pk": self.pk})
+    def get_absolute_url(self):
+        return reverse_lazy("sales:sale", kwargs={"pk": self.pk})
 
 
 class MaterialSaleRelation(TimeStampFields):
@@ -132,3 +132,27 @@ class DolarPrice(TimeStampFields):
 
     class Meta:
         pass
+
+
+def get_company_directory_path(instance, filename):
+    # el archivo de carga en MEDIA_ROOT/sales/user_<id>/<filename>
+    return 'sales/company_{0}/%Y_%m_%d_%H_%M_%S'.format(
+        instance.user.safe_company.pk
+    )
+
+
+class SaleFile(TimeStampFields):
+
+    sale_upload = models.FileField(
+        "Archivo de Registro de Compras",
+        upload_to=get_company_directory_path
+    )
+
+    # Referencias
+    company = models.ForeignKey(  # Si la registra el superusuario
+        'users.Company',
+        on_delete=models.SET_NULL,
+        parent_link=False,
+        blank=True,
+        null=True,
+    )

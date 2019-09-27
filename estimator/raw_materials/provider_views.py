@@ -19,7 +19,7 @@ class ProviderListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         new_context = Provider.objects.filter(
-            company=self.request.user.company.pk,
+            company=self.request.user.safe_company.pk,
         )
         return new_context
 
@@ -28,7 +28,7 @@ class ProviderListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         context["current_page"] = "providers"
-        context["company"] = self.request.user.company
+        context["company"] = self.request.user.safe_company
         return context
 
 
@@ -43,7 +43,7 @@ class ProviderCreateView(LoginRequiredMixin, CreateView):
         context = super().get_context_data(**kwargs)
         context["user"] = self.request.user
         context["current_page"] = "providers"
-        context["company"] = self.request.user.company
+        context["company"] = self.request.user.safe_company
         context["form_url"] = reverse_lazy('raw_materials:new_provider')
         return context
 
@@ -53,7 +53,7 @@ class ProviderDetailView(LoginRequiredMixin, DetailView):
     template_name = "providers/provider_detail.html"
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('raw_materials:providers')
         return super().get(request, *args, **kwargs)
 
@@ -70,7 +70,7 @@ class ProviderUpdateView(LoginRequiredMixin, UpdateView):
     form_class = ProviderForm
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('raw_materials:providers')
         return super().get(request, *args, **kwargs)
 
@@ -80,7 +80,7 @@ class ProviderUpdateView(LoginRequiredMixin, UpdateView):
         context["user"] = self.request.user
         context["current_page"] = "providers"
 
-        context["company"] = self.request.user.company
+        context["company"] = self.request.user.safe_company
         context["form_url"] = reverse_lazy(
             'raw_materials:update_provider',
             args=[self.object.pk]
@@ -95,6 +95,6 @@ class ProviderDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('raw_materials:providers')
 
     def get(self, request, *args, **kwargs):
-        if self.get_object().company.pk != self.request.user.company.pk:
+        if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('raw_materials:providers')
         return super().get(request, *args, **kwargs)

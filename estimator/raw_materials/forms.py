@@ -44,7 +44,7 @@ class RawMaterialForm(forms.ModelForm):
         self.fields['years_to_expire'].initial = self.instance.years_to_expire
 
         self.fields['providers'].queryset = Provider.objects.filter(
-            company=user.company.pk,
+            company=user.safe_company.pk,
         )
 
     class Meta:
