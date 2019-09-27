@@ -245,3 +245,10 @@ class SaleUploadFileView(FormView):
     form_class = SaleFileForm
 
     success_url = reverse_lazy('sales:calendar')
+
+    def get_form_kwargs(self):
+        form_kwargs = super(SaleUploadFileView, self).get_form_kwargs()
+
+        form_kwargs['company'] = self.request.user.safe_company
+
+        return form_kwargs

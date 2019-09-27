@@ -87,6 +87,11 @@ class SaleForm(forms.ModelForm):
                         'value': val['cost_local'],
                     },
                 ))
+            if int(val['provider']) == 0:
+                errors.append(forms.ValidationError(
+                    _('Proveedor no valido'),
+                    code='invalid',
+                ))
         if errors:
             raise forms.ValidationError(errors)
 
@@ -118,25 +123,27 @@ class SaleForm(forms.ModelForm):
             primary_key = data_to_save.pop('pk')
 
             try:
+                # Editando
                 relation = MaterialSaleRelation.objects.get(pk=primary_key)
             except Exception:
+                # Creando
                 relation = MaterialSaleRelation(**data_to_save)
+                print(data_to_save)
             else:
+                # Continua la edicion
+                pass
                 relation.amount = data_to_save['amount']
                 relation.cost_dollar = data_to_save['cost_dollar']
                 relation.cost_local = data_to_save['cost_local']
                 relation.bought_in_dollars = data_to_save['bought_in_dollars']
                 relation.provider = data_to_save['provider']
-
+            print(relation)
             materials_sale_relation.append(
                 relation
             )
 
-        if self.creator_user.is_superuser:
-            """Si es superusuario agrega la compañia de lo
-                contrario agrega el usuario"""
-            instance.company = self.creator_user.company
-        else:
+        instance.company = self.creator_user.safe_company
+        if not self.creator_user.is_superuser:
             instance.company_user = self.creator_user.companyuser
 
         if commit:
@@ -145,10 +152,11 @@ class SaleForm(forms.ModelForm):
             instance.save()
 
             for el in materials_sale_relation:
-                # Saving the many to many
+                # Guardando mucho a muchos
                 el.sale = instance
                 el.save()
-                self.save_m2m()
+
+            self.save_m2m()
         return instance
 
 
