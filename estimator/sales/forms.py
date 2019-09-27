@@ -40,10 +40,6 @@ class SaleForm(forms.ModelForm):
                 self.fields['dollar_price'].initial = DolarPrice.objects.latest('created').dollar_price
             except Exception:
                 self.fields['dollar_price'].initial = 1
-        # if self.creator_user.is_superuser:
-        #     company = self.creator_user.company
-        # else:
-        #     company = self.creator_user.companyuser.company
 
         self.fields['raw_materials'].queryset = RawMaterial.objects.filter(
             company=self.creator_user.safe_company.pk,
@@ -154,3 +150,11 @@ class SaleForm(forms.ModelForm):
                 el.save()
                 self.save_m2m()
         return instance
+
+
+class UploadSaleFileForm(forms.Form):
+    pass
+    sale_file = forms.FileField(
+        label=_("Informe de "),
+        required=True
+    )

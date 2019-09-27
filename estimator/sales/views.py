@@ -10,10 +10,11 @@ from django.views.generic import (
     DetailView,
     ListView,
     TemplateView,
-    UpdateView)
+    UpdateView,
+    FormView)
 
-from sales.objects import Prediction
-from .forms import SaleForm
+# from sales.objects import Prediction
+from .forms import SaleForm, UploadSaleFileForm
 from raw_materials.models import RawMaterial, Provider
 from .models import Sale
 from django.shortcuts import redirect
@@ -22,19 +23,19 @@ from django.shortcuts import redirect
 class CalendarView(LoginRequiredMixin, TemplateView):
     template_name = "sales/calendar.html"
 
-    def exampleDates(self):
-        now = datetime.now()
-        some_dates = []
+    # def exampleDates(self):
+    #     now = datetime.now()
+    #     some_dates = []
 
-        for i in range(10):
-            some_dates.append(
-                Prediction(
-                    date=(now - timedelta(days=i)).strftime("%m/%d/%Y"),
-                    pk=i,
-                ).__dict__
-            )
+    #     for i in range(10):
+    #         some_dates.append(
+    #             Prediction(
+    #                 date=(now - timedelta(days=i)).strftime("%m/%d/%Y"),
+    #                 pk=i,
+    #             ).__dict__
+    #         )
 
-        return some_dates
+    #     return some_dates
 
     def get_context_data(self, **kwargs):
         """Añadiendo variables al contexto """
@@ -42,7 +43,7 @@ class CalendarView(LoginRequiredMixin, TemplateView):
         context["title"] = "Calendario"
         context["user"] = self.request.user
 
-        context["predictions"] = self.exampleDates()
+        # context["predictions"] = self.exampleDates()
         context["current_page"] = "calendar_sale"
 
         return context
@@ -236,3 +237,8 @@ class SaleDeleteView(DeleteView):
         if self.get_object().company.pk != self.request.user.safe_company.pk:
             return redirect('sales:sales_list')
         return super().get(request, *args, **kwargs)
+
+
+class SaleUploadFileView(FormView):
+    template_name = "sales/file_upload.html"
+    form_class = UploadSaleFileForm

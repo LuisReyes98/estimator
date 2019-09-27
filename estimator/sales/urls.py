@@ -34,5 +34,10 @@ urlpatterns = [
         route="delete/<int:pk>/",
         view=views.SaleDeleteView.as_view(),
         name="delete_sale"
+    ),
+    path(
+        route="upload/",
+        view=views.SaleUploadFileView.as_view(),
+        name="upload_file"
     )
 ]
