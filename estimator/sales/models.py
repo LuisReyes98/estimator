@@ -165,6 +165,16 @@ def get_company_directory_path(instance, filename):
 
 class SaleFile(TimeStampFields):
 
+    FILE_HEADER_FORMAT = (
+        'dolar_precio',
+        'material_~',
+        'cantidad_~',
+        'costo_dolar_~',
+        'costo_local_~',
+        'comprado_en_dolares_~',
+        'provedor_~',
+    )
+
     sale_upload = models.FileField(
         "Archivo de Registro de Compras",
         upload_to=get_company_directory_path

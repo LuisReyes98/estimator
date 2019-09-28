@@ -1,11 +1,17 @@
-import json
-
-from django import forms
-from .models import Sale, MaterialSaleRelation, DolarPrice, SaleFile
-from raw_materials.models import RawMaterial, Provider
-from django.utils.translation import gettext as _
 import copy
+import csv
+import json
+import os
+
+from django.core.files.base import ContentFile
+from django import forms
+from django.conf import settings
 from django.core.files.storage import default_storage
+from django.utils.translation import gettext as _
+
+from raw_materials.models import Provider, RawMaterial
+
+from .models import DolarPrice, MaterialSaleRelation, Sale, SaleFile
 
 
 class SaleForm(forms.ModelForm):
@@ -183,7 +189,7 @@ class SaleFileForm(forms.ModelForm):
         model = SaleFile
         fields = ("sale_upload",)
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
         # Confirmando que sea un archivo csv
         cleaned_data = super(SaleFileForm, self).clean()
 
@@ -192,7 +198,29 @@ class SaleFileForm(forms.ModelForm):
                 _('Debe ser un archivo en formato csv'),
                 code='invalid',
             )
+        readable_file = copy.copy(cleaned_data['sale_upload'])
+        # tmp_file = args[0]
+        # import pdb; pdb.set_trace()
+        build_path = getattr(settings, 'MEDIA_ROOT')+'/tmp/'+readable_file.name
 
+        file_path = default_storage.save(build_path, ContentFile(readable_file.read()))
+        # import pdb; pdb.set_trace()
+        reader = csv.reader(open(file_path, 'r'))
+        # print(file_path)
+        row_count = sum(1 for row in reader)
+        print(row_count)
+        if row_count > 51:
+            raise forms.ValidationError(
+                _('El maximo permitido por archivo son 50 ventas (51 filas)'),
+                code='invalid',
+            )
+
+        # print(len(reader))
+        # for row in reader:
+
+        default_storage.delete(file_path)
+
+        # Todo correcto retorna la data
         return cleaned_data
 
     def save(self, commit=True):

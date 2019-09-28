@@ -1,5 +1,6 @@
-from datetime import datetime, timedelta
 import json
+import csv
+from datetime import datetime, timedelta
 
 from django.core.serializers.json import DjangoJSONEncoder
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -252,6 +253,11 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
 
         return form_kwargs
 
+    def parse_csv_to_sales(self, file_uploaded):
+        reader = csv.reader(open(file_uploaded.path, 'r'))
+        for row in reader:
+            print(row)
+
     def form_valid(self, form):
         self.object = form.save()
 
@@ -259,6 +265,7 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
         #self.object.sale_upload
 
         #read the file
-        self.object.sale_upload
+        # self.object.sale_upload.read()
+        # self.parse_csv_to_sales(self.object.sale_upload)
 
         return HttpResponseRedirect(self.get_success_url())
