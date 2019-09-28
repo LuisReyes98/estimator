@@ -26,10 +26,12 @@
                 Proveedor
             </label>
             <br>
-            <select class="w-100 selectpicker reset_select_picker" data-live-search="true" :id="'provider_' + index" v-model="item.provider">
-                <option value="0">Selecciona</option>
-                <option v-for="prov in item.providers_list" :value="prov.pk">[[prov.name]]</option>
-            </select>
+            <div class="app__form--select w-100 pb-0">
+                <select class="selectpicker" data-live-search="true" :id="'provider_' + index" v-model="item.provider">
+                    <option value="0">Selecciona</option>
+                    <option v-for="prov in item.providers_list" :value="prov.pk">[[prov.name]]</option>
+                </select>
+            </div>
         </div>
     </div>
     <div class="row pb-1">
@@ -43,7 +45,7 @@
                 <label
                     class="custom-control-label app__text--gray-600"
                     :for="'is_bought_in_dollars' + index">
-                    Se compró en dolares
+                    ¿Se compró en dolares?
                 </label>
             </div>
         </div>
@@ -52,7 +54,7 @@
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <label class="app__text--gray-600" :for="'dollar_coin_' + index">
-                            Costo Individual Dolar
+                            Costo ($)
                         </label>
                         <input
                             :id="'dollar_coin_' + index" type="number" min="0" step="0.001"
@@ -63,7 +65,7 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <p class="app__text--gray-600">
-                            Costo Local: 
+                            Costo (Moneda local): 
                             <span class="text-dark font-weight-bold">
                                 [[item.calculateLocalCost() | roundDecimals(3)]]
                             </span>
@@ -82,7 +84,7 @@
                 <div class="row">
                     <div class="col-12 col-md-6">
                         <label class="app__text--gray-600" :for="'local_coin_' + index">
-                            Costo Individual Local
+                            Costo (Moneda local)
                         </label>
                         <input
                             :id="'local_coin_' + index"
@@ -93,7 +95,7 @@
                     </div>
                     <div class="col-12 col-md-6">
                         <p class="app__text--gray-600">
-                            Costo Dolar: 
+                            Costo ($): 
                             <span class="text-dark font-weight-bold">
                                 [[item.calculateDolarCost() | roundDecimals(3)]]
                             </span>

@@ -2,6 +2,9 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from estimator.model_mixins import TimeStampFields
 from django.urls import reverse_lazy
+from datetime import datetime
+import pytz
+from dateutil import tz
 # Modelos para las ventas
 
 
@@ -60,6 +63,21 @@ class Sale(TimeStampFields):
         return MaterialSaleRelation.objects.filter(
             sale=self.pk,
         )
+
+    @property
+    def date_format(self):
+        utc = tz.tzutc()
+        local = tz.tzlocal()
+        fecha = self.created
+
+        print(fecha)
+
+        local_now = fecha.replace(tzinfo=utc).astimezone(local)
+
+        print(local_now)
+        print("--")
+
+        return self.created.replace(tzinfo=utc).astimezone(local)
 
     def __str__(self):
         return '%s %d' % (self._meta.verbose_name, self.pk)

@@ -1,44 +1,128 @@
 {% extends 'layouts/base_app.html' %}
-
 {% block content %}
 {{ block.super }}
 <div class="page-content" id="content">
-    <h1>Compra individual</h1>
-    <p>
-        Creado por
-        <b>
-            {% if sale.company_user %}
-                {{sale.company_user}}
-            {% else %}
-                {{sale.company.user}}
-            {% endif %}
-        </b>
-    </p>
-    <p>Fecha {{sale.created}}</p>
-    <p>Precio del Dolar:  <b>{{sale.dollar_price}}</b></p>
-    <div>
-        <ul>
-            {% for relation in sale.materials_sale_relation %}
-                <li>
-                    <p>
-                    <p>Se compro en dolares:  <b>{{relation.bought_in_dollars}}</b></p>
-                        {{ relation.amount}} {{relation.raw_material.measurement_unit}} {{relation.raw_material.name}}
-                    </p>
-                    <p>Proveedor {{ relation.provider}}</p>
-                    <p>
-                        Precio de 1 {{relation.raw_material.measurement_unit}}
-                        <p>
-                            Dolares: {{ relation.cost_dollar}}
-                        </p>
-                        <p>
-                            Local: {{ relation.cost_local}}
-                        </p>
-                    </p>
-                </li>
-            {% endfor %}
-        </ul>
+    <div class="container-fluid app__background_gradient--pastel app__viewport pb-3">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <a href="{% url 'sales:sales_list' %}"
+                   title="Volver"
+                   class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    <i class="mdi mdi-arrow-left"></i>
+                </a>
+                <h4 class="text-center font-weight-bold text-uppercase">
+                    Compra
+                </h4>
+            </div>
+        </div>
+        <div class="row pt-3 pb-3 app__border--gray-200 app__background--white">
+            <div class="col">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                            <p>Creador por</p>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                            <p>
+                                {% if sale.company_user %}
+                                    {{sale.company_user}}
+                                {% else %}
+                                    {{sale.company.user}}
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                            <p>Fecha</p>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                            <p>{{sale.created}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                            <p>Precio del Dólar ($)</p>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                            <p>{{sale.dollar_price}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                            <p>Total ($)</p>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                            <p>{{sale.total_cost_dollar}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                            <p class="mb-0">Total (Moneda Local)</p>
+                        </div>
+                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                            <p class="mb-0">{{sale.total_cost_local}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid mt-3">
+                    <div class="row">
+                        {% for relation in sale.materials_sale_relation %}
+                            <div class="col-12 col-md-4 col-lg-3 p-1">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <span class="font-weight-bold">{{relation.raw_material.name}}</span> ({{ relation.amount}} {{relation.raw_material.measurement_unit}})
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-0 app__text--gray-600">
+                                            ¿Comprado en dólares?:
+                                        </p>
+                                        <p>
+                                            {% if relation.bought_in_dollars %}
+                                                <span class="text-uppercase font-weight-bold app__text--cyan">Sí</span>
+                                            {% else %}
+                                                <span class="text-uppercase font-weight-bold app__text--red">No</span>
+                                            {% endif %}
+                                        </p>
+                                        <p class="mb-0 app__text--gray-600">
+                                            Proveedor:
+                                        </p>
+                                        <p>
+                                            <span class="font-weight-bold">{{ relation.provider}}</span>
+                                        </p>
+                                        <p class="mb-0 app__text--gray-600">
+                                            Precio de 1 {{relation.raw_material.measurement_unit}}:
+                                        </p>
+                                        <p class="small">
+                                            <span class="app__text--gray-600">Dólar ($):</span> <br>
+                                            <span class="font-weight-bold">{{ relation.cost_dollar}}</span>
+                                        </p>
+                                        <p class="small">
+                                            <span class="app__text--gray-600">Moneda Local:</span> <br>
+                                            <span class="font-weight-bold">{{ relation.cost_local}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row mt-4">
+                        <div class="col">
+                            <a href="{% url 'sales:update_sale'  object.pk  %}"
+                            class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                editar
+                            </a>
+                            <a href="{% url 'sales:delete_sale'  object.pk %}"
+                            class="m-1 rounded-pill app__button button--red mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                eliminar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <p>Total dolares: {{sale.total_cost_dollar}}</p>
-    <p>Total local: {{sale.total_cost_local}}</p>
 </div>
 {% endblock content %}
