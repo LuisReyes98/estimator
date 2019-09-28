@@ -23,9 +23,9 @@
                 </a>
                 <h4 class="text-center font-weight-bold text-uppercase">
                     {% if editing %}
-                        Editar Venta
+                        Editar Compra
                     {% else %}
-                        Crear Venta
+                        Crear Compra
                     {% endif %}
                 </h4>
             </div>
@@ -73,7 +73,7 @@
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                             {% render_field form.dollar_price class+="mdl-textfield__input" v-model="dollar_price" step="0.001" %}
                                             <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="">
-                                                <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                <i class="mdi mdi-currency-usd mr-1"></i>
                                                 {{form.dollar_price.label_tag}}
                                             </label>
                                         </div>
@@ -83,14 +83,14 @@
                                     <div class="form-group col-md-3 col-sm-12">
                                         <div class="app__form--textfield w-100">
                                             <label class="" for="">
-                                                <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                <i class="mdi mdi-layers-triple mr-1"></i>
                                                 {{form.raw_materials.label_tag}}
                                             </label>
                                         </div>
                                     </div>
                                     <div class="form-group col-md-9 col-sm-12">
                                         <div class="app__form--select w-100">
-                                            {% render_field form.raw_materials v-model="materials" @change="buildMaterials" class+="selectpicker col-10 mx-4" multiple="" data-live-search="true" title="Selecciona" %}
+                                            {% render_field form.raw_materials v-model="materials" @change="buildMaterials" class+="selectpicker" multiple="" data-live-search="true" title="Selecciona" %}
                                         </div>
                                     </div>
                                 </div>
@@ -118,7 +118,7 @@
                                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
                                                 {% render_field form.total_cost_dollar class+="mdl-textfield__input" %}
                                                 <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="">
-                                                    <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                    <i class="mdi mdi-currency-usd mr-1"></i>
                                                     {{form.total_cost_dollar.label_tag}}
                                                 </label>
                                             </div>
@@ -126,12 +126,12 @@
                                     </div>
                                     <div class="form-row">
                                         <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
-                                            <div class="app__form--print">
-                                                <label class="" for="">
-                                                    <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                            <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
+                                                <label class="mdl-textfield__label focused__color__dark_blue material_fix label_placeholder" for="">
+                                                    <i class="mdi mdi-currency-usd mr-1"></i>
                                                     {{form.total_cost_local.label_tag}}
                                                 </label>
-                                                {% render_field form.total_cost_local class+="_form-input" %}
+                                                {% render_field form.total_cost_local class+="mdl-textfield__input" %}
                                             </div>
                                         </div>
                                     </div>
@@ -144,10 +144,10 @@
                                             <div class="app__form--print">
                                                 <input type="hidden" name="total_cost_dollar" :value="totalCostDolar">
                                                 <label class="" for="">
-                                                    <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                    <i class="mdi mdi-currency-usd mr-1"></i>
                                                     Costo final dolares
                                                 </label>
-                                                <p class="pl-1">[[totalCostDolar | roundDecimals(3) ]]</p>
+                                                <p class="pl-1 font-weight-bold">[[totalCostDolar | roundDecimals(3) ]]</p>
                                             </div>
                                         </div>
                                     </div>
@@ -156,10 +156,10 @@
                                             <div class="app__form--print">
                                                 <input type="hidden" name="total_cost_local" :value="totalCostLocal" >
                                                 <label class="" for="">
-                                                    <i class="mdi mdi-hexagon-slice-3 mr-1"></i>
+                                                    <i class="mdi mdi-currency-usd mr-1"></i>
                                                     Costo final local
                                                 </label>
-                                                <p class="pl-1">[[totalCostLocal | roundDecimals(3) ]]</p>
+                                                <p class="pl-1 font-weight-bold">[[totalCostLocal | roundDecimals(3) ]]</p>
                                             </div>
                                         </div>
                                     </div>
@@ -168,9 +168,14 @@
 
                                 <div class="col m-auto text-center">
                                     <button type="submit"
-                                            class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                            class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                                         Guardar
                                     </button>
+                                    <a href="{% url 'sales:sales_list' %}"
+                                        class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                        title="">
+                                        Cancelar
+                                    </a>
                                     <input type="hidden" name="raw_materials_json" :value="parsedMaterials" >
                                 </div>
                             </form>
