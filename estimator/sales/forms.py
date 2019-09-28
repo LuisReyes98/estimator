@@ -4,7 +4,7 @@ from django import forms
 from .models import Sale, MaterialSaleRelation, DolarPrice, SaleFile
 from raw_materials.models import RawMaterial, Provider
 from django.utils.translation import gettext as _
-
+import copy
 
 class SaleForm(forms.ModelForm):
 
@@ -97,6 +97,15 @@ class SaleForm(forms.ModelForm):
 
         return data
 
+    def get_array_dict_value(self, array, key_name, comparator):
+        """en un vector de diccionarios retorna el primer diccionario
+            que contenga el valor del campo key_name igual al comparator
+        """
+        my_array = [copy.copy(element) for element in array]
+        for el in my_array:
+            if el[key_name] == comparator:
+                return el
+
     def save(self, commit=True):
         """Metodo de guardar Una Compra"""
         instance = super(SaleForm, self).save(commit=False)
@@ -105,12 +114,16 @@ class SaleForm(forms.ModelForm):
 
         raw_materials_json = json.loads(data['raw_materials_json'])
         materials_sale_relation = []
+
         for raw_material in data['raw_materials']:
             """Por cada materia prima seleccionada"""
-            data_to_save = next(
-                    (item for item in raw_materials_json if item["raw_material_pk"] == raw_material.pk),
-                    None
-                )
+
+            data_to_save = self.get_array_dict_value(
+                raw_materials_json,
+                'raw_material_pk',
+                raw_material.pk
+            )
+
             data_to_save.pop('name')
             data_to_save.pop('measurement_unit')
             data_to_save.pop('raw_material_pk')
@@ -128,16 +141,13 @@ class SaleForm(forms.ModelForm):
             except Exception:
                 # Creando
                 relation = MaterialSaleRelation(**data_to_save)
-                print(data_to_save)
             else:
                 # Continua la edicion
-                pass
                 relation.amount = data_to_save['amount']
                 relation.cost_dollar = data_to_save['cost_dollar']
                 relation.cost_local = data_to_save['cost_local']
                 relation.bought_in_dollars = data_to_save['bought_in_dollars']
                 relation.provider = data_to_save['provider']
-            print(relation)
             materials_sale_relation.append(
                 relation
             )
@@ -173,7 +183,6 @@ class SaleFileForm(forms.ModelForm):
 
     def save(self, commit=True):
         instance = super(SaleFileForm, self).save(commit=False)
-
         instance.company = self.creator_company
 
         if commit:
