@@ -5,6 +5,8 @@ from .models import Sale, MaterialSaleRelation, DolarPrice, SaleFile
 from raw_materials.models import RawMaterial, Provider
 from django.utils.translation import gettext as _
 import copy
+from django.core.files.storage import default_storage
+
 
 class SaleForm(forms.ModelForm):
 
@@ -181,9 +183,22 @@ class SaleFileForm(forms.ModelForm):
         model = SaleFile
         fields = ("sale_upload",)
 
+    def clean(self):
+        # Confirmando que sea un archivo csv
+        cleaned_data = super(SaleFileForm, self).clean()
+
+        if not cleaned_data['sale_upload'].name.endswith('.csv'):
+            raise forms.ValidationError(
+                _('Debe ser un archivo en formato csv'),
+                code='invalid',
+            )
+
+        return cleaned_data
+
     def save(self, commit=True):
         instance = super(SaleFileForm, self).save(commit=False)
         instance.company = self.creator_company
 
         if commit:
             instance.save()
+        return instance

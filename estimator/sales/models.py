@@ -2,6 +2,11 @@ from django.db import models
 from django.utils.translation import ugettext as _
 from estimator.model_mixins import TimeStampFields
 from django.urls import reverse_lazy
+from django.utils import timezone as django_time
+from datetime import datetime
+from collections import defaultdict
+# from django.db import models
+
 # Modelos para las ventas
 
 
@@ -135,10 +140,14 @@ class DolarPrice(TimeStampFields):
 
 
 def get_company_directory_path(instance, filename):
-    # el archivo de carga en MEDIA_ROOT/sales/user_<id>/<filename>
-    return 'sales/company_{0}/%Y_%m_%d_%H_%M_%S'.format(
-        instance.user.safe_company.pk
-    )
+    # el archivo de carga en MEDIA_ROOT/sales/company_<pk>/<filename>
+
+    name = instance.created.strftime('%Y_%m_%d_%H_%M_%S')
+
+    return 'sales/company_{company_pk}/{filename}.csv'.format_map({
+        'company_pk': str(instance.company.pk),
+        'filename': name
+    })
 
 
 class SaleFile(TimeStampFields):

@@ -11,13 +11,12 @@ from django.views.generic import (
     ListView,
     TemplateView,
     UpdateView,
-    FormView)
-
-# from sales.objects import Prediction
+)
+from django.http import HttpResponseRedirect
 from .forms import SaleForm, SaleFileForm
 from raw_materials.models import RawMaterial, Provider
-from .models import Sale
-from django.shortcuts import redirect
+from .models import Sale, SaleFile
+from django.shortcuts import redirect, render
 
 
 class CalendarView(LoginRequiredMixin, TemplateView):
@@ -49,7 +48,7 @@ class CalendarView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class SaleDetailView(DetailView):
+class SaleDetailView(LoginRequiredMixin, DetailView):
     model = Sale
     template_name = "sales/sale_detail.html"
 
@@ -65,7 +64,7 @@ class SaleDetailView(DetailView):
         return context
 
 
-class SaleListView(ListView):
+class SaleListView(LoginRequiredMixin, ListView):
     model = Sale
     template_name = "sales/sales_list.html"
 
@@ -83,7 +82,7 @@ class SaleListView(ListView):
         return context
 
 
-class SaleCreateView(CreateView):
+class SaleCreateView(LoginRequiredMixin, CreateView):
     model = Sale
     template_name = "sales/sale_form.html"
     success_url = reverse_lazy("sales:calendar")
@@ -133,7 +132,7 @@ class SaleCreateView(CreateView):
         ))
 
 
-class SaleUpdateView(UpdateView):
+class SaleUpdateView(LoginRequiredMixin, UpdateView):
     model = Sale
     template_name = "sales/sale_form.html"
     success_url = reverse_lazy("sales:calendar")
@@ -228,7 +227,7 @@ class SaleUpdateView(UpdateView):
         return context
 
 
-class SaleDeleteView(DeleteView):
+class SaleDeleteView(LoginRequiredMixin, DeleteView):
     model = Sale
     template_name = "sales/sale_delete.html"
     success_url = reverse_lazy('sales:sales_list')
@@ -239,8 +238,8 @@ class SaleDeleteView(DeleteView):
         return super().get(request, *args, **kwargs)
 
 
-class SaleUploadFileView(FormView):
-
+class SaleUploadFileView(LoginRequiredMixin, CreateView):
+    model = SaleFile
     template_name = "sales/file_upload.html"
     form_class = SaleFileForm
 
@@ -252,3 +251,14 @@ class SaleUploadFileView(FormView):
         form_kwargs['company'] = self.request.user.safe_company
 
         return form_kwargs
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+        # uploaded file
+        #self.object.sale_upload
+
+        #read the file
+        self.object.sale_upload
+
+        return HttpResponseRedirect(self.get_success_url())
