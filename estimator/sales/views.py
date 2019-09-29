@@ -246,6 +246,15 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
 
     success_url = reverse_lazy('sales:calendar')
 
+    def get_context_data(self, **kwargs):
+        """User and profile to context"""
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "calendar_sale"
+
+        context["download_url"] = '/static/files/sales/upload_format.csv'
+
+        return context
+
     def get_form_kwargs(self):
         form_kwargs = super(SaleUploadFileView, self).get_form_kwargs()
 

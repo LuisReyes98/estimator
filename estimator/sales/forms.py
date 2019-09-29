@@ -189,6 +189,20 @@ class SaleFileForm(forms.ModelForm):
         model = SaleFile
         fields = ("sale_upload",)
 
+    def is_valid_csv_header(self, header):
+        header_format = SaleFile.FILE_HEADER_FORMAT
+        correct_format = False
+
+        material_counter = 1
+        if header[0] != header_format[0]:
+            return False
+
+        for index, col in header:
+            if index == 0:
+                pass
+        pass
+        return True
+
     def clean(self, *args, **kwargs):
         # Confirmando que sea un archivo csv
         cleaned_data = super(SaleFileForm, self).clean()
@@ -199,24 +213,33 @@ class SaleFileForm(forms.ModelForm):
                 code='invalid',
             )
         readable_file = copy.copy(cleaned_data['sale_upload'])
-        # tmp_file = args[0]
-        # import pdb; pdb.set_trace()
+
         build_path = getattr(settings, 'MEDIA_ROOT')+'/tmp/'+readable_file.name
 
         file_path = default_storage.save(build_path, ContentFile(readable_file.read()))
-        # import pdb; pdb.set_trace()
+
         reader = csv.reader(open(file_path, 'r'))
-        # print(file_path)
-        row_count = sum(1 for row in reader)
-        print(row_count)
+        i = 0
+        row_count = 0
+        for row in reader:
+            if i == 0:
+                header = row
+            i += 1
+            row_count += 1
+
         if row_count > 51:
             raise forms.ValidationError(
                 _('El maximo permitido por archivo son 50 ventas (51 filas)'),
                 code='invalid',
             )
 
-        # print(len(reader))
-        # for row in reader:
+        if not self.is_valid_csv_header(header):
+            raise forms.ValidationError(
+                _('El archivo no posee el formato correcto de las cabeceras'),
+                code='invalid',
+            )
+
+        print(header)
 
         default_storage.delete(file_path)
 
