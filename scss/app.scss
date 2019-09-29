@@ -203,6 +203,29 @@
         }
       }
     }
+
+    &--system {
+      li {
+        a {
+          color: map-get($project_colors, "gray-600");
+        }
+        i {
+          color: map-get($project_colors, "gray-600");
+        }
+        p {
+          color: map-get($project_colors, "gray-400");
+        }
+        &:hover {
+          background-color: map-get($project_colors, "gray-100");
+          a {
+            color: map-get($project_colors, "deep_blue");
+          }
+          i {
+            color: map-get($project_colors, "deep_blue");
+          }
+        }
+      }
+    }
   }
 
   &__input {

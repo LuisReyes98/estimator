@@ -250,6 +250,12 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
         context["current_page"] = "calendar_sale"
+        context["materials_ex"] = RawMaterial.objects.filter(
+            company=self.request.user.safe_company.pk,
+        )
+        context["providers_ex"] = Provider.objects.filter(
+            company=self.request.user.safe_company.pk,
+        )
 
         context["download_url"] = '/static/files/sales/upload_format.csv'
 

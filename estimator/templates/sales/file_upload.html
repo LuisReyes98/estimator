@@ -1,16 +1,323 @@
 {% extends 'layouts/base_app.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
 {{ block.super }}
 <div class="page-content" id="content">
-    <h1>Cargar de Compras por archivos</h1>
-    <h3>Instrucciones de cargar de archivo</h3>
-     <a href="{{ download_url }}" target="_blank" class="btn btn-primary">Descargar archivo de ejemplo</a>
-    <form action="{% url 'sales:upload_file' %}" enctype="multipart/form-data"  method="POST">
-        {% csrf_token %}
-        {{form}}
-
-        <button type="submit" >Guardar</button>
-    </form>
+    <div class="container-fluid app__background_gradient--pastel app__viewport">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <h4 class="text-center font-weight-bold text-uppercase">
+                    Cargar compras por archivo
+                </h4>
+            </div>
+        </div>
+        <div class="row mb-3 pt-3 pb-3 app__border--gray-200 app__background--white">
+            <div class="col pb-1">
+                <form action="{% url 'sales:upload_file' %}" enctype="multipart/form-data"  method="POST">
+                {% csrf_token %}
+                    <div class="form-row pb-1">
+                        <div class="form-group col-12 col-md-6 m-auto">
+                            <div class="custom-file">
+                                {% render_field form.sale_upload class+="custom-file-input" id="customFileLang" lang="es" %}
+                                <label class="custom-file-label" for="customFileLang">
+                                    Selecionar Archivo CSV
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m-auto text-center">
+                        <div class="d-flex flex-row justify-content-center">
+                            <button class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                    title="Subir Archivo"
+                                    type="submit">
+                                <i class="mdi mdi-file-upload"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row pt-2 pb-3">
+            <div class="col-12 m-auto">
+                <div class="app__background--white p-2 rounded shadow">
+                    <div class="container-fluid">
+                        <div class="row pb-3">
+                            <div class="col">
+                                <h5 class="text-center font-weight-bold text-uppercase">
+                                    Instrucciones para cargar un archivo
+                                </h5>
+                            </div>
+                        </div>
+                        {% comment %} <div class="row pb-3 px-2">
+                            <div class="col">
+                                <p>
+                                    A continuación puede ver una lista de las abreviaturas permitidas para referirse a los proveedores y materia prima.
+                                </p>
+                                <p>
+                                    Pulse la opción "Formato de columnas" para ver una lista con los valores aceptados para la construcción de sus propios archivos .csv de compras.
+                                </p>
+                            </div>
+                        </div> {% endcomment %}
+                        <div class="row pb-3">
+                            <div class="col-12 col-md-6 m-auto app__border_alt--gray-200">
+                                <ul class="list-group list-group-flush app__nav--system">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <a
+                                                href="#"
+                                                data-toggle="modal"
+                                                data-target="#instructions"
+                                            >
+                                                Instrucciones
+                                            </a>
+                                        </div>
+                                        <i class="mdi mdi-view-list app__button--icon"></i>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <a
+                                                href="#"
+                                                data-toggle="modal"
+                                                data-target="#materialsExample"
+                                            >
+                                                Lista de Materia Prima
+                                            </a>
+                                        </div>
+                                        <i class="mdi mdi-layers-triple app__button--icon"></i>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <a
+                                                href="#"
+                                                data-toggle="modal"
+                                                data-target="#providersExample"
+                                            >
+                                                Lista de Proveedores
+                                            </a>
+                                        </div>
+                                        <i class="mdi mdi-bus-multiple app__button--icon"></i>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <a
+                                                href="#"
+                                                data-toggle="modal"
+                                                data-target="#formatCsvExample"
+                                                >
+                                                Formato de Columnas
+                                            </a>
+                                        </div>
+                                        <i class="mdi mdi-table-row app__button--icon"></i>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <a href="{{ download_url }}" target="_blank">
+                                                Descargar archivo .csv de ejemplo
+                                            </a>
+                                        </div>
+                                        <i class="mdi mdi-file-download-outline app__button--icon"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <a href="{{ download_url }}" target="_blank" class="btn btn-primary">
+                        Descargar archivo de ejemplo
+                    </a> {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="instructions" tabindex="-1" role="dialog" aria-labelledby="instructionsTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="instructionsTitle">Instrucciones</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="mdi mdi-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Cada fila del archivo corresponderá a una sola compra.
+                                    </li>
+                                    <li class="list-group-item">
+                                        En cada fila se registra primero el precio del dólar.
+                                    </li>
+                                    <li class="list-group-item">
+                                        Se continúa en las siguientes columnas en este orden:
+                                        <br>
+                                        <p class="app__text--gray-700 small">
+                                            Nombre de la materia prima, cantidad comprada, costo en dólares, costo en la moneda local, si fue o no comprado con dólares, proveedor de la materia prima.
+                                        </p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        Se continua en la misma fila si existen más materias primas a registrar en la compra.
+                                    </li>
+                                    <li class="list-group-item">
+                                        Si se quiere registrar otra compra distinta, se salta a la siguiente fila.
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="materialsExample" tabindex="-1" role="dialog" aria-labelledby="materialsExampleTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="materialsExampleTitle">Lista de Materia Prima</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="mdi mdi-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm table-hover" style="white-space: nowrap;">
+                        <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for material in materials_ex %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ material.name }}</td>
+                                <td>{{ material.pk }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="providersExample" tabindex="-1" role="dialog" aria-labelledby="providersExampleTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="providersExampleTitle">Lista de Proveedores</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="mdi mdi-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm table-hover" style="white-space: nowrap;">
+                        <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for provider in providers_ex %}
+                            <tr>
+                                <th scope="row">{{ forloop.counter }}</th>
+                                <td>{{ provider.name }}</td>
+                                <td>{{ provider.pk }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="formatCsvExample" tabindex="-1" role="dialog" aria-labelledby="formatCsvExampleTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formatCsvExampleTitle">Formato de Columnas</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="mdi mdi-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-sm table-hover" style="white-space: nowrap;">
+                        <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
+                            <tr>
+                                <th scope="col">Nombre de la columna</th>
+                                <th scope="col">Valores permitidos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>dolar_precio</td>
+                                <td>
+                                    <ul class="list-unstyled small">
+                                        <li>Números enteros y decimales positivos</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>material_#</td>
+                                <td>
+                                    <ul class="list-unstyled small">
+                                        <li>Nombre registrado (Mayúsculas o minúsculas)</li>
+                                        <li>Número ID</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>cantidad_#</td>
+                                <td>
+                                    <ul class="list-unstyled small">
+                                        <li>Números enteros positivos</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>costo_dolar_#</td>
+                                <td>
+                                    <ul class="list-unstyled small">
+                                        <li>Números enteros y decimales positivos</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>costo_local_#</td>
+                                <td>
+                                    <ul class="list-unstyled small">
+                                        <li>Números enteros y decimales positivos</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>comprado_en_dolares_#</td>
+                                <td>
+                                    <ul class="list-unstyled small">
+                                        <li>Sí y no (Mayúsculas o minúsculas)</li>
+                                        <li>0 y 1</li>
+                                        <li>El proveedor debe corresponder a la materia prima</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>proveedor_#</td>
+                                <td>
+                                    <ul class="list-unstyled small">
+                                        <li>Nombre registrado (Mayúsculas o minúsculas)</li>
+                                        <li>Número ID</li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}
