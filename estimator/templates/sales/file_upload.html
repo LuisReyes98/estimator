@@ -1,16 +1,102 @@
 {% extends 'layouts/base_app.html' %}
+{% load widget_tweaks %}
 
 {% block content %}
 {{ block.super }}
 <div class="page-content" id="content">
-    <h1>Cargar de Compras por archivos</h1>
-    <h3>Instrucciones de cargar de archivo</h3>
-     <a href="{{ download_url }}" target="_blank" class="btn btn-primary">Descargar archivo de ejemplo</a>
-    <form action="{% url 'sales:upload_file' %}" enctype="multipart/form-data"  method="POST">
-        {% csrf_token %}
-        {{form}}
-
-        <button type="submit" >Guardar</button>
-    </form>
+    <div class="container-fluid app__background_gradient--pastel app__viewport">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <h4 class="text-center font-weight-bold text-uppercase">
+                    Cargar compras por archivo
+                </h4>
+            </div>
+        </div>
+        <div class="row mb-3 pt-3 pb-3 app__border--gray-200 app__background--white">
+            <div class="col pb-1">
+                <form action="{% url 'sales:upload_file' %}" enctype="multipart/form-data"  method="POST">
+                {% csrf_token %}
+                    <div class="form-group">
+                        <div class="custom-file">
+                            {% render_field form.sale_upload class+="custom-file-input" id="customFileLang" lang="es" %}
+                            <label class="custom-file-label" for="customFileLang">Selecionar Archivo CSV</label>
+                        </div>
+                    </div>
+                    <div class="col m-auto text-center">
+                        <div class="d-flex flex-row justify-content-center">
+                            <button class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                    title="Subir Archivo"
+                                    type="submit">
+                                <i class="mdi mdi-file-upload"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row pt-2 pb-3">
+            <div class="col-12 m-auto">
+                <div class="app__background--white p-2 rounded shadow">
+                    <div class="container-fluid">
+                        <div class="row pb-3">
+                            <div class="col">
+                                <h5 class="text-center font-weight-bold text-uppercase">
+                                    Instrucciones para cargar un archivo
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="col">
+                                <p>
+                                    A continuación puede ver una lista de las abreviaturas permitidas para referirse a los proveedores, materia prima y demás para la construcción de sus propios archivos .csv de compras.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row pb-5">
+                            <div class="col-12 col-md-6 m-auto app__border_alt--gray-200">
+                                <ul class="list-group list-group-flush app__nav--system">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <a href="#">
+                                                Lista de Materia Prima
+                                            </a>
+                                        </div>
+                                        <i class="mdi mdi-layers-triple app__button--icon"></i>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <a href="#">
+                                                Lista de Proveedores
+                                            </a>
+                                        </div>
+                                        <i class="mdi mdi-bus-multiple app__button--icon"></i>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <a href="#">
+                                                Lista de [Algo]
+                                            </a>
+                                        </div>
+                                        <i class="mdi mdi-cube-outline app__button--icon"></i>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div class="">
+                                            <a href="{{ download_url }}" target="_blank">
+                                                Descargar archivo .csv de ejemplo
+                                            </a>
+                                        </div>
+                                        <i class="mdi mdi-file-download-outline app__button--icon"></i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <a href="{{ download_url }}" target="_blank" class="btn btn-primary">
+                        Descargar archivo de ejemplo
+                    </a> {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}
