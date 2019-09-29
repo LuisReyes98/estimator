@@ -5,6 +5,7 @@
 <div class="page-content" id="content">
     <h1>Cargar de Compras por archivos</h1>
     <h3>Instrucciones de cargar de archivo</h3>
+     <a href="{{ download_url }}" target="_blank" class="btn btn-primary">Descargar archivo de ejemplo</a>
     <form action="{% url 'sales:upload_file' %}" enctype="multipart/form-data"  method="POST">
         {% csrf_token %}
         {{form}}
