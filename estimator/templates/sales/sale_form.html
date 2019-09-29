@@ -16,7 +16,7 @@
     <div class="container-fluid app__background_gradient--pastel app__viewport">
         <div class="row pt-3 pb-3">
             <div class="col">
-                <a href="{% url 'sales:calendar' %}"
+                <a href="{% url 'sales:sales_list' %}"
                    title="Volver"
                    class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
                     <i class="mdi mdi-arrow-left"></i>
@@ -112,7 +112,7 @@
                                 </div>
 
 
-                                <div v-if="manualFinalCosts">
+                                <div v-if="manualFinalCosts" style="min-height: 186px">
                                     <div class="form-row">
                                         <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
                                             <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
@@ -138,7 +138,7 @@
                                 </div>
 
 
-                                <div v-else>
+                                <div v-else style="min-height: 186px">
                                     <div class="form-row">
                                         <div class="form-group col-12 col-sm-8 col-md-6 col-lg-4">
                                             <div class="app__form--print">
