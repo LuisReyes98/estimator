@@ -52,11 +52,11 @@
                                     </td>
                                     <td>
                                         <ul class="list-unstyled small">
-                                        {% for relation in sale.materials_sale_relation %}
+                                            {% for relation in sale.materials_sale_relation %}
                                                 <li>
                                                     {{relation.raw_material.name}} ({{ relation.amount}} {{relation.raw_material.measurement_unit}})
                                                 </li>
-                                        {% endfor %}
+                                            {% endfor %}
                                         </ul>
                                     </td>
                                     <td class="text-center" style="cursor: default;">
