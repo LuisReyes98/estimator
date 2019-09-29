@@ -1,10 +1,14 @@
-from django.db import models
-from django.utils.translation import ugettext as _
-from estimator.model_mixins import TimeStampFields
-from django.urls import reverse_lazy
 from datetime import datetime
+
 import pytz
 from dateutil import tz
+from django.db import models
+from django.dispatch import receiver
+from django.urls import reverse_lazy
+from django.utils.translation import ugettext as _
+
+from estimator.model_mixins import TimeStampFields
+
 # Modelos para las ventas
 
 
@@ -166,13 +170,15 @@ def get_company_directory_path(instance, filename):
 class SaleFile(TimeStampFields):
 
     FILE_HEADER_FORMAT = (
-        'dolar_precio',
-        'material_~',
-        'cantidad_~',
-        'costo_dolar_~',
-        'costo_local_~',
-        'comprado_en_dolares_~',
-        'provedor_~',
+        'dolar_precio',  # cualquier flotante
+        'total_dolar',  # cualquier flotante
+        'total_local',  # cualquier flotante
+        'material_~',  # una materia prima de la empresa
+        'cantidad_~',  # cualquier entero
+        'costo_dolar_~',  # cualquier flotante
+        'costo_local_~',  # cualquier flotante
+        'comprado_en_dolares_~',  # si,no,No,Si,NO,SI,1,0
+        'proveedor_~',  # un proveedor que pertenezca a la materia prima
     )
 
     sale_upload = models.FileField(
@@ -188,3 +194,8 @@ class SaleFile(TimeStampFields):
         blank=True,
         null=True,
     )
+
+
+@receiver(models.signals.post_delete, sender=SaleFile)
+def submission_delete(sender, instance, **kwargs):
+    instance.sale_upload.delete(False)

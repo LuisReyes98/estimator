@@ -244,7 +244,7 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
     template_name = "sales/file_upload.html"
     form_class = SaleFileForm
 
-    success_url = reverse_lazy('sales:calendar')
+    success_url = reverse_lazy('sales:uploaded_file')
 
     def get_context_data(self, **kwargs):
         """User and profile to context"""
@@ -262,10 +262,30 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
 
         return form_kwargs
 
-    def parse_csv_to_sales(self, file_uploaded):
-        reader = csv.reader(open(file_uploaded.path, 'r'))
-        for row in reader:
-            print(row)
+    def parse_row_to_materials_sale(self, row, company):
+        pass
+
+    def save_csv_to_sales(self, file_uploaded, user):
+        """
+            Razones para no guardar una venta
+            faltan valores
+            una materia prima se repite
+            el proveedor no pertenece a la materia prima
+            el valor de la columna no es valido
+            
+        """
+        csv.register_dialect('semi_col', delimiter=';', quoting=csv.QUOTE_NONE)
+        reader = csv.reader(open(file_uploaded.path, 'r'), 'semi_col')
+
+        counter_success = 0
+        counter_failed = 0
+
+        for index, row in enumerate(reader):
+            sale_data = {}
+            if index > 0:
+                # sale_data[]
+                print(index)
+                print(row)
 
     def form_valid(self, form):
         self.object = form.save()
@@ -275,6 +295,17 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
 
         #read the file
         # self.object.sale_upload.read()
-        # self.parse_csv_to_sales(self.object.sale_upload)
+        self.save_csv_to_sales(self.object.sale_upload, self.request.user)
 
         return HttpResponseRedirect(self.get_success_url())
+
+
+class SaleUploadedFileView(TemplateView):
+    template_name = "sales/file_uploaded.html"
+
+    def get_context_data(self, **kwargs):
+        """User and profile to context"""
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "calendar_sale"
+
+        return context

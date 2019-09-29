@@ -1,3 +1,3 @@
-dolar_precio,material_1,amount_1,costo_dolar_1,costo_local_1,comprado_en_dolares_1,provedor_1,material_2,amount_2,costo_dolar_2,costo_local_2,comprado_en_dolares_2,provedor_2
-0,0,0,0,0,0,0,0,0,0,0,0,0
-0,0,0,0,0,0,0,0,0,0,0,0,0
+dolar_precio;total_dolar;total_local;material_1;cantidad_1;costo_dolar_1;costo_local_1;comprado_en_dolares_1;proveedor_1;material_2;cantidad_2;costo_dolar_2;costo_local_2;comprado_en_dolares_2;proveedor_2
+0;0;0;0;0;0;0;0;0;0;0;0;0;0;0
+0;0;0;0;0;0;0;0;0;0;0;0;0;0;0

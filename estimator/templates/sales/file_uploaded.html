@@ -1,0 +1,11 @@
+{% extends 'layouts/base_app.html' %}
+
+{% block content %}
+{{ block.super }}
+<div class="page-content" id="content">
+    <h1>Vista temporal de carga exitosa del archivo de ventas</h1>
+
+    <p>{{message}}</p>
+    <a href="{% url 'sales:calendar' %}">Volver</a>
+</div>
+{% endblock content %}

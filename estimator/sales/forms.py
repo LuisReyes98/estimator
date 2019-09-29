@@ -191,20 +191,26 @@ class SaleFileForm(forms.ModelForm):
 
     def is_valid_csv_header(self, header):
         header_format = SaleFile.FILE_HEADER_FORMAT
-        correct_format = False
-        # print(header[0])
 
-        # print(len(header))
         material_counter = 1
 
-        if header[0] != header_format[0]:
-            return False
+        for k in range(3):
+            if header[k] != header_format[k]:
+                return False
 
-        for i in range(1, len(header), 6):
-            # print(header[i])
+        for i in range(3, len(header), 6):
             for j in range(6):
-                print(header[i + j])
-                
+                file_col = header[i + j]
+                model_col = header_format[j+3][:-1]+str(material_counter)
+                # print(file_col)
+                # print(header)
+                # print(header[i + j])
+                # print(i + j)
+                # print(model_col)
+                if file_col != model_col:
+                    return False
+            material_counter += 1
+
         return True
 
     def clean(self, *args, **kwargs):
@@ -220,16 +226,27 @@ class SaleFileForm(forms.ModelForm):
 
         build_path = getattr(settings, 'MEDIA_ROOT')+'/tmp/'+readable_file.name
 
+        csv.register_dialect(
+            'semi_col',
+            delimiter=';',
+            quoting=csv.QUOTE_NONE
+        )
         file_path = default_storage.save(build_path, ContentFile(readable_file.read()))
 
-        reader = csv.reader(open(file_path, 'r'))
+        reader = csv.reader(open(file_path, 'r'), 'semi_col')
         i = 0
         row_count = 0
-        for row in reader:
-            if i == 0:
-                header = row
-            i += 1
-            row_count += 1
+        try:
+            for row in reader:
+                if i == 0:
+                    header = row
+                i += 1
+                row_count += 1
+        except csv.Error:
+            raise forms.ValidationError(
+                _('El archivo esta mal formulado o dañado'),
+                code='invalid',
+            )
 
         if row_count > 51:
             raise forms.ValidationError(
@@ -243,7 +260,6 @@ class SaleFileForm(forms.ModelForm):
                 code='invalid',
             )
 
-        # print(header)
         default_storage.delete(file_path)
 
         # Todo correcto retorna la data
