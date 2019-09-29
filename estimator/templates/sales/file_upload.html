@@ -62,62 +62,66 @@
                         <div class="row pb-3">
                             <div class="col-12 col-md-6 m-auto app__border_alt--gray-200">
                                 <ul class="list-group list-group-flush app__nav--system">
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div class="">
-                                            <a
-                                                href="#"
-                                                data-toggle="modal"
-                                                data-target="#instructions"
-                                            >
-                                                Instrucciones
-                                            </a>
-                                        </div>
-                                        <i class="mdi mdi-view-list app__button--icon"></i>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div class="">
-                                            <a
-                                                href="#"
-                                                data-toggle="modal"
-                                                data-target="#materialsExample"
-                                            >
-                                                Lista de Materia Prima
-                                            </a>
-                                        </div>
-                                        <i class="mdi mdi-layers-triple app__button--icon"></i>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div class="">
-                                            <a
-                                                href="#"
-                                                data-toggle="modal"
-                                                data-target="#providersExample"
-                                            >
-                                                Lista de Proveedores
-                                            </a>
-                                        </div>
-                                        <i class="mdi mdi-bus-multiple app__button--icon"></i>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div class="">
-                                            <a
-                                                href="#"
-                                                data-toggle="modal"
-                                                data-target="#formatCsvExample"
-                                                >
-                                                Formato de Columnas
-                                            </a>
-                                        </div>
-                                        <i class="mdi mdi-table-row app__button--icon"></i>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                                        <div class="">
-                                            <a href="{{ download_url }}" target="_blank">
-                                                Descargar archivo .csv de ejemplo
-                                            </a>
-                                        </div>
-                                        <i class="mdi mdi-file-download-outline app__button--icon"></i>
-                                    </li>
+                                    <a
+                                        class="text-decoration-none list-group-item"
+                                        href="instructions"
+                                        data-toggle="modal"
+                                        data-target="#instructions"
+                                    >
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="">
+                                                    Instrucciones
+                                            </div>
+                                            <i class="mdi mdi-view-list app__button--icon"></i>
+                                        </li>
+                                    </a>
+                                    <a
+                                        class="text-decoration-none list-group-item"
+                                        href="#"
+                                        data-toggle="modal"
+                                        data-target="#materialsExample"
+                                    >
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="">
+                                                    Lista de Materia Prima
+                                            </div>
+                                            <i class="mdi mdi-layers-triple app__button--icon"></i>
+                                        </li>
+                                    </a>
+                                    <a
+                                        class="text-decoration-none list-group-item"
+                                        href="#"
+                                        data-toggle="modal"
+                                        data-target="#providersExample"
+                                    >
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="">
+                                                    Lista de Proveedores
+                                            </div>
+                                            <i class="mdi mdi-bus-multiple app__button--icon"></i>
+                                        </li>
+                                    </a>
+                                    <a
+                                        class="text-decoration-none list-group-item"
+                                        href="#"
+                                        data-toggle="modal"
+                                        data-target="#formatCsvExample"
+                                        >
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="">
+                                                    Formato de Columnas
+                                            </div>
+                                            <i class="mdi mdi-table-row app__button--icon"></i>
+                                        </li>
+                                    </a>
+                                    <a href="{{ download_url }}" class="list-group-item" target="_blank">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <div class="">
+                                                    Descargar archivo .csv de ejemplo
+                                            </div>
+                                            <i class="mdi mdi-file-download-outline app__button--icon"></i>
+                                        </li>
+                                    </a>
                                 </ul>
                             </div>
                         </div>
@@ -193,9 +197,20 @@
                             {% for material in materials_ex %}
                             <tr>
                                 <th scope="row">{{ forloop.counter }}</th>
-                                <td>{{ material.name }}</td>
-                                <td>{{ material.pk }}</td>
+                                <td >{{ material.name }}</td>
+                                <td >{{ material.pk }}</td>
                             </tr>
+                            <tr>
+                                <th scope="row"></th>
+                                <td colspan="2"><b>Proveedores</b></td>
+                            </tr>
+                                {% for prov in material.providers.all %}
+                                    <tr>
+                                        <th scope="row"></th>
+                                        <td class="pl-4 small">{{ prov.name }}</td>
+                                        <td class="small">{{ prov.pk }}</td>
+                                    </tr>
+                                {% endfor %}
                             {% endfor %}
                         </tbody>
                     </table>
