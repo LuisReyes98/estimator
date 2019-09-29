@@ -61,7 +61,7 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         """Contexto de detalle de materia prima"""
         context = super().get_context_data(**kwargs)
-        context["current_page"] = "materials"
+        context["current_page"] = "calendar_sale"
         return context
 
 

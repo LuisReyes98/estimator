@@ -192,15 +192,19 @@ class SaleFileForm(forms.ModelForm):
     def is_valid_csv_header(self, header):
         header_format = SaleFile.FILE_HEADER_FORMAT
         correct_format = False
+        # print(header[0])
 
+        # print(len(header))
         material_counter = 1
+
         if header[0] != header_format[0]:
             return False
 
-        for index, col in header:
-            if index == 0:
-                pass
-        pass
+        for i in range(1, len(header), 6):
+            # print(header[i])
+            for j in range(6):
+                print(header[i + j])
+                
         return True
 
     def clean(self, *args, **kwargs):
@@ -239,8 +243,7 @@ class SaleFileForm(forms.ModelForm):
                 code='invalid',
             )
 
-        print(header)
-
+        # print(header)
         default_storage.delete(file_path)
 
         # Todo correcto retorna la data

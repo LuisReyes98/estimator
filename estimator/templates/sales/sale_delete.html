@@ -1,45 +1,114 @@
-{% extends 'layouts/base_app.html' %}
+{% extends 'layouts/base.html' %}
 
 {% block content %}
 {{block.super}}
-<div class="page-content" id="content">
-
-
-    <form method="POST">
-        {% csrf_token %}
-        <p class="">
-            Está seguro de eliminar a esta venta, para siempre ?
-        </p>
-        <div class="p-2 m-2 app__background--gray-100 rounded">
-            <p>Creado por {{sale.company.user}}</p>
-            <p>Fecha {{sale.created}}</p>
-            <div>
-                <ul>
-                    {% for relation in sale.materials_sale_relation %}
-                        <li>
-                            <p>
-                                {{ relation.amount}} {{relation.raw_material.measurement_unit}} {{relation.raw_material.name}}
-                            </p>
-                            <p>
-                                Precio de 1 {{relation.raw_material.measurement_unit}}
-                                <p>
-                                    Dolares: {{ relation.cost_dollar}}
-                                </p>
-                                <p>
-                                    Local: {{ relation.cost_local}}
-                                </p>
-                            </p>
-                        </li>
-                    {% endfor %}
-                </ul>
+<div class="container-fluid bg__black_gradient app__viewport">
+    <div class="row pt-3 pb-3">
+        <div class="col-12 col-lg-10 m-auto">
+            <div class="card app__background--white">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <div class="row pb-3">
+                            <div class="col-12 m-auto">
+                                <h4 class="text-center font-weight-bold text-uppercase app__text--red">
+                                    Eliminar Compra
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row pb-3">
+                            <div class="col pt-1 pb-1">
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group text-center">
+                                        <p class="">
+                                            ¿Está seguro de eliminar esta compra permanentemente?
+                                        </p>
+                                    </div>
+                                    <hr>
+                                    <div class="container-fluid">
+                                        <div class="row pb-1">
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    Creado por: 
+                                                    <span class="font-weight-bold">{{sale.company.user}}</span>
+                                                </p>
+                                                <p>
+                                                    Fecha: 
+                                                    <span class="font-weight-bold">{{sale.created}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="row pb-2">
+                                            {% for relation in sale.materials_sale_relation %}
+                                                <div class="col-12 col-md-4 col-lg-3 p-1">
+                                                    <div class="card">
+                                                        <div class="card-header">
+                                                            <span class="font-weight-bold">{{relation.raw_material.name}}</span> ({{ relation.amount}} {{relation.raw_material.measurement_unit}})
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <p class="mb-0 app__text--gray-600">
+                                                                ¿Comprado en dólares?:
+                                                            </p>
+                                                            <p>
+                                                                {% if relation.bought_in_dollars %}
+                                                                    <span class="text-uppercase font-weight-bold app__text--cyan">Sí</span>
+                                                                {% else %}
+                                                                    <span class="text-uppercase font-weight-bold app__text--red">No</span>
+                                                                {% endif %}
+                                                            </p>
+                                                            <p class="mb-0 app__text--gray-600">
+                                                                Proveedor:
+                                                            </p>
+                                                            <p>
+                                                                <span class="font-weight-bold">{{ relation.provider}}</span>
+                                                            </p>
+                                                            <p class="mb-0 app__text--gray-600">
+                                                                Precio de 1 {{relation.raw_material.measurement_unit}}:
+                                                            </p>
+                                                            <p class="small">
+                                                                <span class="app__text--gray-600">Dólar ($):</span> <br>
+                                                                <span class="font-weight-bold">{{ relation.cost_dollar}}</span>
+                                                            </p>
+                                                            <p class="small">
+                                                                <span class="app__text--gray-600">Moneda Local:</span> <br>
+                                                                <span class="font-weight-bold">{{ relation.cost_local}}</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                        <div class="row pb-2">
+                                            <div class="col">
+                                                <p class="mb-0">
+                                                    Total ($): 
+                                                    <span class="font-weight-bold">{{sale.total_cost_dollar}}</span>
+                                                </p>
+                                                <p>
+                                                    Total (Moneda Local): 
+                                                    <span class="font-weight-bold">{{sale.total_cost_local}}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col text-center">
+                                        <button type="submit"
+                                            class="m-1 rounded-pill app__button button--red mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                            Eliminar
+                                        </button>
+                                        <a href="{% url 'sales:sales_list' %}"
+                                        class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                            Cancelar
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p>Total dolares: {{sale.total_cost_dollar}}</p>
-            <p>Total local: {{sale.total_cost_local}}</p>
         </div>
-        <button type="submit"class="bg-danger text-white mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" >
-            Si Eliminar
-        </button>
-    </form>
+    </div>
 </div>
 
 {% endblock content %}
