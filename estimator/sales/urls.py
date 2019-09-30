@@ -1,8 +1,9 @@
 # Django
 from django.urls import path
 
-# Models
-from sales import views
+# Views
+from sales import views, sale_files_views
+
 
 urlpatterns = [
     path(
@@ -37,13 +38,13 @@ urlpatterns = [
     ),
     path(
         route="upload/",
-        view=views.SaleUploadFileView.as_view(),
+        view=sale_files_views.SaleUploadFileView.as_view(),
         name="upload_file"
     )
     ,
     path(
         route="upload/success/",
-        view=views.SaleUploadedFileView.as_view(),
+        view=sale_files_views.SaleUploadedFileView.as_view(),
         name="uploaded_file"
     )
 ]
