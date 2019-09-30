@@ -3,9 +3,19 @@
 {% block content %}
 {{ block.super }}
 <div class="page-content" id="content">
-    <h1>Vista temporal de carga exitosa del archivo de ventas</h1>
+    <h1>Carga de archivos terminada</h1>
 
-    <p>{{message}}</p>
+    <p>Se registraron con exito {{counter_success}} ventas </p>
+    <p>Se fallo en registrar {{counter_failed}} ventas </p>
+    <p> las siguientes filas se encontraban mal formadas y no se cargaron al sistema
+        <ul>
+            {% for fail in failed_rows %}
+                <li>{{fail}}</li>
+            {% endfor %}
+        </ul>
+    </p>
+    <p>Revise estas filas y subalas en un archivo separado, ya que subir el mismo archivo ocasionara que se repita la informacion</p>
+
     <a href="{% url 'sales:calendar' %}">Volver</a>
 </div>
 {% endblock content %}

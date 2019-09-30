@@ -16,6 +16,17 @@
             <div class="col pb-1">
                 <form action="{% url 'sales:upload_file' %}" enctype="multipart/form-data"  method="POST">
                 {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                            <div class="d-flex flex-row align-items-center justify-content-center">
+                                <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+                                <p class="app__form--error text-danger mb-0 ml-3">
+                                    {{ error }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                     <div class="form-row pb-1">
                         <div class="form-group col-12 col-md-6 m-auto">
                             <div class="custom-file">
@@ -148,6 +159,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        Debe ser un archivo .csv separado por punto y coma ( <b>;</b> ).
+                                    </li>
                                     <li class="list-group-item">
                                         Cada fila del archivo corresponderá a una sola compra.
                                     </li>
@@ -297,7 +311,7 @@
                                 <td>costo_dolar_#</td>
                                 <td>
                                     <ul class="list-unstyled small">
-                                        <li>Números enteros y decimales positivos</li>
+                                        <li>Números enteros y decimales positivos, de haberse comprado en la modena local colocar 0</li>
                                     </ul>
                                 </td>
                             </tr>
@@ -305,7 +319,7 @@
                                 <td>costo_local_#</td>
                                 <td>
                                     <ul class="list-unstyled small">
-                                        <li>Números enteros y decimales positivos</li>
+                                        <li>Números enteros y decimales positivos , de haberse comprado en dolares colocar 0</li>
                                     </ul>
                                 </td>
                             </tr>
@@ -313,9 +327,8 @@
                                 <td>comprado_en_dolares_#</td>
                                 <td>
                                     <ul class="list-unstyled small">
-                                        <li>Sí y no (Mayúsculas o minúsculas)</li>
+                                        <li>Si y no (Mayúsculas o minúsculas)</li>
                                         <li>0 y 1</li>
-                                        <li>El proveedor debe corresponder a la materia prima</li>
                                     </ul>
                                 </td>
                             </tr>
@@ -324,6 +337,7 @@
                                 <td>
                                     <ul class="list-unstyled small">
                                         <li>Nombre registrado (Mayúsculas o minúsculas)</li>
+                                        <li>El proveedor debe corresponder a la materia prima</li>
                                         <li>Número ID</li>
                                     </ul>
                                 </td>

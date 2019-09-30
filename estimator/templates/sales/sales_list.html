@@ -45,10 +45,10 @@
                                     <th scope="row">{{ forloop.counter }}</th>
                                     <td>{{sale.created}}</td>
                                     <td class="font-weight-bold">
-                                        {{sale.total_cost_dollar}}
+                                        {{sale.total_cost_dollar | floatformat:2}}
                                     </td>
                                     <td class="font-weight-bold">
-                                        {{sale.total_cost_local}}
+                                        {{sale.total_cost_local | floatformat:2}}
                                     </td>
                                     <td>
                                         <ul class="list-unstyled small">

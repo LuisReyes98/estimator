@@ -193,20 +193,17 @@ class SaleFileForm(forms.ModelForm):
         header_format = SaleFile.FILE_HEADER_FORMAT
 
         material_counter = 1
-
+        # se chequean las primeras 3 columnas por separado de las demas
         for k in range(3):
             if header[k] != header_format[k]:
+                print(header[k])
                 return False
 
         for i in range(3, len(header), 6):
             for j in range(6):
                 file_col = header[i + j]
                 model_col = header_format[j+3][:-1]+str(material_counter)
-                # print(file_col)
-                # print(header)
-                # print(header[i + j])
-                # print(i + j)
-                # print(model_col)
+
                 if file_col != model_col:
                     return False
             material_counter += 1
@@ -216,7 +213,13 @@ class SaleFileForm(forms.ModelForm):
     def clean(self, *args, **kwargs):
         # Confirmando que sea un archivo csv
         cleaned_data = super(SaleFileForm, self).clean()
-
+        try:
+            cleaned_data['sale_upload']
+        except KeyError:
+            raise forms.ValidationError(
+                _('El archivo es requerido'),
+                code='invalid',
+            )
         if not cleaned_data['sale_upload'].name.endswith('.csv'):
             raise forms.ValidationError(
                 _('Debe ser un archivo en formato csv'),
