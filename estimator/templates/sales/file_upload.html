@@ -7,6 +7,11 @@
     <div class="container-fluid app__background_gradient--pastel app__viewport">
         <div class="row pt-3 pb-3">
             <div class="col">
+                <a href="{% url 'sales:sales_list' %}"
+                   title="Volver"
+                   class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    <i class="mdi mdi-arrow-left"></i>
+                </a>
                 <h4 class="text-center font-weight-bold text-uppercase">
                     Cargar compras por archivo
                 </h4>
@@ -79,7 +84,7 @@
                                         data-toggle="modal"
                                         data-target="#instructions"
                                     >
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <li class="d-flex justify-content-between align-items-center">
                                             <div class="">
                                                     Instrucciones
                                             </div>
@@ -92,7 +97,7 @@
                                         data-toggle="modal"
                                         data-target="#materialsExample"
                                     >
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <li class="d-flex justify-content-between align-items-center">
                                             <div class="">
                                                     Lista de Materia Prima
                                             </div>
@@ -105,7 +110,7 @@
                                         data-toggle="modal"
                                         data-target="#providersExample"
                                     >
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <li class="d-flex justify-content-between align-items-center">
                                             <div class="">
                                                     Lista de Proveedores
                                             </div>
@@ -117,16 +122,20 @@
                                         href="#"
                                         data-toggle="modal"
                                         data-target="#formatCsvExample"
-                                        >
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    >
+                                        <li class="d-flex justify-content-between align-items-center">
                                             <div class="">
                                                     Formato de Columnas
                                             </div>
                                             <i class="mdi mdi-table-row app__button--icon"></i>
                                         </li>
                                     </a>
-                                    <a href="{{ download_url }}" class="list-group-item" target="_blank">
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a
+                                        class="text-decoration-none list-group-item"
+                                        href="{{ download_url }}"
+                                        target="_blank"
+                                    >
+                                        <li class="d-flex justify-content-between align-items-center">
                                             <div class="">
                                                     Descargar archivo .csv de ejemplo
                                             </div>
@@ -204,6 +213,7 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nombre</th>
+                                <th scope="col">Proveedores (ID)</th>
                                 <th scope="col">ID</th>
                             </tr>
                         </thead>
@@ -212,19 +222,15 @@
                             <tr>
                                 <th scope="row">{{ forloop.counter }}</th>
                                 <td >{{ material.name }}</td>
+                                <td class="small">
+                                    <ul class="list-unstyled">
+                                        {% for prov in material.providers.all %}
+                                            <li>{{ prov.name }} (<b>{{ prov.pk }}</b>)</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
                                 <td >{{ material.pk }}</td>
                             </tr>
-                            <tr>
-                                <th scope="row"></th>
-                                <td colspan="2"><b>Proveedores</b></td>
-                            </tr>
-                                {% for prov in material.providers.all %}
-                                    <tr>
-                                        <th scope="row"></th>
-                                        <td class="pl-4 small">{{ prov.name }}</td>
-                                        <td class="small">{{ prov.pk }}</td>
-                                    </tr>
-                                {% endfor %}
                             {% endfor %}
                         </tbody>
                     </table>

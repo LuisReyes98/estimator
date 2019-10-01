@@ -18,8 +18,12 @@
         </div>
         <div class="row mb-3 pt-3 pb-3 app__border--gray-200 app__background--white">
             <div class="col">
-                <a href="{% url 'sales:new_sale' %}"
-                    class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                <a
+                    href="registerSales"
+                    data-toggle="modal"
+                    data-target="#registerSales"
+                    class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                >
                     Registrar Compra
                 </a>
             </div>
@@ -74,6 +78,51 @@
                                 {% endfor %}
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="registerSales" tabindex="-1" role="dialog" aria-labelledby="registerSalesTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerSalesTitle">Registrar Compra</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="mdi mdi-close"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <ul class="list-group list-group-flush app__nav--system">
+                                    <a
+                                        class="text-decoration-none list-group-item"
+                                        href="{% url 'sales:new_sale' %}"
+                                    >
+                                        <li class="d-flex justify-content-between align-items-center">
+                                            <div class="">
+                                                    Registrar compra manualmente
+                                            </div>
+                                            <i class="mdi mdi-pencil-box-outline app__button--icon"></i>
+                                        </li>
+                                    </a>
+                                    <a
+                                        class="text-decoration-none list-group-item"
+                                        href="{% url 'sales:upload_file' %}"
+                                    >
+                                        <li class="d-flex justify-content-between align-items-center">
+                                            <div class="">
+                                                    Cargar compras por archivo
+                                            </div>
+                                            <i class="mdi mdi-file-document app__button--icon"></i>
+                                        </li>
+                                    </a>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
