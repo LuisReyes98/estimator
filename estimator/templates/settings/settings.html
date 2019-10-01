@@ -13,33 +13,54 @@
         <div class="row pt-2 pb-2 app__viewport--settings">
             <div class="col-12 col-sm-10 col-md-8 col-lg-6 m-auto app__background--white app__border_alt--gray-200">
                 <ul class="list-group list-group-flush app__nav--settings">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="">
-                            <a href="#">
-                                Perfil de usuario
-                            </a>
-                            <p class="small mb-0">Nombre y correo de usuario, foto de perfil, cambio de contraseña</p>
-                        </div>
-                        <i class="mdi mdi-account app__button--icon"></i>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="">
-                            <a href="#">
-                                Perfil de compañía
-                            </a>
-                            <p class="small mb-0">Nombre de la compañía, jefe de la compañía</p>
-                        </div>
-                        <i class="mdi mdi-factory app__button--icon"></i>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="">
-                            <a href="{% url 'settings:company_users_list' %}">
-                                Administrador de usuarios
-                            </a>
-                            <p class="small mb-0">Crear nuevo usuario miembro, editar y eliminar los usuarios miembro</p>
-                        </div>
-                        <i class="mdi mdi-account-group app__button--icon"></i>
-                    </li>
+                    <a
+                        class="list-group-item text-decoration-none"
+                        href="#"
+                    >
+                        <li class="d-flex justify-content-between align-items-center">
+                            <div class="">
+                                    Administrar monedas
+                                <p class="small mb-0">Mostrar todas las monedas registradas en la aplicación</p>
+                            </div>
+                            <i class="mdi mdi-currency-usd app__button--icon"></i>
+                        </li>
+                    </a>
+                    <a
+                        class="list-group-item text-decoration-none"
+                        href="#"
+                    >
+                        <li class="d-flex justify-content-between align-items-center">
+                            <div class="">
+                                    Perfil de usuario
+                                <p class="small mb-0">Nombre y correo de usuario, foto de perfil, cambio de contraseña</p>
+                            </div>
+                            <i class="mdi mdi-account app__button--icon"></i>
+                        </li>
+                    </a>
+                    <a
+                        class="list-group-item text-decoration-none"
+                        href="#"
+                    >
+                        <li class="d-flex justify-content-between align-items-center">
+                            <div class="">
+                                    Perfil de compañía
+                                <p class="small mb-0">Nombre de la compañía, jefe de la compañía</p>
+                            </div>
+                            <i class="mdi mdi-factory app__button--icon"></i>
+                        </li>
+                    </a>
+                    <a
+                        class="list-group-item text-decoration-none"
+                        href="{% url 'settings:company_users_list' %}"
+                    >
+                        <li class="d-flex justify-content-between align-items-center">
+                            <div class="">
+                                    Administrador de usuarios
+                                <p class="small mb-0">Crear nuevo usuario miembro, editar y eliminar los usuarios miembro</p>
+                            </div>
+                            <i class="mdi mdi-account-group app__button--icon"></i>
+                        </li>
+                    </a>
                 </ul>
             </div>
         </div>

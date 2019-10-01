@@ -182,8 +182,8 @@
 
   &__nav {
     &--settings {
-      li {
-        a {
+      a {
+        li {
           color: map-get($project_colors, "gray-600");
         }
         i {
@@ -194,7 +194,7 @@
         }
         &:hover {
           background-color: map-get($project_colors, "gray-100");
-          a {
+          li {
             color: map-get($project_colors, "cyan");
           }
           i {
@@ -205,8 +205,8 @@
     }
 
     &--system {
-      li {
-        a {
+      a {
+        li {
           color: map-get($project_colors, "gray-600");
         }
         i {
@@ -217,7 +217,7 @@
         }
         &:hover {
           background-color: map-get($project_colors, "gray-100");
-          a {
+          li {
             color: map-get($project_colors, "deep_blue");
           }
           i {
@@ -361,7 +361,7 @@
 
       p {
         font-size: 18px;
-        @extend .app__vertical_border--dark_blue ;
+        @extend .app__vertical_border--dark_blue;
       }
 
       ._form-input {
@@ -371,7 +371,7 @@
         width: 100%;
         font-size: 18px;
         transition: all 0.2s;
-        @extend .app__border_bottom--gray-200 ;
+        @extend .app__border_bottom--gray-200;
 
         &:focus {
           outline: none !important;
