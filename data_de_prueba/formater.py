@@ -12,6 +12,17 @@ file_headers = [
     'total_dolar',
     'conversion_dolar',
 ]
+file_headers2 = [
+    '#',
+    'fecha',
+    'material',
+    'precio_local',
+    'cantidad',
+    'precio_total_local',
+    'total_dolar',
+    'conversion_dolar',
+]
+
 
 FILE_PATH = 'datos_de_ventas.csv'
 
@@ -105,6 +116,69 @@ def write_csv(rows, file_name):
             file_writer.writerow(row)
 
 
+def format_dates():
+
+    df = pandas.read_csv(
+        'datos_formateados.csv',
+        parse_dates=['fecha'],
+        header=0,
+        names=file_headers,
+        sep=';',
+    )
+    print(df)
+    df.to_csv('datos_con_fecha.csv', sep=';')
+
+
+def format_dolar_dates():
+    df = pandas.read_csv(
+        'dolar_today.csv',
+        parse_dates=['fecha'],
+        header=0,
+        names=['fecha', 'conversion_dolar'],
+        sep=';',
+    )
+    print(df)
+    df.to_csv('dolar_fecha.csv', sep=';')
+
+
+def add_dolar_price_dates():
+    row_list = []
+
+    dolar_df = pandas.read_csv(
+        'dolar_fecha.csv',
+        header=0,
+        index_col='#',
+        names=['#', 'fecha', 'conversion_dolar'],
+        sep=';',
+    )
+
+    datos_df = pandas.read_csv(
+        'datos_con_fecha.csv',
+        header=0,
+        index_col='#',
+        names=file_headers2,
+        sep=';',
+    )
+
+    for index, row in datos_df.iterrows():
+        edit_row = dict(row)
+        dolar_value = dolar_df.loc[dolar_df['fecha'] == row['fecha']]['conversion_dolar']
+        # import pdb; pdb.set_trace()
+        # print(dolar_value)
+        try:
+            edit_row['conversion_dolar'] = float(dolar_value)
+            row_list.append(edit_row)
+        except Exception  as ex:
+            print(ex)
+            print(edit_row)
+            print(dolar_value)
+
+    # print(row_list)
+
+
 if __name__ == "__main__":
-    rows = read_ventas()
-    write_csv(rows, 'datos_formateados.csv')
+    # rows = read_ventas()
+    # write_csv(rows, 'datos_formateados.csv')
+    # format_dates()
+    # format_dolar_dates()
+    add_dolar_price_dates()
