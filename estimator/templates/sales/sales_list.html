@@ -37,6 +37,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Fecha</th>
+                                    <th scope="col">Fecha 2</th>
                                     <th scope="col">Total ($)</th>
                                     <th scope="col">Total (Moneda local)</th>
                                     <th scope="col">Materias Primas</th>
@@ -48,6 +49,7 @@
                                 <tr>
                                     <th scope="row">{{ forloop.counter }}</th>
                                     <td>{{sale.created}}</td>
+                                    <td>{{sale.date}}</td>
                                     <td class="font-weight-bold">
                                         {{sale.total_cost_dollar | floatformat:2}}
                                     </td>

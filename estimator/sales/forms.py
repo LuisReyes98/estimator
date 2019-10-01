@@ -2,6 +2,7 @@ import copy
 import csv
 import json
 import os
+from datetime import datetime
 
 from django.core.files.base import ContentFile
 from django import forms
@@ -117,8 +118,15 @@ class SaleForm(forms.ModelForm):
     def save(self, commit=True):
         """Metodo de guardar Una Compra"""
         instance = super(SaleForm, self).save(commit=False)
+
+        # import pdb; pdb.set_trace()
+        # instance['date'] = datetime.now()
+
         data = self.cleaned_data
-        dollar_price = DolarPrice(dollar_price=data.pop('dollar_price'))
+        # agregando nueva fecha
+        instance.date = datetime.now()
+
+        dollar_price = DolarPrice(dollar_price=data.pop('dollar_price'), date=datetime.now())
 
         raw_materials_json = json.loads(data['raw_materials_json'])
         materials_sale_relation = []
@@ -191,18 +199,19 @@ class SaleFileForm(forms.ModelForm):
 
     def is_valid_csv_header(self, header):
         header_format = SaleFile.FILE_HEADER_FORMAT
+        num_base_col = 4
 
         material_counter = 1
         # se chequean las primeras 3 columnas por separado de las demas
-        for k in range(3):
+        for k in range(num_base_col):
             if header[k] != header_format[k]:
                 print(header[k])
                 return False
 
-        for i in range(3, len(header), 6):
+        for i in range(num_base_col, len(header), 6):
             for j in range(6):
                 file_col = header[i + j]
-                model_col = header_format[j+3][:-1]+str(material_counter)
+                model_col = header_format[j+num_base_col][:-1]+str(material_counter)
 
                 if file_col != model_col:
                     return False

@@ -26,6 +26,13 @@ class Sale(TimeStampFields):
         blank=False,
     )
 
+    date = models.DateTimeField(
+        auto_now=False, 
+        auto_now_add=False,
+        blank=True,
+        null=True,
+    )
+
     # Referencias
     company = models.ForeignKey(  # Si la registra el superusuario
         'users.Company',
@@ -149,6 +156,13 @@ class DolarPrice(TimeStampFields):
         null=False,
     )
 
+    date = models.DateTimeField(
+        auto_now=False, 
+        auto_now_add=False,
+        blank=True,
+        null=True,
+    )
+
     def __str__(self):
         return '%.2f' % (self.dollar_price)
 
@@ -170,6 +184,7 @@ def get_company_directory_path(instance, filename):
 class SaleFile(TimeStampFields):
 
     FILE_HEADER_FORMAT = (
+        'fecha',  # una fecha o 0
         'dolar_precio',  # cualquier flotante
         'total_dolar',  # cualquier flotante
         'total_local',  # cualquier flotante

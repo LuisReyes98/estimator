@@ -189,13 +189,43 @@ def add_dolar_price_dates():
 
 
 def get_dolar_price():
-    with open('employee_birthday.txt', mode='r') as csv_file:
-        pass
+    pass
+    reader = csv.DictReader(
+        open('datos_precio_fecha.csv', mode='r'),
+        fieldnames=file_headers,
+        delimiter=';'
+    )
+    file_rows = []
+    for index, row in enumerate(reader):
+        if index > 0:
+            dict_row = dict(row)
+            if dict_row['total_dolar'] == 'nan':
+                try:
+                    dict_row['total_dolar'] = float(dict_row['precio_total_local']) / float(dict_row['conversion_dolar'])
+                    pass
+                except Exception as ex:
+                    print(row)
+                    print(ex)
+                    pass
+            file_rows.append(dict_row)
+
+    with open('datos_totales_dolar_precio.csv', mode='w') as csv_file:
+        # fieldnames = ['emp_name', 'dept', 'birth_month']
+        writer = csv.DictWriter(
+            csv_file,
+            fieldnames=file_headers,
+            delimiter=';'
+        )
+        writer.writeheader()
+
+        for row in file_rows:
+            writer.writerow(row)
 
 if __name__ == "__main__":
-    add_dolar_price_dates()
+    pass
     # rows = read_ventas()
     # write_csv(rows, 'datos_formateados.csv')
     # format_dates()
     # format_dolar_dates()
-    # get_dolar_price()
+    # add_dolar_price_dates()
+    get_dolar_price()

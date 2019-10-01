@@ -1,6 +1,7 @@
 import json
 import csv
 import copy
+from datetime import datetime
 from django.views.generic import (
     CreateView,
     TemplateView,
@@ -46,12 +47,18 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
         pass
 
     def validate_first_cols(self, row):
-        result = [0, 0, 0]
-        result[0] = float(row[0])
+        result = [0, 0, 0, 0]
+        try:
+            result[0] = datetime.strptime(row[0],'%Y-%m-%d')
+        except Exception:
+            if int(row[0]) == 0:
+                result[0] = datetime.now()
+
         result[1] = float(row[1])
         result[2] = float(row[2])
+        result[3] = float(row[3])
 
-        if result[0] < 0 or result[1] < 0 or result[2] < 0:
+        if result[1] < 0 or result[2] < 0 or result[3] < 0:
             raise Exception("No se permiten valores negativos")
 
         return result
@@ -89,7 +96,7 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
 
         return temp_material
 
-    def validate_bought(self,bought_in_dollars):
+    def validate_bought(self, bought_in_dollars):
         result = False
         int_value = False
 
@@ -171,19 +178,20 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
 
                     first_values = self.validate_first_cols(row)
 
-                    sale_data['dollar_price'] = first_values[0]
-                    sale_data['total_cost_dollar'] = first_values[1]
-                    sale_data['total_cost_local'] = first_values[2]
-
-                    for i in range(3, len(row), 6):
+                    sale_data['date'] = first_values[0]
+                    sale_data['dollar_price'] = first_values[1]
+                    sale_data['total_cost_dollar'] = first_values[2]
+                    sale_data['total_cost_local'] = first_values[3]
+                    # for i desde la primera coluna numerada
+                    for i in range(4, len(row), 6):
                         if row[i] != '':
                             material_data = {}
                             # validacion de la existencia de la materia prima
+                            # print(row[i])
                             temp_material = self.validate_material(
                                 row[i], company
                             )
                             material_data['raw_material'] = temp_material
-
                             amount_costs = self.validate_amount_costs(
                                 row[i + 1],
                                 row[i + 2],
@@ -237,6 +245,8 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
                     counter_success += 1
                 except Exception as ex:
                     # se guarda el numero de filas que han fallado y que fila fallo
+                    print('Debug: archivo sale_files_views linea 245')
+                    print('Debug: error guardando de archivo ', ex)
                     counter_failed += 1
                     failed_rows.append(index + 1)
 
