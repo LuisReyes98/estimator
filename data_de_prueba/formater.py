@@ -26,11 +26,12 @@ file_headers2 = [
 
 FILE_PATH = 'datos_de_ventas.csv'
 
+csv.register_dialect('semi_col', delimiter=';', quoting=csv.QUOTE_NONE)
+
 
 def read_ventas():
     file_lines = []
 
-    csv.register_dialect('semi_col', delimiter=';', quoting=csv.QUOTE_NONE)
     reader = csv.reader(open(FILE_PATH, 'r'), 'semi_col')
     for index, row in enumerate(reader):
         if index > 0:
@@ -168,17 +169,33 @@ def add_dolar_price_dates():
         try:
             edit_row['conversion_dolar'] = float(dolar_value)
             row_list.append(edit_row)
-        except Exception  as ex:
+        except Exception as ex:
             print(ex)
             print(edit_row)
             print(dolar_value)
 
+    with open('datos_precio_fecha.csv', mode='w') as csv_file:
+        # fieldnames = ['emp_name', 'dept', 'birth_month']
+        writer = csv.DictWriter(
+            csv_file,
+            fieldnames=file_headers,
+            delimiter=';'
+        )
+        writer.writeheader()
+
+        for row in row_list:
+            writer.writerow(row)
     # print(row_list)
 
 
+def get_dolar_price():
+    with open('employee_birthday.txt', mode='r') as csv_file:
+        pass
+
 if __name__ == "__main__":
+    add_dolar_price_dates()
     # rows = read_ventas()
     # write_csv(rows, 'datos_formateados.csv')
     # format_dates()
     # format_dolar_dates()
-    add_dolar_price_dates()
+    # get_dolar_price()
