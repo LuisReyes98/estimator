@@ -15,7 +15,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Lasso
 
 import io
-import base64
+
 
 class PredictionFormView(FormView):
     template_name = "predictions/select_prediction.html"
@@ -81,7 +81,7 @@ class PredictionResultView(TemplateView):
         ydf = ydf.reset_index()
 
         # import pdb; pdb.set_trace()
-        x_train, x_test, y_train, y_test = train_test_split(xdf,ydf,test_size=0.3)
+        x_train, x_test, y_train, y_test = train_test_split(xdf, ydf, test_size=0.3)
 
         # chequeando columnas
         model = Lasso()  # usando el modelo Lasso
@@ -94,7 +94,7 @@ class PredictionResultView(TemplateView):
         # verificar tamaño
         print("Shape: ", predicted.shape)
 
-        print("Score: ", model.score(x_test,y_test))
+        print("Score: ", model.score(x_test, y_test))
         """
             Primer score obtenido es 0.9997392317240795
             Lo mas probable es que no encontremos
@@ -104,9 +104,6 @@ class PredictionResultView(TemplateView):
         plt.hist(predicted)
         my_stringIObytes = io.StringIO()
         plt.savefig(my_stringIObytes, format='svg')
-        # my_stringIObytes.seek(0)
-        # my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
-        # import pdb; pdb.set_trace()
 
         context['graph'] = my_stringIObytes.getvalue()
 
