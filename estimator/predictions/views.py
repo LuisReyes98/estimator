@@ -14,6 +14,8 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import Lasso
 
+import io
+import base64
 
 class PredictionFormView(FormView):
     template_name = "predictions/select_prediction.html"
@@ -46,7 +48,7 @@ class PredictionResultView(TemplateView):
                     'raw_material'
                 )[0],
 
-                'dollar_price': el.dollar_price.dollar_price,
+                # 'dollar_price': el.dollar_price.dollar_price,
                 'date': el.date.toordinal(),
             } for el in sales
         ]
@@ -99,9 +101,14 @@ class PredictionResultView(TemplateView):
             que el algoritmo esta en overfitting
         """
         # plt.hist(predicted)
-        context['graph'] = plt.hist(predicted)
-        print()
+        plt.hist(predicted)
+        my_stringIObytes = io.StringIO()
+        plt.savefig(my_stringIObytes, format='svg')
+        # my_stringIObytes.seek(0)
+        # my_base64_jpgData = base64.b64encode(my_stringIObytes.read())
+        # import pdb; pdb.set_trace()
 
+        context['graph'] = my_stringIObytes.getvalue()
 
         print("Realizando prediccion")
 
