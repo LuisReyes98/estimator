@@ -221,6 +221,46 @@ def get_dolar_price():
         for row in file_rows:
             writer.writerow(row)
 
+
+def individual_price():
+    reader = csv.DictReader(
+        open('datos_totales_dolar_precio.csv', mode='r'),
+        fieldnames=file_headers,
+        delimiter=';'
+    )
+    local_price = [
+        'fecha',
+        'material',
+        'precio_local',
+        'cantidad',
+        'precio_total_local',
+        'total_dolar',
+        'conversion_dolar',
+        "cost_dolar"
+    ]
+    file_rows = []
+    for index, row in enumerate(reader):
+        if index > 0:
+            dict_row = dict(row)
+            try:
+                dict_row['cost_dolar'] = float(dict_row['total_dolar']) / int(dict_row['cantidad'])
+                file_rows.append(dict_row)
+            except Exception as ex:
+                print(ex)
+                print(dict_row)
+
+    with open('datos_costo_dolar.csv', mode='w') as csv_file:
+        # fieldnames = ['emp_name', 'dept', 'birth_month']
+        writer = csv.DictWriter(
+            csv_file,
+            fieldnames=local_price,
+            delimiter=';'
+        )
+        writer.writeheader()
+
+        for row in file_rows:
+            writer.writerow(row)
+
 if __name__ == "__main__":
     pass
     # rows = read_ventas()
@@ -228,4 +268,5 @@ if __name__ == "__main__":
     # format_dates()
     # format_dolar_dates()
     # add_dolar_price_dates()
-    get_dolar_price()
+    # get_dolar_price()
+    individual_price()

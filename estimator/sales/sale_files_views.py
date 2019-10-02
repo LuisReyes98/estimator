@@ -226,7 +226,7 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
                     if materials_count < 1:
                         raise Exception("No hay materia prima suficiente")
 
-                    print(raw_materials_data)
+                    # print(raw_materials_data)
                     # ultimas validaciones
                     if sale_data['total_cost_dollar'] == 0:
                         sale_data['total_cost_dollar'] = total_cost_dollar
@@ -234,7 +234,10 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
                     if sale_data['total_cost_local'] == 0:
                         sale_data['total_cost_local'] = total_cost_local
 
-                    sale_data['dollar_price'] = DolarPrice.objects.create(dollar_price=sale_data['dollar_price'])
+                    sale_data['dollar_price'] = DolarPrice.objects.create(
+                        dollar_price=sale_data['dollar_price'],
+                        date=sale_data['date'],
+                    )
                     # Guardando la venta
                     sale = Sale.objects.create(**sale_data)
 
