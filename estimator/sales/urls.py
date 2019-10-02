@@ -40,8 +40,7 @@ urlpatterns = [
         route="upload/",
         view=sale_files_views.SaleUploadFileView.as_view(),
         name="upload_file"
-    )
-    ,
+    ),
     path(
         route="upload/success/",
         view=sale_files_views.SaleUploadedFileView.as_view(),

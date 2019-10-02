@@ -1,0 +1,21 @@
+{% extends 'layouts/base_app.html' %}
+{% load widget_tweaks %}
+
+{% block content %}
+
+{{block.super}}
+    <div class="page-content" id="content">
+        <h1>Modulo de predicciones</h1>
+        <form action="{% url 'predictions:generate' %}" method="POST">
+            {% csrf_token %}
+            {% render_field form.date type="date"%}
+            <button type="submit" > Predecir</button>
+        </form>
+    </div>
+{% endblock content%}
+{% block javascript %}
+{{block.super}}
+<script>
+
+</script>
+{% endblock javascript %}

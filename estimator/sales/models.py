@@ -27,7 +27,7 @@ class Sale(TimeStampFields):
     )
 
     date = models.DateTimeField(
-        auto_now=False, 
+        auto_now=False,
         auto_now_add=False,
         blank=True,
         null=True,

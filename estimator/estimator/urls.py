@@ -5,6 +5,7 @@ Urls del sistema
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+# import estimations
 from . import views
 
 urlpatterns = [
@@ -39,6 +40,13 @@ urlpatterns = [
         include(
             ('api.urls', 'api'),
             namespace="api"
+        )
+    ),
+    path(
+        'predictions/',
+        include(
+            ('predictions.urls', 'predictions'),
+            namespace="predictions"
         )
     ),
     path(
