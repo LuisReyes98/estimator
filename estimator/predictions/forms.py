@@ -2,7 +2,8 @@ from django import forms
 from django.utils.translation import gettext as _
 from sales.models import Sale
 from raw_materials.models import RawMaterial
-
+from datetime import datetime
+import pytz
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -38,15 +39,16 @@ class SelectPredictionForm(forms.Form):
             {
                 **el.materials_sale_relation.values(
                     'cost_dollar',
-                    'amount'
+                    'amount',
+                    'raw_material'
                 )[0],
-                'raw_material': RawMaterial.objects.get(
-                    pk=el.materials_sale_relation.values(
-                        'raw_material_id'
-                    )[0]['raw_material_id']
-                ).name,
+                # 'raw_material': RawMaterial.objects.get(
+                #     pk=el.materials_sale_relation.values(
+                #         'raw_material_id'
+                #     )[0]['raw_material_id']
+                # ).name,
                 'dollar_price': el.dollar_price.dollar_price,
-                'date': el.date
+                'date': el.date,
             } for el in sales
         ]
 
