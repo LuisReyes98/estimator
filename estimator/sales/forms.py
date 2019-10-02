@@ -260,9 +260,9 @@ class SaleFileForm(forms.ModelForm):
                 code='invalid',
             )
 
-        if row_count > 51:
+        if row_count > 150:
             raise forms.ValidationError(
-                _('El maximo permitido por archivo son 50 ventas (51 filas)'),
+                _('El maximo permitido por archivo son 150 ventas (151 filas)'),
                 code='invalid',
             )
 
