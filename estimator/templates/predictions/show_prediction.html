@@ -1,0 +1,15 @@
+{% extends 'layouts/base_app.html' %}
+{% block content %}
+{{block.super}}
+<div class="page-content" id="content">
+    <h1>Resultados prediccion</h1>
+    <p>fecha {{prediction_date}} </p>
+
+    <p>grafico</p>
+    <div class="col-12">
+        {{graph | safe}}
+
+    </div>
+
+</div>
+{% endblock content%}
