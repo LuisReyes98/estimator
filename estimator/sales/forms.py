@@ -126,7 +126,10 @@ class SaleForm(forms.ModelForm):
         # agregando nueva fecha
         instance.date = datetime.now()
 
-        dollar_price = DolarPrice(dollar_price=data.pop('dollar_price'), date=datetime.now())
+        dollar_price = DolarPrice(
+            dollar_price=data.pop('dollar_price'),
+            date=datetime.now()
+        )
 
         raw_materials_json = json.loads(data['raw_materials_json'])
         materials_sale_relation = []
