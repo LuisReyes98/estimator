@@ -247,8 +247,8 @@ class SaleFileForm(forms.ModelForm):
             quoting=csv.QUOTE_NONE
         )
         file_path = default_storage.save(build_path, ContentFile(readable_file.read()))
-
-        reader = csv.reader(open(file_path, 'r'), 'semi_col')
+        fo = open(file_path, 'r')
+        reader = csv.reader(fo, 'semi_col')
         i = 0
         row_count = 0
         try:
@@ -274,7 +274,7 @@ class SaleFileForm(forms.ModelForm):
                 _('El archivo no posee el formato correcto de las cabeceras'),
                 code='invalid',
             )
-
+        fo.close()
         default_storage.delete(file_path)
 
         # Todo correcto retorna la data
