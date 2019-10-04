@@ -152,7 +152,8 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
             el valor de la columna no es valido
         """
         csv.register_dialect('semi_col', delimiter=';', quoting=csv.QUOTE_NONE)
-        reader = csv.reader(open(file_uploaded.path, 'r'), 'semi_col')
+        fo = open(file_uploaded.path, 'r')
+        reader = csv.reader(fo, 'semi_col')
 
         counter_success = 0
         counter_failed = 0
@@ -252,6 +253,8 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
                     print('Debug: error guardando de archivo ', ex)
                     counter_failed += 1
                     failed_rows.append(index + 1)
+
+        fo.close()
 
         return {
             'counter_success': counter_success,
