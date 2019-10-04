@@ -3,7 +3,7 @@ from django.views.generic import FormView, TemplateView
 from .forms import SelectPredictionForm
 from django.urls import reverse_lazy
 
-from sales.models import Sale
+from sales.models import Sale, DolarPrice
 from raw_materials.models import RawMaterial
 from datetime import datetime
 import pytz
@@ -32,34 +32,10 @@ class PredictionFormView(FormView):
 class PredictionResultView(TemplateView):
     template_name = "predictions/show_prediction.html"
 
-    def get(self, request, *args, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        sales = list(Sale.objects.filter(
-            company=self.request.user.safe_company.pk,
-        ).order_by('date'))
-
-        # construyendo diccionario de datos a utilizar
-        materials = [
-            {
-                **el.materials_sale_relation.values(
-                    'cost_dollar',
-                    'amount',
-                    'raw_material'
-                )[0],
-
-                # 'dollar_price': el.dollar_price.dollar_price,
-                'date': el.date.toordinal(),
-            } for el in sales
-        ]
-
-        # print(materials[0])
-
-        # print(sales[0].__dict__)
-        xdf = pd.DataFrame(materials)
+    def estimate_costs(self, date, xdf):
         print(xdf.head(1))
 
-        xdf=xdf.dropna()
+        xdf = xdf.dropna()
 
         # print(np.any(np.isnan(xdf)))
         print("hay valores nulos: ",np.any(np.isnan(xdf)))
@@ -71,7 +47,7 @@ class PredictionResultView(TemplateView):
         ydf = ydf.dropna()
 
         xdf = xdf.drop('cost_dollar', axis=1)
-        xdf=xdf.dropna()
+        xdf = xdf.dropna()
         # xdf.dropna()
 
         print("Cabecera del df",xdf.head(1))
@@ -104,11 +80,66 @@ class PredictionResultView(TemplateView):
         plt.hist(predicted)
         my_stringIObytes = io.StringIO()
         plt.savefig(my_stringIObytes, format='svg')
+        return my_stringIObytes.getvalue()
 
-        context['graph'] = my_stringIObytes.getvalue()
+
+    def get(self, request, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        date = request.session['prediction_date']
+
+        sales = list(Sale.objects.filter(
+            company=self.request.user.safe_company.pk,
+        ).exclude(
+                date__isnull=True,
+                raw_materials__isnull=True,
+                dollar_price__isnull=True,
+            ).order_by('date')
+        )
+
+        dolar_prices = list(
+            DolarPrice.objects.exclude(
+                date__isnull=True
+            ).order_by('date')
+        )
+        dolar_prices = [
+            {
+                'date': el.date.toordinal(),
+                'dollar_price': el.dollar_price
+            } for el in dolar_prices
+        ]
+
+        # construyendo diccionario de datos a utilizar
+        materials = [
+            {
+                **el.materials_sale_relation.values(
+                    'cost_dollar',
+                    'amount',
+                    'raw_material'
+                )[0],
+
+                # 'dollar_price': el.dollar_price.dollar_price,
+                'date': el.date.toordinal(),
+            } for el in sales
+        ]
+
+        # print(materials[0])
+
+        # print(sales[0].__dict__)
+        xdf = pd.DataFrame(materials)
+
+        #COst estimation
+        # graphic = estimate_costs(date, xdf)
+
+        dolardf = pd.DataFrame(dolar_prices)
+
+        dolardf = dolardf.dropna()
+        print(dolardf)
+
+
+        # context['graph'] = graphic
 
         print("Realizando prediccion")
 
-        context['prediction_date'] = request.session['prediction_date']
+        context['prediction_date'] = date
 
         return self.render_to_response(context)
