@@ -1,9 +1,10 @@
 .app {
   &__viewport {
-    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
 
     &--settings {
-      min-height: calc(100vh - 64px);
+      height: calc(100vh - 64px);
     }
   }
   &__background_gradient {
@@ -407,4 +408,28 @@ button:focus {
       }
     }
   }
+}
+
+//Scrollbar options
+/* width */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+/* Track */
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+/* Handle */
+*::-webkit-scrollbar-thumb {
+  background: rgba(222, 226, 230, 0.6);
+  border-radius: 10px;
+}
+/* Handle on hover */
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(206, 212, 218, 0.6);
+}
+/* Handle on active */
+*::-webkit-scrollbar-thumb:active {
+  background: rgba(173, 181, 189, 0.6);
 }
