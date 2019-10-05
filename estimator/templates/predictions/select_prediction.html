@@ -1,24 +1,37 @@
 {% extends 'layouts/base_app.html' %}
+
 {% load widget_tweaks %}
+{% load static %}
+
+{% block head %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}">
+
+{% endblock head %}
+
 
 {% block content %}
 
 {{block.super}}
     <div class="page-content" id="content">
         <h1>Modulo de predicciones</h1>
-        <form action="{% url 'predictions:result' %}" method="GET">
-            {% comment %} {% csrf_token %} {% endcomment %}
-            {{ form.date.label }}
-            {% render_field form.date type="date"%}
+        <form action="{% url 'predictions:generate' %}" method="POST">
+            {% csrf_token %}
+            <div>
+                {{ form.date.label }}
+                {% render_field form.date type="date"%}
+            </div>
 
-            {% render_field form.raw_materials %}
+            <div>
+                {{ form.raw_materials.label }}
+
+                {% render_field form.raw_materials class+="selectpicker col-4" multiple="" data-live-search="true" title="Escoge" %}
+            </div>
             <button type="submit" > Predecir</button>
         </form>
     </div>
 {% endblock content%}
 {% block javascript %}
 {{block.super}}
-<script>
-
-</script>
+<script src="{% static 'js/bootstrap_select/bootstrap-select.min.js' %}"></script>
 {% endblock javascript %}

@@ -23,3 +23,6 @@ matplotlib==3.1.*
 
 #graficos de matplotlib bonitos
 seaborn==0.9.*
+
+#codificador de categorias
+category_encoders==2.1.*
