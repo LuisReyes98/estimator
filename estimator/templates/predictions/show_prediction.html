@@ -3,13 +3,33 @@
 {{block.super}}
 <div class="page-content" id="content">
     <h1>Resultados prediccion</h1>
-    <p>fecha {{prediction_date}} </p>
+    <p>fecha {{prediction_date }} </p>
 
     <p>grafico</p>
-    <div class="col-12">
-        {{graph | safe}}
+    <div class="col-12 m-6 p-6 ">
+    {% for graph in graphics %}
+        <div class="w-100">
+            {{graph | safe}}
+        </div>
+    {% endfor %}
 
     </div>
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 </div>
 {% endblock content%}
