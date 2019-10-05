@@ -1,12 +1,16 @@
 <div
-    class="d-flex justify-content-center align-items-center w-100 h-100 position-fixed"
+    class="d-none justify-content-center align-items-center w-100 h-100 position-fixed"
     style="z-index: 999; background-color: rgba(0,0,0,0.5);"
+    id="loaderApp"
 >
-    <div
-        class="spinner-border app__text--cyan"
-        role="status"
-        style="width: 3.5rem; height: 3.5rem;"
-    >
-        <span class="sr-only">Loading...</span>
+    <div class="text-center">
+        <div
+            class="spinner-border app__text--cyan"
+            role="status"
+            style="width: 3.5rem; height: 3.5rem;"
+        >
+            <span class="sr-only">Loading...</span>
+        </div>
+        <p class="text-uppercase text-light mt-1 mb-0">Cargando</p>
     </div>
 </div>

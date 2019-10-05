@@ -13,25 +13,71 @@
 {% block content %}
 
 {{block.super}}
+    {% include 'sales/_loader.html' %}
     <div class="page-content" id="content">
-        <h1>Modulo de predicciones</h1>
-        <form action="{% url 'predictions:generate' %}" method="POST">
-            {% csrf_token %}
-            <div>
-                {{ form.date.label }}
-                {% render_field form.date type="date"%}
+        <div class="container-fluid app__background_gradient--pastel app__viewport">
+            <div class="row pt-3 pb-3">
+                <div class="col">
+                    <a
+                        href="{% url 'sales:calendar' %}"
+                        title="Volver"
+                        class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute"
+                    >
+                        <i class="mdi mdi-arrow-left"></i>
+                    </a>
+                    <h4 class="text-center font-weight-bold text-uppercase">
+                        Realizar Predicción
+                    </h4>
+                </div>
             </div>
+            <div class="row mb-3 pt-3 pb-3 app__border--gray-200 app__background--white">
+                <div class="col pb-1">
+                    <form action="{% url 'predictions:generate' %}" method="POST" id="predictForm">
+                        {% csrf_token %}
+                        <div class="form-row pb-1">
+                            <div class="form-group col-12 col-md-6 m-auto">
+                                {% render_field form.date type="date" class="form-control" id="inputDate" %}
+                            </div>
+                            <div>
+                                {{ form.raw_materials.label }}
 
-            <div>
-                {{ form.raw_materials.label }}
-
-                {% render_field form.raw_materials class+="selectpicker col-4" multiple="" data-live-search="true" title="Escoge" %}
+                                {% render_field form.raw_materials class+="selectpicker col-4" multiple="" data-live-search="true" title="Escoge" %}
+                            </div>
+                        </div>
+                        <div class="col m-auto text-center">
+                        <div class="d-flex flex-row justify-content-center">
+                            <button
+                                onclick="enviar_formulario()"
+                                class="m-1 rounded-pill app__button button--cyan mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                            >
+                                Predecir
+                            </button>
+                        </div>
+                    </div>
+                    </form>
+                </div>
             </div>
-            <button type="submit" > Predecir</button>
-        </form>
+        </div>
     </div>
 {% endblock content%}
 {% block javascript %}
 {{block.super}}
+
 <script src="{% static 'js/bootstrap_select/bootstrap-select.min.js' %}"></script>
+
+<script>
+    function enviar_formulario(){
+
+        loader = document.getElementById("loaderApp");
+        formulario = document.getElementById("predictForm");
+        fecha = document.getElementById("inputDate");
+
+        if (fecha.validity.valid) {
+            loader.classList.remove("d-none");
+            loader.classList.add("d-flex");
+            formulario.submit();
+        }
+    }
+</script>
+
 {% endblock javascript %}

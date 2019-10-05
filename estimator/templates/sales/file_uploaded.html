@@ -1,21 +1,75 @@
-{% extends 'layouts/base_app.html' %}
+{% extends 'layouts/base.html' %}
 
 {% block content %}
 {{ block.super }}
-<div class="page-content" id="content">
-    <h1>Carga de archivos terminada</h1>
-
-    <p>Se registraron con exito {{counter_success}} ventas </p>
-    <p>Se fallo en registrar {{counter_failed}} ventas </p>
-    <p> las siguientes filas se encontraban mal formadas y no se cargaron al sistema
-        <ul>
-            {% for fail in failed_rows %}
-                <li>{{fail}}</li>
-            {% endfor %}
-        </ul>
-    </p>
-    <p>Revise estas filas y subalas en un archivo separado, ya que subir el mismo archivo ocasionara que se repita la informacion</p>
-
-    <a href="{% url 'sales:calendar' %}">Volver</a>
+<div class="container-fluid bg__black_gradient app__viewport predictions__form ">
+    <div class="row pt-3 pb-3">
+        <div class="col-12 col-lg-10 m-auto">
+            <div class="card app__background--white">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <div class="row pb-3">
+                            <div class="col-12 m-auto">
+                                <h4 class="text-center font-weight-bold text-uppercase app__text--cyan">
+                                    Carga de datos terminada
+                                </h4>
+                            </div>
+                        </div>
+                        <div class="row pb-0">
+                            <div class="col pt-1 pb-2">
+                                <p>
+                                    Se registraron con éxito 
+                                    <span class="font-weight-bold">{{counter_success}}</span> 
+                                    compras</p>
+                                <p class="mb-0">
+                                    Ocurrió un error al registrar 
+                                    <span class="font-weight-bold">{{counter_failed}}</span> 
+                                    compras</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row pb-3">
+                            <div class="col pt-1 pb-1">
+                                <p>
+                                    Las siguientes filas mostraron errores y no se cargaron al sistema. Asegúrese de revisar que el formato es correcto y súbalos en un nuevo documento .csv:
+                                </p>
+                                {% if counter_failed != "0" %}
+                                    <div class="pb-2 pt-2 pr-2 pl-2 app__border--gray-200 overflow-y-scroll files__list">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                {% for fail in failed_rows %}
+                                                    <div class="col-12 col-md-6 col-lg-4 pr-1 pl-1">
+                                                        <p class="list-group-item small p-2 mt-1 mb-1">
+                                                            {{fail}}
+                                                        </p>
+                                                        {% comment %} <ul class="list-group">
+                                                                <li class="list-group-item small pt-1 pb-1">
+                                                                    {{fail}}
+                                                                </li>
+                                                        </ul> {% endcomment %}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col text-center">
+                                <a
+                                    href="{% url 'sales:calendar' %}"
+                                    class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                >
+                                    Continuar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
 </div>
 {% endblock content %}
