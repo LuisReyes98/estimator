@@ -7,8 +7,17 @@
 
 <link rel="stylesheet" href="{% static 'css/fullcalendar/core.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/fullcalendar/daygrid.min.css' %}">
-{% comment %}
-<link rel="stylesheet" href="{% static 'css/fullcalendar/bootstrap.min.css' %}"> {% endcomment %}
+<style>
+.fc-day-top{
+    pointer-events: none;
+    z-index: 0;
+}
+.fc-content-skeleton{
+    pointer-events: none;
+    z-index: 0;
+}
+
+</style>
 
 {% endblock head %}
 
@@ -112,6 +121,13 @@
     </div>
 </div>
 
+{% for pred in predictions %}
+<div id="prediction_{{pred.pk}}" class="d-none">
+
+<span class="" style="z-index: 4;pointer-events: all;"><button onclick="correr()" >Hola</button><button>Hola2</button></span>
+</div>
+{% endfor %}
+
 {% endblock content %}
 
 
@@ -124,9 +140,12 @@
 <script src="{% static 'js/fullcalendar/bootstrap.min.js' %}"></script>
 
 <script>
+    function correr() {
+        console.log("Correr");
+    }
     var mydate = {{ predictions | safe_js }};
 
-    var template = document.getElementById('lorem');
+    var template = document.getElementById('prediction_1');
 
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -150,12 +169,18 @@
             locale: 'es',
             selectable: true,
             dayRender: function (dayRenderInfo) {
-                // if (dayRenderInfo.date.toDateString() === mydate.toDateString()) {
-                //     tem = template.cloneNode(true);
-                //     tem.classList.remove("d-none");
-                //     dayRenderInfo.el.innerHTML = tem.outerHTML;
-                //     console.log(dayRenderInfo);
-                // }
+
+                if (dayRenderInfo.date.toDateString() === new Date(mydate[0].date).toDateString()) {
+                    tem = template.cloneNode(true);
+                    tem.classList.remove("d-none");
+
+                    console.log("Day render inner html");
+                    console.log(dayRenderInfo.el.innerHTML);
+                    console.log("Day render outer html");
+                    console.log(dayRenderInfo.el.outerHTML);
+
+                    dayRenderInfo.el.innerHTML = tem.innerHTML;
+                }
             },
         });
         calendar.render();

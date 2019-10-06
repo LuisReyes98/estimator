@@ -23,19 +23,19 @@ from django.shortcuts import redirect, render
 class CalendarView(LoginRequiredMixin, TemplateView):
     template_name = "sales/calendar.html"
 
-    # def exampleDates(self):
-    #     now = datetime.now()
-    #     some_dates = []
+    def exampleDates(self):
+        now = datetime.now()
+        some_dates = []
 
-    #     for i in range(10):
-    #         some_dates.append(
-    #             Prediction(
-    #                 date=(now - timedelta(days=i)).strftime("%m/%d/%Y"),
-    #                 pk=i,
-    #             ).__dict__
-    #         )
+        for i in range(10):
+            some_dates.append(
+                {
+                    'date': (now - timedelta(days=i)).strftime("%Y-%m-%d"),
+                    'pk': i,
+                }
+            )
 
-    #     return some_dates
+        return some_dates
 
     def get_context_data(self, **kwargs):
         """Añadiendo variables al contexto """
@@ -43,7 +43,7 @@ class CalendarView(LoginRequiredMixin, TemplateView):
         context["title"] = "Calendario"
         context["user"] = self.request.user
 
-        # context["predictions"] = self.exampleDates()
+        context["predictions"] = self.exampleDates()
         context["current_page"] = "calendar_sale"
 
         return context
