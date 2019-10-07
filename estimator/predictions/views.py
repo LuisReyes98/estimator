@@ -95,18 +95,20 @@ class PredictionResultView(TemplateView):
         return my_stringIObytes.getvalue()
 
     def build_dolar_dataframes(self):
-        pass
-        # dolar_prices = list(
-        #     DolarPrice.objects.exclude(
-        #         date__isnull=True
-        #     ).order_by('date')
-        # )
-        # dolar_prices = [
-        #     {
-        #         'date': el.date.toordinal(),
-        #         'dollar_price': el.dollar_price
-        #     } for el in dolar_prices
-        # ]
+        """ Retorna dataframe de los precios del dolar"""
+        dolar_prices = list(
+            DolarPrice.objects.exclude(
+                date__isnull=True
+            ).order_by('date')
+        )
+        dolar_prices = [
+            {
+                'date': el.date.toordinal(),
+                'dollar_price': el.dollar_price
+            } for el in dolar_prices
+        ]
+
+        return pd.DataFrame(dolar_prices)
 
     def build_materials_dataframes(self, raw_materials):
         # contruyendo grupos de datos
@@ -144,25 +146,24 @@ class PredictionResultView(TemplateView):
         Xall_df = pd.DataFrame(all_materials_array)
 
         Xall_df = Xall_df.dropna()
-        print(Xall_df.head())
 
         encoder = ce.BinaryEncoder(cols=['raw_material'])
         Xall_df = encoder.fit_transform(Xall_df)
 
-        print("hay valores nulos: ", np.any(np.isnan(Xall_df)))
-        print(Xall_df.head())
+        # diccionario de dataframes de las materias primas seleccionadas
+        Xm_df_array = {}
 
-        Xm_df_array = {}  # arreglo de dataframes de las materias primas seleccionadas
         for key, value in materials_dict.items():
             df = pd.DataFrame(value)
             df = df.dropna()
-            print("hay valores nulos: ", np.any(np.isnan(df)))
 
-            print(df.head())
-
-            Xm_df_array[key] = df
+            Xm_df_array[key] = df.drop('raw_material', 1)
 
         return (Xall_df, Xm_df_array)
+
+    def train_model(self, model, dataframe, y_column_name):
+        pass
+
 
     def generate_data_frame_tempeture_corr(self, dataframe):
         """ Recibe un dataframe y retorna un
@@ -180,7 +181,7 @@ class PredictionResultView(TemplateView):
             Se recibira fecha
             Lista de materia prima a predecir
         """
-        graphics = []
+        graphics = []  # vector de diccionari con name y fig
         context = super().get_context_data(**kwargs)
 
         date = datetime.strptime(
@@ -194,6 +195,8 @@ class PredictionResultView(TemplateView):
         Xall_df = materials_dataframes[0]
         Xm_df_array = materials_dataframes[1]
 
+        X_dolar = self.build_dolar_dataframes()
+
         graphics.append({
             'name': 'temperatura todos los datos',
             'fig': self.generate_data_frame_tempeture_corr(Xall_df)
@@ -204,14 +207,13 @@ class PredictionResultView(TemplateView):
                 {
                     'name': key,
                     'fig': self.generate_data_frame_tempeture_corr(
-                        df.drop('raw_material', 1)
+                        df
                     )
                 }
             )
 
         context['graphics'] = graphics
 
-        # context['tempeture_graph'] = graphic
         context['raw_materials'] = raw_materials
 
         context['prediction_date'] = date
