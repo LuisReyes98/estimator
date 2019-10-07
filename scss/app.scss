@@ -241,6 +241,16 @@
     }
   }
 
+  &__page-item {
+    a {
+      color: map-get($project_colors, "deep_blue") !important;
+
+      &:hover {
+        color: map-get($project_colors, "dark_blue") !important;
+      }
+    }
+  }
+
   &__input {
     border-style: solid;
     border-width: 0px 0px 2px 0px;
@@ -425,8 +435,8 @@ button:focus {
 //Scrollbar options
 /* width */
 *::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 9px;
+  height: 9px;
 }
 /* Track */
 *::-webkit-scrollbar-track {
@@ -434,14 +444,14 @@ button:focus {
 }
 /* Handle */
 *::-webkit-scrollbar-thumb {
-  background: rgba(222, 226, 230, 0.6);
-  border-radius: 10px;
+  background: rgba(map-get($project_colors, "gray-300"),0.5);
+  border-radius: 0px;
 }
 /* Handle on hover */
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(206, 212, 218, 0.6);
+  background: rgba(map-get($project_colors, "gray-400"),0.6);
 }
 /* Handle on active */
 *::-webkit-scrollbar-thumb:active {
-  background: rgba(173, 181, 189, 0.6);
+  background: rgba(map-get($project_colors, "light_cyan"),0.9);
 }

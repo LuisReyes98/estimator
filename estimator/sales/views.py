@@ -97,6 +97,7 @@ class SaleDetailView(LoginRequiredMixin, DetailView):
 class SaleListView(LoginRequiredMixin, ListView):
     model = Sale
     template_name = "sales/sales_list.html"
+    paginate_by = 30
 
     def get_queryset(self):
         new_context = Sale.objects.filter(
@@ -108,6 +109,10 @@ class SaleListView(LoginRequiredMixin, ListView):
         """Añadiendo variables al contexto """
         context = super().get_context_data(**kwargs)
         context["current_page"] = "calendar_sale"
+        try:
+            context["page_counter"] = (int(self.request.GET["page"]) - 1) * self.paginate_by
+        except Exception:
+            context["page_counter"] = 0
 
         return context
 
