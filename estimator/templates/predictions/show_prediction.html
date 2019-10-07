@@ -2,36 +2,52 @@
 {% block content %}
 {{block.super}}
 <div class="page-content" id="content">
-    <h1>Resultados prediccion</h1>
-    <p>fecha {{prediction_date }} </p>
-
-    <p>grafico</p>
-    <div class="col-12 m-6 p-6 ">
-    {{raw_materials}}
-    {% for graph in graphics %}
-        <div class="w-100">
-            {{graph.name}}
-            {{graph.fig | safe}}
+    <div class="container-fluid app__background_gradient--pastel app__viewport">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <h4 class="text-center font-weight-bold text-uppercase app__text--cyan">
+                    Resultados de la Predicción
+                </h4>
+            </div>
         </div>
-    {% endfor %}
-
+        <div class="row pt-3 pb-3">
+            <div class="col pb-1">
+                <div class="app__background--white p-2 rounded shadow">
+                    <div class="container-fluid">
+                        <div class="row pb-2">
+                            <div class="col">
+                                <p class="font-italic">Fecha:</p>
+                                <p class="font-weight-bold">{{prediction_date }}</p>
+                            </div>
+                        </div>
+                        <div class="row pb-2">
+                            <div class="col">
+                                <h5 class="font-weight-bold text-uppercase">Gráfico</h5>
+                            </div>
+                        </div>
+                        <div class="row pb-2">
+                            <div class="col">
+                                <p class="font-weight-bold">
+                                    {{raw_materials}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            {% for graph in graphics %}
+                                <div class="col-12 p-4">
+                                    <p class="mb-1 app__vertical_border--cyan pl-2">
+                                        {{graph.name}}
+                                    </p>
+                                    <div class="text-center app__graph">
+                                        {{graph.fig | safe}}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
 </div>
 {% endblock content%}

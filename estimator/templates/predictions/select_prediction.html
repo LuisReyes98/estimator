@@ -30,40 +30,42 @@
                     </h4>
                 </div>
             </div>
-            <div class="row mb-3 pt-3 pb-3 app__border--gray-200 app__background--white">
+            <div class="row pt-3 pb-3">
                 <div class="col pb-1">
-                    <form action="{% url 'predictions:generate' %}" method="POST" id="predictForm">
-                        {% csrf_token %}
-                        <div class="form-row pb-2">
-                            <div class="form-group col-12 col-md-6 m-auto">
-                                {% render_field form.date type="date" class="form-control" id="inputDate" %}
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group col-12 col-md-3 offset-md-3">
-                                <div class="app__form--textfield w-100">
-                                    <label for="">
-                                        {{ form.raw_materials.label }}
-                                    </label>
+                    <div class="app__background--white p-2 rounded shadow">
+                        <form action="{% url 'predictions:generate' %}" method="POST" id="predictForm">
+                            {% csrf_token %}
+                            <div class="form-row pb-2">
+                                <div class="form-group col-12 col-md-6 m-auto">
+                                    {% render_field form.date type="date" class="form-control" id="inputDate" %}
                                 </div>
                             </div>
-                            <div class="form-group col-12 col-md-3">
-                                <div class="app__form--select w-100">
-                                    {% render_field form.raw_materials class+="selectpicker" multiple="" data-live-search="true" title="Selecciona" %}
+                            <div class="form-row">
+                                <div class="form-group col-12 col-md-3 offset-md-3">
+                                    <div class="app__form--textfield w-100">
+                                        <label for="">
+                                            {{ form.raw_materials.label }}
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-md-3">
+                                    <div class="app__form--select w-100">
+                                        {% render_field form.raw_materials class+="selectpicker" multiple="" data-live-search="true" title="Selecciona" id="inputRawMaterial" %}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col m-auto text-center">
-                            <div class="d-flex flex-row justify-content-center">
-                                <button
-                                    onclick="enviar_formulario()"
-                                    class="m-1 rounded-pill app__button button--cyan mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                                >
-                                    Predecir
-                                </button>
+                            <div class="col m-auto text-center">
+                                <div class="d-flex flex-row justify-content-center">
+                                    <button
+                                        onclick="enviar_formulario()"
+                                        class="m-1 rounded-pill app__button button--cyan mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                    >
+                                        Predecir
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -80,8 +82,9 @@
         loader = document.getElementById("loaderApp");
         formulario = document.getElementById("predictForm");
         fecha = document.getElementById("inputDate");
+        materias = document.getElementById("inputRawMaterial");
 
-        if (fecha.validity.valid) {
+        if (fecha.validity.valid && materias.validity.valid) {
             loader.classList.remove("d-none");
             loader.classList.add("d-flex");
             formulario.submit();
