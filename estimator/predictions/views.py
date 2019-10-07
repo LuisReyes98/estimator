@@ -94,7 +94,21 @@ class PredictionResultView(TemplateView):
 
         return my_stringIObytes.getvalue()
 
-    def build_dataframes(self, date, raw_materials):
+    def build_dolar_dataframes(self):
+        pass
+        # dolar_prices = list(
+        #     DolarPrice.objects.exclude(
+        #         date__isnull=True
+        #     ).order_by('date')
+        # )
+        # dolar_prices = [
+        #     {
+        #         'date': el.date.toordinal(),
+        #         'dollar_price': el.dollar_price
+        #     } for el in dolar_prices
+        # ]
+
+    def build_materials_dataframes(self, raw_materials):
         # contruyendo grupos de datos
 
         sales = list(Sale.objects.filter(
@@ -106,54 +120,59 @@ class PredictionResultView(TemplateView):
             ).order_by('date')
         )
 
-        dolar_prices = list(
-            DolarPrice.objects.exclude(
-                date__isnull=True
-            ).order_by('date')
-        )
-        dolar_prices = [
-            {
-                'date': el.date.toordinal(),
-                'dollar_price': el.dollar_price
-            } for el in dolar_prices
-        ]
-
+        materials_dict = {}
+        all_materials_array = []
+        for material in raw_materials:
+            materials_dict[material['pk']] = []
         # construyendo diccionario de datos a utilizar
-        materials = []
+
         for sale in sales:
             for material in sale.materials_sale_relation:
-                materials.append(
-                    {
-                        'cost_dollar': material.cost_dollar,
-                        'amount': material.amount,
-                        'raw_material': material.raw_material.name,
-                        'dollar_price': sale.dollar_price.dollar_price,
-                        'date': sale.date.toordinal(),
-                    }
-                )
+                value = {
+                            'cost_dollar': material.cost_dollar,
+                            'amount': material.amount,
+                            'raw_material': material.raw_material.pk,
+                            'dollar_price': sale.dollar_price.dollar_price,
+                            'date': sale.date.toordinal(),
+                        }
+                all_materials_array.append(value)
+                if material.raw_material.pk in materials_dict:
+                    materials_dict[material.raw_material.pk].append(
+                        value
+                    )
+        # dataframe de todas las materias primas
+        Xall_df = pd.DataFrame(all_materials_array)
 
-        xdf = pd.DataFrame(materials)
-        xdf = xdf.dropna()
+        Xall_df = Xall_df.dropna()
+        print(Xall_df.head())
 
-        print(xdf.head(1))
         encoder = ce.BinaryEncoder(cols=['raw_material'])
+        Xall_df = encoder.fit_transform(Xall_df)
 
-        xdf = encoder.fit_transform(xdf)
-        print(xdf.head(1))
+        print("hay valores nulos: ", np.any(np.isnan(Xall_df)))
+        print(Xall_df.head())
 
+        Xm_df_array = {}  # arreglo de dataframes de las materias primas seleccionadas
+        for key, value in materials_dict.items():
+            df = pd.DataFrame(value)
+            df = df.dropna()
+            print("hay valores nulos: ", np.any(np.isnan(df)))
 
-        print("hay valores nulos: ", np.any(np.isnan(xdf)))
+            print(df.head())
 
-        return xdf
+            Xm_df_array[key] = df
+
+        return (Xall_df, Xm_df_array)
 
     def generate_data_frame_tempeture_corr(self, dataframe):
+        """ Recibe un dataframe y retorna un
+        archivo con un mapa de temperatura de la correlacion"""
         sns.heatmap(dataframe.corr())
         heatmapIO = io.StringIO()
         plt.savefig(heatmapIO, format='svg')
         plt.close()
         heatmapIO = heatmapIO.getvalue()
         return heatmapIO
-
 
     def get(self, request, *args, **kwargs):
         """
@@ -168,38 +187,32 @@ class PredictionResultView(TemplateView):
             request.session['prediction_date'],
             '%Y-%m-%d'
         )
+
         raw_materials = json.loads(request.session['prediction_raw_materials'])
 
-        xdf = self.build_dataframes(date, raw_materials)
+        materials_dataframes = self.build_materials_dataframes(raw_materials)
+        Xall_df = materials_dataframes[0]
+        Xm_df_array = materials_dataframes[1]
 
-        graphics.append(self.generate_data_frame_tempeture_corr(xdf))
-        # print(date)
-        # print(raw_materials)
+        graphics.append({
+            'name': 'temperatura todos los datos',
+            'fig': self.generate_data_frame_tempeture_corr(Xall_df)
+        })
 
-        #COst estimation
-        # graphic = self.estimate_costs(date, xdf)
-
-        # dolardf = pd.DataFrame(dolar_prices)
-
-        # dolardf = dolardf.dropna()
-        # print(dolardf)
-
-        # temperatura de precios materia prima
-        # sns.heatmap(xdf.corr())
-        # heatmapIO = io.StringIO()
-        # plt.savefig(heatmapIO, format='svg')
-        # plt.close()
-        # heatmapIO = heatmapIO.getvalue()
-
-        # sns.heatmap(dolardf.corr())
-        # dollarMap = io.StringIO()
-        # plt.savefig(dollarMap, format='svg')
-        # plt.close()
-        # dollarMap = dollarMap.getvalue()
+        for key, df in Xm_df_array.items():
+            graphics.append(
+                {
+                    'name': key,
+                    'fig': self.generate_data_frame_tempeture_corr(
+                        df.drop('raw_material', 1)
+                    )
+                }
+            )
 
         context['graphics'] = graphics
 
         # context['tempeture_graph'] = graphic
+        context['raw_materials'] = raw_materials
 
         context['prediction_date'] = date
 

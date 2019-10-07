@@ -7,9 +7,11 @@
 
     <p>grafico</p>
     <div class="col-12 m-6 p-6 ">
+    {{raw_materials}}
     {% for graph in graphics %}
         <div class="w-100">
-            {{graph | safe}}
+            {{graph.name}}
+            {{graph.fig | safe}}
         </div>
     {% endfor %}
 

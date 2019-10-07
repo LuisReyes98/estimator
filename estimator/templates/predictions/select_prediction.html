@@ -34,14 +34,14 @@
                 <div class="col pb-1">
                     <form action="{% url 'predictions:generate' %}" method="POST" id="predictForm">
                         {% csrf_token %}
-                        <div class="form-row pb-1">
+                        <div class="form-group pb-1">
                             <div class="form-group col-12 col-md-6 m-auto">
                                 {% render_field form.date type="date" class="form-control" id="inputDate" %}
                             </div>
-                            <div>
-                                {{ form.raw_materials.label }}
+                            <div class="form-group col-12 col-md-6 m-auto">
+                                <label for="id_raw_materials" class="col-12">{{ form.raw_materials.label }}</label>
 
-                                {% render_field form.raw_materials class+="selectpicker col-4" multiple="" data-live-search="true" title="Escoge" %}
+                                {% render_field form.raw_materials class+="selectpicker col-12" multiple="" data-live-search="true" title="Escoge" %}
                             </div>
                         </div>
                         <div class="col m-auto text-center">
