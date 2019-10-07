@@ -53,6 +53,18 @@
         }
       }
 
+      &.icon--calendar {
+        margin-left: 0px;
+        margin-right: 0px;
+        &_sale {
+          color: map-get($project_colors, "deep_blue");
+
+          &:hover {
+            color: map-get($project_colors, "dark_blue");
+          }
+        }
+      }
+
       &.button--back {
         display: flex;
         align-items: center;

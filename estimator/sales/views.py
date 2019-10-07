@@ -37,13 +37,42 @@ class CalendarView(LoginRequiredMixin, TemplateView):
 
         return some_dates
 
+    # def salesDate(self):
+    #     result = list(Sale.objects.filter(
+    #         company=self.request.user.safe_company,).values(
+    #             'date',
+    #             'pk',
+    #         ))
+    #     for el in result:
+    #         el['date'] = el['date'].strftime("%Y-%m-%d")
+    #     return result
+
+    def salesObject(self):
+        sales = Sale.objects.filter(
+            company=self.request.user.safe_company.pk,
+        ).order_by('-created')
+        sales_date_dict = {}
+        js_dict = {}
+        for sale in sales:
+            date = sale.date.strftime("%Y-%m-%d")
+
+            if date not in sales_date_dict:
+                sales_date_dict[date] = []
+                sales_date_dict[date].append(sale)
+                js_dict[date] = date
+            else:
+                sales_date_dict[date].append(sale)
+        return [sales_date_dict, js_dict]
+
     def get_context_data(self, **kwargs):
         """Añadiendo variables al contexto """
         context = super().get_context_data(**kwargs)
         context["title"] = "Calendario"
         context["user"] = self.request.user
+        sales_objects = self.salesObject()
+        context["salesObj"] = sales_objects[0]
 
-        context["predictions"] = self.exampleDates()
+        context["salesJs"] = sales_objects[1]
         context["current_page"] = "calendar_sale"
 
         return context

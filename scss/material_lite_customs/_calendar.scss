@@ -12,6 +12,18 @@
     align-items: center;
   }
 
+  &-day {
+    &--today {
+      border-radius: 0px;
+      background-color: rgba(map-get($project_colors, "gray-400"), 0.5) !important;
+    }
+
+    &--sale {
+      border-radius: 0px;
+      background-color: rgba(map-get($project_colors, "deep_blue"), 0.1) !important;
+    }
+  }
+
   &-button {
     display: flex;
     align-items: center;

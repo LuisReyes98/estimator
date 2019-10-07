@@ -5,28 +5,27 @@ document.addEventListener("DOMContentLoaded", function() {
     )[0].childNodes[0].childNodes[1];
 
     let botonIzquierdo = Array.from(
-        document.getElementsByClassName("fc-center")
-      )[0].childNodes[0].childNodes[0];
+      document.getElementsByClassName("fc-center")
+    )[0].childNodes[0].childNodes[0];
 
-      let botonDerecho = Array.from(
-        document.getElementsByClassName("fc-center")
-      )[0].childNodes[0].childNodes[2];
+    let botonDerecho = Array.from(
+      document.getElementsByClassName("fc-center")
+    )[0].childNodes[0].childNodes[2];
 
-      let botonPrevYear = Array.from(
-        document.getElementsByClassName("fc-left")
-      )[0].childNodes[0];
+    let botonPrevYear = Array.from(
+      document.getElementsByClassName("fc-left")
+    )[0].childNodes[0];
 
-      let contenedorDerecho = Array.from(
-        document.getElementsByClassName("fc-right")
-      )[0];
+    let contenedorDerecho = Array.from(
+      document.getElementsByClassName("fc-right")
+    )[0];
 
-      let botonNextYear = Array.from(
-        document.getElementsByClassName("fc-right")
-      )[0].childNodes[1];
+    let botonNextYear = Array.from(
+      document.getElementsByClassName("fc-right")
+    )[0].childNodes[1];
 
-      let botonToday = Array.from(
-        document.getElementsByClassName("fc-right")
-      )[0].childNodes[0];
+    let botonToday = Array.from(document.getElementsByClassName("fc-right"))[0]
+      .childNodes[0];
 
     calendarioTitulo.classList.add("text-uppercase");
     calendarioTitulo.classList.add("calendar-title");
@@ -34,18 +33,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
     botonIzquierdo.classList.add("app__button--icon");
     botonIzquierdo.classList.add("calendar-button");
+    botonIzquierdo.classList.remove("btn-primary");
     botonIzquierdo.classList.add("mdl-button");
     botonIzquierdo.classList.add("mdl-js-button");
     botonIzquierdo.classList.add("mdl-button--icon");
 
     botonDerecho.classList.add("app__button--icon");
     botonDerecho.classList.add("calendar-button");
+    botonDerecho.classList.remove("btn-primary");
     botonDerecho.classList.add("mdl-button");
     botonDerecho.classList.add("mdl-js-button");
     botonDerecho.classList.add("mdl-button--icon");
 
     botonPrevYear.classList.add("app__button--icon");
     botonPrevYear.classList.add("calendar-button_year");
+    botonPrevYear.classList.remove("btn-primary");
     botonPrevYear.classList.add("mdl-button");
     botonPrevYear.classList.add("mdl-js-button");
     botonPrevYear.classList.add("mdl-button--icon");
@@ -54,14 +56,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
     botonNextYear.classList.add("app__button--icon");
     botonNextYear.classList.add("calendar-button_year");
+    botonNextYear.classList.remove("btn-primary");
     botonNextYear.classList.add("mdl-button");
     botonNextYear.classList.add("mdl-js-button");
     botonNextYear.classList.add("mdl-button--icon");
 
     botonToday.classList.add("calendar-button_today");
-    botonToday.classList.add("text-uppercase");
+    botonToday.classList.add("text-capitalize");
     botonToday.classList.add("small");
     botonToday.classList.add("font-weight-bold");
+
     // botonIzquierdo.classList.add("position-absolute")
     // calendarioTitulo.forEach(el => {
     // });
