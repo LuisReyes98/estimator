@@ -3,7 +3,6 @@
     &--hidden {
       transition: all 0.4s;
     }
-
   }
 
   &__nav--link {
@@ -24,7 +23,7 @@
   }
 
   &__focused_item {
-    @extend .app__vertical_border--cyan ;
+    @extend .app__vertical_border--cyan;
     padding-left: 13px !important;
   }
 
@@ -32,25 +31,27 @@
     // border-left: solid 1px map-get($project_colors, "light_cyan");
   }
 
-  &__tooltip:hover {
-    &::after {
-      content: attr(data-toggle);
-      position: absolute;
-      color: #f8f9fa;
-      background: #1a1a1a;
-      left: 110%;
-      width: max-content;
-      padding: 4px;
-      border-radius: 4px;
-    }
+  &__tooltip {
+    &:hover {
+      &::after {
+        content: attr(tooltipMenu);
+        position: absolute;
+        color: #f8f9fa;
+        background: #1a1a1a;
+        left: 110%;
+        width: max-content;
+        padding: 4px;
+        border-radius: 4px;
+      }
 
-    &::before {
-      content: "";
-      position: absolute;
-      left: 90%;
-      border-width: 5px;
-      border-style: solid;
-      border-color: transparent #1a1a1a transparent transparent;
+      &::before {
+        content: "";
+        position: absolute;
+        left: 90%;
+        border-width: 5px;
+        border-style: solid;
+        border-color: transparent #1a1a1a transparent transparent;
+      }
     }
   }
 
@@ -58,17 +59,17 @@
     background: #1a1a1a;
 
     width: 17rem;
-    .app__item--hidden{
-      margin-left: 0 ;
+    .app__item--hidden {
+      margin-left: 0;
     }
-    .nav-item{
+    .nav-item {
       width: 17rem;
     }
     .nav--menu {
       width: 17rem;
     }
-    .app__nav--link{
-      &::before{
+    .app__nav--link {
+      &::before {
         content: none;
       }
       &::after {
@@ -78,25 +79,26 @@
     #nav_menu {
       border-bottom: solid 1px #383838;
     }
-    #arrow{
+    #arrow {
       transform: rotate(0deg);
     }
 
-    &.nav__toggled{ //Estilos Cuando la barra de navegacion se reduce
+    &.nav__toggled {
+      //Estilos Cuando la barra de navegacion se reduce
       width: 50px;
       .app__item--hidden {
         margin-left: -17rem;
       }
 
-      .nav-item{
+      .nav-item {
         width: 50px;
       }
-      .nav--menu{
+      .nav--menu {
         width: 50px;
       }
 
-      .app__nav--link{
-        @extend .app__tooltip ;
+      .app__nav--link {
+        @extend .app__tooltip;
       }
 
       #nav_menu {
@@ -160,7 +162,6 @@
       }
     }
   }
-
 }
 
 #arrow {
@@ -179,7 +180,6 @@
   left: 0;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.1);
   transition: all 0.4s;
-
 }
 
 #content.active {

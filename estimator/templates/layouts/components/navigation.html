@@ -1,17 +1,17 @@
 
 <!-- Vertical navbar -->
 <div class="vertical-nav app__navigation" id="sidebar" style="z-index: 100;">
-  <div class="py-4 px-3 mb-0">
+  <div class="py-3 px-3 mb-0">
     <a href="#" class="nav--button" id="arrow" onclick="mostrar()">
       <i class="mdi mdi-arrow-left"></i>
     </a>
     <div class="media d-flex align-items-center">
       <div class="media-body app__item--hidden">
-        <h4 class="m-0 mt-3 text-light font-weight-bold text-uppercase">
+        <h4 class="m-0 mt-0 text-light font-weight-bold text-uppercase">
           Estimator
         </h4>
         <div class="app__media pl-2">
-          <p class="mt-4 app__text--light_cyan">
+          <p class="mt-3 mb-0 app__text--light_cyan">
             {{ user }}
             {% if user.is_superuser %}
               <i class="mdi mdi-key-variant app__text--yellow ml-1"></i>
@@ -28,89 +28,116 @@
   </div>
 
   <p
-    class="nav__menu app__item--hidden text-light font-weight-bold text-uppercase px-3 small pb-4 mb-0"
+    class="nav__menu app__item--hidden text-light font-weight-bold text-uppercase px-3 small pb-3 mb-0"
     id="nav_menu"
   >
     Menú
   </p>
 
-  <ul class="nav flex-column mb-0 nav--menu">
-    <li class="nav-item">
-      <a
-        href="{% url 'home' %}"
-        class="{% if current_page == "home" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
-               app__nav--link nav-link d-flex flex-row align-items-center pl-0"
-        data-toggle="Inicio"
-      >
-        <i class="mdi mdi-home"></i>
-        Inicio
-      </a>
-    </li>
-    <li class="nav-item">
-      <a
-        href="{% url 'sales:calendar' %}"
-        class="{% if current_page == "calendar_sale" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
-               app__nav--link nav-link d-flex flex-row align-items-center pl-0"
-        data-toggle="Calendario Predictor"
-      >
-        <i class="mdi mdi-calendar"></i>
-        Calendario Predictor
-      </a>
-    </li>
-    <li class="nav-item">
-      <a
-        href="{% url 'raw_materials:materials' %}"
-        class="{% if current_page == "materials" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
-               app__nav--link nav-link d-flex flex-row align-items-center pl-0"
-        data-toggle="Materia Prima"
-      >
-        <i class="mdi mdi-layers-triple"></i>
-        Materia Prima
-      </a>
-    </li>
-    <li class="nav-item">
-      <a
-        href="{% url 'raw_materials:providers' %}"
-        class="{% if current_page == "providers" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
-               app__nav--link nav-link d-flex flex-row align-items-center pl-0"
-        data-toggle="Proveedores"
-      >
-        <i class="mdi mdi-bus-multiple"></i>
-        Proveedores
-      </a>
-    </li>
-    <li class="nav-item">
-      <a
-        href="#"
-        class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
-        data-toggle="Gráficas y Estadísticas"
-      >
-        <i class="mdi mdi-chart-bar"></i>
-        Gráficas y Estadísticas
-      </a>
-    </li>
-    {% comment %} <li class="nav-item">
-      <a
-        href="{% url 'users:company_users_list' %}"
-        class="{% if current_page == "company_users" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
-               app__nav--link nav-link d-flex flex-row align-items-center pl-0"
-        data-toggle="Usuarios"
-      >
-        <i class="mdi mdi-account-group"></i>
-        Usuarios
-      </a>
-    </li> {% endcomment %}
-    <li class="nav-item">
-      <a
-        href="{% url 'users:logout' %}"
-        class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
-        data-toggle="Cerrar Sesión"
-      >
-        <i class="mdi mdi-logout"></i>
-        Cerrar Sesión
-      </a>
-    </li>
-  </ul>
+  <div class="" style="height: 60%; overflow-y: auto; overflow-x: hidden;">
+    <ul class="nav flex-column mb-0 nav--menu">
+      <li class="nav-item">
+        <a
+          href="{% url 'home' %}"
+          class="{% if current_page == "home" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
+                 app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+          tooltipMenu="Inicio"
+        >
+          <i class="mdi mdi-home"></i>
+          Inicio
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          data-toggle="collapse"
+          href="#collapseSales"
+          aria-expanded="false"
+          aria-controls="collapseSales"
+          class="{% if current_page == "calendar_sale" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
+                 app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+          tooltipMenu="Compras"
+        >
+          <i class="mdi mdi-cart"></i>
+          Compras
+        </a>
+      </li>
+      <div class="collapse" id="collapseSales">
+        <li class="nav-item">
+          <a
+            href="{% url 'sales:calendar' %}"
+            class="app__text--light_gray app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+            tooltipMenu="Calendario Predictor"
+          >
+            <i class="mdi mdi-calendar"></i>
+            <span class="small">Calendario Predictor</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href="{% url 'sales:sales_list' %}"
+            class="app__text--light_gray app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+            tooltipMenu="Lista de Compras"
+          >
+            <i class="mdi mdi-view-list"></i>
+            <span class="small">Lista de Compras</span>
+          </a>
+        </li>
+      </div>
+      <li class="nav-item">
+        <a
+          href="{% url 'raw_materials:materials' %}"
+          class="{% if current_page == "materials" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
+                 app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+          tooltipMenu="Materia Prima"
+        >
+          <i class="mdi mdi-layers-triple"></i>
+          Materia Prima
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="{% url 'raw_materials:providers' %}"
+          class="{% if current_page == "providers" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
+                 app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+          tooltipMenu="Proveedores"
+        >
+          <i class="mdi mdi-bus-multiple"></i>
+          Proveedores
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          href="#"
+          class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+          tooltipMenu="Gráficas y Estadísticas"
+        >
+          <i class="mdi mdi-chart-bar"></i>
+          Gráficas y Estadísticas
+        </a>
+      </li>
+      {% comment %} <li class="nav-item">
+        <a
+          href="{% url 'users:company_users_list' %}"
+          class="{% if current_page == "company_users" %} app__text--cyan {% else %} app__text--light_gray {% endif %}
+                 app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+          tooltipMenu="Usuarios"
+        >
+          <i class="mdi mdi-account-group"></i>
+          Usuarios
+        </a>
+      </li> {% endcomment %}
+      <li class="nav-item">
+        <a
+          href="{% url 'users:logout' %}"
+          class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+          tooltipMenu="Cerrar Sesión"
+        >
+          <i class="mdi mdi-logout"></i>
+          Cerrar Sesión
+        </a>
+      </li>
+    </ul>
+  </div>
   <a
     href="{% url 'settings:settings' %}"
     class="nav--settings"
