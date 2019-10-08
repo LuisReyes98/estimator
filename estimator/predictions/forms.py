@@ -1,8 +1,10 @@
-from django import forms
-from django.utils.translation import gettext as _
-from raw_materials.models import RawMaterial
 import json
+
+from django import forms
 from django.core.serializers.json import DjangoJSONEncoder
+from django.utils.translation import gettext as _
+
+from raw_materials.models import RawMaterial
 
 
 class SelectPredictionForm(forms.Form):

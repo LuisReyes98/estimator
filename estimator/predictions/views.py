@@ -1,25 +1,29 @@
 # from django.shortcuts import render
-from django.views.generic import FormView, TemplateView
-from .forms import SelectPredictionForm
-from django.urls import reverse_lazy
+import io
 import json
-from sales.models import Sale, DolarPrice
-from raw_materials.models import RawMaterial
-from datetime import datetime, date
-import pytz
+from datetime import date, datetime
+
+import category_encoders as ce
+import matplotlib
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
+import pytz
 import seaborn as sns
-import category_encoders as ce
-from sklearn.model_selection import (
-    train_test_split,
-    cross_val_score,
-    cross_validate
-)
+from django.urls import reverse_lazy
+from django.views.generic import FormView, TemplateView
+from matplotlib import pyplot as plt
 from sklearn.linear_model import Lasso, LassoCV, MultiTaskLasso
+from sklearn.model_selection import (cross_val_score, cross_validate,
+                                     train_test_split)
 
-import io
+from raw_materials.models import RawMaterial
+from sales.models import DolarPrice, Sale
+
+from .forms import SelectPredictionForm
+
+matplotlib.use('Agg')
+
+
 
 
 class PredictionFormView(FormView):
@@ -39,11 +43,7 @@ class PredictionResultView(TemplateView):
     template_name = "predictions/show_prediction.html"
 
     def estimate_costs(self, date, xdf):
-
-
         # print(np.any(np.isnan(xdf)))
-
-
         # import pdb; pdb.set_trace()
         # print(xdf)
 
@@ -73,10 +73,10 @@ class PredictionResultView(TemplateView):
         model.fit(x_train, y_train)
         # predecir los datos con los tests
 
-        predicted = model.predict(x_test)
+        # predicted = model.predict(x_test)
 
         # verificar tamaño
-        print("Shape: ", predicted.shape)
+        # print("Shape: ", predicted.shape)
 
         print("Score: ", model.score(x_test, y_test))
 
@@ -97,7 +97,9 @@ class PredictionResultView(TemplateView):
     def build_dolar_dataframes(self):
         """ Retorna dataframe de los precios del dolar"""
         dolar_prices = list(
-            DolarPrice.objects.exclude(
+            DolarPrice.objects.filter(
+                date__gte=date(2018, 8, 19)  # fecha despues del cambio de moneda
+            ).exclude(
                 date__isnull=True
             ).order_by('date')
         )
@@ -107,8 +109,10 @@ class PredictionResultView(TemplateView):
                 'dollar_price': el.dollar_price
             } for el in dolar_prices
         ]
+        xdf = pd.DataFrame(dolar_prices)
+        xdf.dropna()
 
-        return pd.DataFrame(dolar_prices)
+        return xdf
 
     def build_materials_dataframes(self, raw_materials):
         # contruyendo grupos de datos
@@ -162,8 +166,34 @@ class PredictionResultView(TemplateView):
         return (Xall_df, Xm_df_array)
 
     def train_model(self, model, dataframe, y_column_name):
-        pass
+        ydf = dataframe[y_column_name]
+        ydf = ydf.dropna()
 
+        xdf = dataframe.drop(y_column_name, axis=1)
+        xdf = xdf.dropna()
+
+        # xdf = xdf.reset_index()
+        # ydf = ydf.reset_index()
+
+        # import pdb; pdb.set_trace()
+        x_train, x_test, y_train, y_test = train_test_split(xdf, ydf, test_size=0.35)
+
+        # entrenado al modelo
+
+        model.fit(x_train, y_train)
+        # predecir los datos con los tests
+
+        predicted = model.predict(x_test)
+
+        # verificar tamaño
+
+        # print("Predicted: " ,predicted)
+
+        # print("Predicted Shape: ", predicted.shape)
+
+        print("Score: ", model.score(x_test, y_test))
+
+        return model
 
     def generate_data_frame_tempeture_corr(self, dataframe):
         """ Recibe un dataframe y retorna un
@@ -197,9 +227,16 @@ class PredictionResultView(TemplateView):
 
         X_dolar = self.build_dolar_dataframes()
 
+        dolar_model = self.train_model(LassoCV(), X_dolar, 'dollar_price')
+
+        print(X_dolar.head())
         graphics.append({
             'name': 'temperatura todos los datos',
             'fig': self.generate_data_frame_tempeture_corr(Xall_df)
+        })
+        graphics.append({
+            'name': 'dolares',
+            'fig': self.generate_data_frame_tempeture_corr(X_dolar)
         })
 
         for key, df in Xm_df_array.items():
