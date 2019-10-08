@@ -4,7 +4,7 @@
 {% block content %}
 {{ block.super }}
 <div class="page-content" id="content">
-    <div class="container-fluid app__background_gradient--pastel app__viewport">
+    <div class="container-fluid app__background_gradient--lemon app__viewport">
         <div class="row pt-3 pb-3">
             <div class="col">
                 <a href="{% url 'sales:sales_list' %}"
@@ -17,41 +17,43 @@
                 </h4>
             </div>
         </div>
-        <div class="row mb-3 pt-3 pb-3 app__border--gray-200 app__background--white">
+        <div class="row mb-3 pt-3 pb-3">
             <div class="col pb-1">
-                <form action="{% url 'sales:upload_file' %}" enctype="multipart/form-data"  method="POST">
-                {% csrf_token %}
-
-                    {% if form.non_field_errors %}
-                        {% for error in form.non_field_errors %}
-                            <div class="d-flex flex-row align-items-center justify-content-center">
-                                <i class="app__icon--alert mdi mdi-alert text-danger"></i>
-                                <p class="app__form--error text-danger mb-0 ml-3">
-                                    {{ error }}
-                                </p>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                    <div class="form-row pb-1">
-                        <div class="form-group col-12 col-md-6 m-auto">
-                            <div class="custom-file">
-                                {% render_field form.sale_upload class+="custom-file-input" id="customFileLang" %}
-                                <label class="custom-file-label" for="customFileLang" data-browse="Elegir">
-                                    Seleccionar Documento CSV
-                                </label>
+                <div class="app__background--white p-2 pt-3 rounded shadow">
+                    <form action="{% url 'sales:upload_file' %}" enctype="multipart/form-data"  method="POST">
+                    {% csrf_token %}
+    
+                        {% if form.non_field_errors %}
+                            {% for error in form.non_field_errors %}
+                                <div class="d-flex flex-row align-items-center justify-content-center">
+                                    <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+                                    <p class="app__form--error text-danger mb-0 ml-3">
+                                        {{ error }}
+                                    </p>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="form-row pb-1">
+                            <div class="form-group col-12 col-md-6 m-auto">
+                                <div class="custom-file">
+                                    {% render_field form.sale_upload class+="custom-file-input" id="customFileLang" %}
+                                    <label class="custom-file-label" for="customFileLang" data-browse="Elegir">
+                                        Seleccionar Documento CSV
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col m-auto text-center">
-                        <div class="d-flex flex-row justify-content-center">
-                            <button class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
-                                    title="Subir documento"
-                                    type="submit">
-                                <i class="mdi mdi-file-upload"></i>
-                            </button>
+                        <div class="col m-auto text-center">
+                            <div class="d-flex flex-row justify-content-center">
+                                <button class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
+                                        title="Subir documento"
+                                        type="submit">
+                                    <i class="mdi mdi-file-upload"></i>
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
         <div class="row pt-2 pb-3">

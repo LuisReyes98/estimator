@@ -2,7 +2,7 @@
 {% block content %}
 {{ block.super }}
 <div class="page-content" id="content">
-    <div class="container-fluid app__background_gradient--pastel app__viewport pb-3">
+    <div class="container-fluid app__background_gradient--lemon app__viewport pb-3">
         <div class="row pt-3 pb-3">
             <div class="col">
                 <a href="{% url 'raw_materials:providers' %}"
@@ -15,37 +15,39 @@
                 </h4>
             </div>
         </div>
-        <div class="row pt-3 pb-3 app__border--gray-200 app__background--white">
+        <div class="row pt-3 pb-3">
             <div class="col">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p>Nombre</p>
+                <div class="app__background--white p-2 pt-3 rounded shadow">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                                <p>Nombre</p>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                                <p>{{object.name}}</p>
+                            </div>
                         </div>
-                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <p>{{object.name}}</p>
+                        <div class="row">
+                            <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                                <p class="mb-0">Compañía</p>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                                <p class="mb-0">{{object.company}}</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p class="mb-0">Compañía</p>
-                        </div>
-                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <p class="mb-0">{{object.company}}</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="container">
-                    <div class="row mt-4">
-                        <div class="col">
-                            <a href="{% url 'raw_materials:update_provider'  object.pk  %}"
-                            class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                                editar
-                            </a>
-                            <a href="{% url 'raw_materials:delete_provider'  object.pk %}"
-                            class="m-1 rounded-pill app__button button--red mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                                eliminar
-                            </a>
+                    <div class="container">
+                        <div class="row mt-4">
+                            <div class="col">
+                                <a href="{% url 'raw_materials:update_provider'  object.pk  %}"
+                                class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                    editar
+                                </a>
+                                <a href="{% url 'raw_materials:delete_provider'  object.pk %}"
+                                class="m-1 rounded-pill app__button button--red mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                    eliminar
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>

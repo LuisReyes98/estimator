@@ -2,7 +2,7 @@
 {% block content %}
 {{block.super}}
 <div class="page-content" id="content">
-    <div class="container-fluid app__background_gradient--pastel app__viewport pb-3">
+    <div class="container-fluid app__background_gradient--lemon app__viewport pb-3">
         <div class="row pt-3 pb-3">
             <div class="col">
                 <a href="{% url 'raw_materials:materials' %}"
@@ -15,105 +15,107 @@
                 </h4>
             </div>
         </div>
-        <div class="row pt-3 pb-3 app__border--gray-200 app__background--white">
+        <div class="row pt-3 pb-3">
             <div class="col">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p>Nombre</p>
-                        </div>
-                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <p>{{object.name}}</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p class="">Proveedores</p>
-                        </div>
-                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <ul class="list-unstyled">
-                                {% for provider in object.providers.all %}
-                                <li class="font-weight-bold {% if object.providers.all|length > 1 %} small {% endif %}">{{provider}}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p class="">Unidad de Medida</p>
-                        </div>
-                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <p class="">
-                                <span class="badge badge-secondary rounded-pill text-uppercase">{{object.unit_name}}</span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p class="">¿Expira?</p>
-                        </div>
-                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <p class="text-uppercase">
-                                {% if object.can_expire %}
-                                    <i class="mdi mdi-check pr-1 app__text--cyan"></i>Sí
-                                {% else %}
-                                    <i class="mdi mdi-cancel pr-1 text-danger"></i>No
-                                {% endif %}
-                            </p>
-                        </div>
-                    </div>
-                    {% if object.can_expire %}
+                <div class="app__background--white p-2 pt-3 rounded shadow">
+                    <div class="container">
                         <div class="row">
                             <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                                <p class="">Tiempo de Expiración</p>
+                                <p>Nombre</p>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                                <p>{{object.name}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                                <p class="">Proveedores</p>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                                <ul class="list-unstyled">
+                                    {% for provider in object.providers.all %}
+                                    <li class="font-weight-bold {% if object.providers.all|length > 1 %} small {% endif %}">{{provider}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                                <p class="">Unidad de Medida</p>
                             </div>
                             <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
                                 <p class="">
-                                    {% if object.years_to_expire == 1  %}
-                                        {{ object.years_to_expire }} año
-                                    {% elif object.years_to_expire > 1 %}
-                                        {{ object.years_to_expire }} años
-                                    {% endif %}
-                                    {% if object.months_to_expire == 1 %}
-                                        {{ object.months_to_expire }} mes
-                                    {% elif object.months_to_expire > 1 %}
-                                        {{ object.months_to_expire }} meses
-                                    {% endif %}
-                                    {% if object.days_to_expire == 1 %}
-                                        {{ object.days_to_expire }} día
-                                    {% elif object.days_to_expire > 1 %}
-                                        {{ object.days_to_expire }} días
+                                    <span class="badge badge-secondary rounded-pill text-uppercase">{{object.unit_name}}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                                <p class="">¿Expira?</p>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                                <p class="text-uppercase">
+                                    {% if object.can_expire %}
+                                        <i class="mdi mdi-check pr-1 app__text--cyan"></i>Sí
+                                    {% else %}
+                                        <i class="mdi mdi-cancel pr-1 text-danger"></i>No
                                     {% endif %}
                                 </p>
                             </div>
                         </div>
-                    {% endif %}
-                    <div class="row">
-                        <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
-                            <p class="mb-0">¿Es Importado?</p>
-                        </div>
-                        <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                            <p class="mb-0 text-uppercase">
-                                {% if object.is_imported %}
-                                    <i class="mdi mdi-check pr-1 app__text--cyan"></i>Sí
-                                {% else %}
-                                    <i class="mdi mdi-cancel pr-1 text-danger"></i>No
-                                {% endif %}
-                            </p>
+                        {% if object.can_expire %}
+                            <div class="row">
+                                <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                                    <p class="">Tiempo de Expiración</p>
+                                </div>
+                                <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                                    <p class="">
+                                        {% if object.years_to_expire == 1  %}
+                                            {{ object.years_to_expire }} año
+                                        {% elif object.years_to_expire > 1 %}
+                                            {{ object.years_to_expire }} años
+                                        {% endif %}
+                                        {% if object.months_to_expire == 1 %}
+                                            {{ object.months_to_expire }} mes
+                                        {% elif object.months_to_expire > 1 %}
+                                            {{ object.months_to_expire }} meses
+                                        {% endif %}
+                                        {% if object.days_to_expire == 1 %}
+                                            {{ object.days_to_expire }} día
+                                        {% elif object.days_to_expire > 1 %}
+                                            {{ object.days_to_expire }} días
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-6 col-md-3 col-lg-2 ml-auto app__text--deep_blue font-italic text-right app__vertical_border--deep_blue">
+                                <p class="mb-0">¿Es Importado?</p>
+                            </div>
+                            <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
+                                <p class="mb-0 text-uppercase">
+                                    {% if object.is_imported %}
+                                        <i class="mdi mdi-check pr-1 app__text--cyan"></i>Sí
+                                    {% else %}
+                                        <i class="mdi mdi-cancel pr-1 text-danger"></i>No
+                                    {% endif %}
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="container">
-                    <div class="row mt-4">
-                        <div class="col">
-                            <a href="{% url 'raw_materials:update_material'  object.pk  %}"
-                            class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                                editar
-                            </a>
-                            <a href="{% url 'raw_materials:delete_material'  object.pk %}"
-                            class="m-1 rounded-pill app__button button--red mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                                eliminar
-                            </a>
+                    <div class="container">
+                        <div class="row mt-4">
+                            <div class="col">
+                                <a href="{% url 'raw_materials:update_material'  object.pk  %}"
+                                class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                    editar
+                                </a>
+                                <a href="{% url 'raw_materials:delete_material'  object.pk %}"
+                                class="m-1 rounded-pill app__button button--red mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                                    eliminar
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
