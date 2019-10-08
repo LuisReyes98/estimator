@@ -136,8 +136,16 @@ python manage.py migrate
 
 ## Comando SASS
 
+para detectar cambios
+
 ```shell
 sass --watch scss/styles.scss:estimator/static/css/styles.css
+```
+
+ejecutar solo una vez
+
+```shell
+sass scss/styles.scss:estimator/static/css/styles.css
 ```
 
 ## Recomendaciones
