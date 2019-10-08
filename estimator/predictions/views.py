@@ -1,6 +1,7 @@
 # from django.shortcuts import render
 import io
 import json
+import copy
 from datetime import date, datetime
 
 import category_encoders as ce
@@ -12,7 +13,7 @@ import seaborn as sns
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
 from matplotlib import pyplot as plt
-from sklearn.linear_model import Lasso, LassoCV, MultiTaskLasso
+from sklearn.linear_model import Lasso, LassoCV, ElasticNet, ElasticNetCV
 from sklearn.model_selection import (cross_val_score, cross_validate,
                                      train_test_split)
 
@@ -115,6 +116,8 @@ class PredictionResultView(TemplateView):
 
     def build_materials_dataframes(self, raw_materials):
         # contruyendo grupos de datos
+        tz = pytz.timezone('America/Caracas')
+
 
         sales = list(Sale.objects.filter(
             company=self.request.user.safe_company.pk,
@@ -154,17 +157,18 @@ class PredictionResultView(TemplateView):
         Xall_df = encoder.fit_transform(Xall_df)
 
         # diccionario de dataframes de las materias primas seleccionadas
-        Xm_df_array = {}
+        Xm_df_dict = {}
 
         for key, value in materials_dict.items():
             df = pd.DataFrame(value)
             df = df.dropna()
 
-            Xm_df_array[key] = df.drop('raw_material', 1)
+            Xm_df_dict[key] = df.drop('raw_material', 1)
 
-        return (Xall_df, Xm_df_array)
+        return (Xall_df, Xm_df_dict)
 
     def train_model(self, model, dataframe, y_column_name):
+        # df = dataframe
         ydf = dataframe[y_column_name]
         ydf = ydf.dropna()
 
@@ -182,7 +186,7 @@ class PredictionResultView(TemplateView):
         model.fit(x_train, y_train)
         # predecir los datos con los tests
 
-        predicted = model.predict(x_test)
+        # predicted = model.predict(x_test)
 
         # verificar tamaño
 
@@ -219,16 +223,39 @@ class PredictionResultView(TemplateView):
         )
 
         raw_materials = json.loads(request.session['prediction_raw_materials'])
+        materials_dict = {}
+        for el in raw_materials:
+            materials_dict[el['pk']] = el['name']
 
         materials_dataframes = self.build_materials_dataframes(raw_materials)
         Xall_df = materials_dataframes[0]
-        Xm_df_array = materials_dataframes[1]
+        Xm_df_dict = materials_dataframes[1]
 
         X_dolar = self.build_dolar_dataframes()
 
-        dolar_model = self.train_model(LassoCV(cv=4), X_dolar, 'dollar_price')
-
         print(X_dolar.head())
+        """
+        LassoCV(cv=4) 0.81
+        """
+        dolar_model = self.train_model(
+            LassoCV(cv=4),
+            X_dolar,
+            'dollar_price'
+        )
+
+        print(Xall_df.head())
+
+        """
+        ElasticNet 0.42
+        """
+        all_materials_model = self.train_model(
+            ElasticNet(),
+            Xall_df,
+            'cost_dollar'
+        )
+
+        materials_models_dict = {}
+
         graphics.append({
             'name': 'temperatura todos los datos',
             'fig': self.generate_data_frame_tempeture_corr(Xall_df)
@@ -238,10 +265,24 @@ class PredictionResultView(TemplateView):
             'fig': self.generate_data_frame_tempeture_corr(X_dolar)
         })
 
-        for key, df in Xm_df_array.items():
+        for key, df in Xm_df_dict.items():
+            print(materials_dict[key])
+            print(df.head())
+            """
+            LassoCV(cv=3)
+            Lasso() el mas estable de los 3
+            ElasticNet()
+            """
+            print(df.shape)
+            materials_models_dict[key] = self.train_model(
+                Lasso(),
+                df,
+                'cost_dollar'
+            )
+
             graphics.append(
                 {
-                    'name': key,
+                    'name': materials_dict[key],
                     'fig': self.generate_data_frame_tempeture_corr(
                         df
                     )
@@ -251,6 +292,8 @@ class PredictionResultView(TemplateView):
         context['graphics'] = graphics
 
         context['raw_materials'] = raw_materials
+        context['materials_dict'] = materials_dict
+        
 
         context['prediction_date'] = date
 
