@@ -10,7 +10,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from users.models import CompanyUser, Company
-from .forms import CompanyUserForm, CompanyUserFormFields, CompanyUserFormPassword, CurrentUserFormFields
+from .forms import CompanyUserForm, CompanyUserFormFields, CompanyUserFormPassword, CurrentUserFormFields, CurrencyFormFields
 from django.contrib.auth.views import PasswordChangeView
 # Create your views here.
 
@@ -199,7 +199,7 @@ class CurrencyUpdateView(UpdateView):
     model = Company
     template_name = "settings/update_currency.html"
     success_url = reverse_lazy('settings:settings')
-    fields = ['currency']
+    form_class = CurrencyFormFields
 
     # def get_form_kwargs(self):
     #     form_kwargs = super(CompanyUserUpdateView, self).get_form_kwargs()
