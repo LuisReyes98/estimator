@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     botonIzquierdo.classList.add("app__button--icon");
     botonIzquierdo.classList.add("calendar-button");
+    botonIzquierdo.classList.remove("btn");
     botonIzquierdo.classList.remove("btn-primary");
     botonIzquierdo.classList.add("mdl-button");
     botonIzquierdo.classList.add("mdl-js-button");
@@ -40,6 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     botonDerecho.classList.add("app__button--icon");
     botonDerecho.classList.add("calendar-button");
+    botonDerecho.classList.remove("btn");
     botonDerecho.classList.remove("btn-primary");
     botonDerecho.classList.add("mdl-button");
     botonDerecho.classList.add("mdl-js-button");
@@ -47,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     botonPrevYear.classList.add("app__button--icon");
     botonPrevYear.classList.add("calendar-button_year");
+    botonPrevYear.classList.remove("btn");
     botonPrevYear.classList.remove("btn-primary");
     botonPrevYear.classList.add("mdl-button");
     botonPrevYear.classList.add("mdl-js-button");
@@ -56,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     botonNextYear.classList.add("app__button--icon");
     botonNextYear.classList.add("calendar-button_year");
+    botonNextYear.classList.remove("btn");
     botonNextYear.classList.remove("btn-primary");
     botonNextYear.classList.add("mdl-button");
     botonNextYear.classList.add("mdl-js-button");
