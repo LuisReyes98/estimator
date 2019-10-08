@@ -24,8 +24,6 @@ from .forms import SelectPredictionForm
 matplotlib.use('Agg')
 
 
-
-
 class PredictionFormView(FormView):
     template_name = "predictions/select_prediction.html"
     success_url = reverse_lazy("predictions:result")
@@ -96,9 +94,10 @@ class PredictionResultView(TemplateView):
 
     def build_dolar_dataframes(self):
         """ Retorna dataframe de los precios del dolar"""
+        tz = pytz.timezone('America/Caracas')
         dolar_prices = list(
             DolarPrice.objects.filter(
-                date__gte=date(2018, 8, 19)  # fecha despues del cambio de moneda
+                date__gte=datetime(2018, 8, 19, 0, 0, 0, 0, tz)  # fecha despues del cambio de moneda
             ).exclude(
                 date__isnull=True
             ).order_by('date')
@@ -227,7 +226,7 @@ class PredictionResultView(TemplateView):
 
         X_dolar = self.build_dolar_dataframes()
 
-        dolar_model = self.train_model(LassoCV(), X_dolar, 'dollar_price')
+        dolar_model = self.train_model(LassoCV(cv=4), X_dolar, 'dollar_price')
 
         print(X_dolar.head())
         graphics.append({

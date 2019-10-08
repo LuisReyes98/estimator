@@ -26,3 +26,6 @@ seaborn==0.9.*
 
 #codificador de categorias
 category_encoders==2.1.*
+
+#libreria para mostrar bien el dinero
+money==1.3.*
