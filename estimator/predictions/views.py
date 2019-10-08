@@ -248,10 +248,16 @@ class PredictionResultView(TemplateView):
         """
         ElasticNet 0.42
         """
-        all_materials_model = self.train_model(
+        all_materials_model_cost = self.train_model(
             ElasticNet(),
             Xall_df,
             'cost_dollar'
+        )
+
+        all_materials_model_amount = self.train_model(
+            ElasticNet(),
+            Xall_df,
+            'amount'
         )
 
         materials_models_dict = {}
