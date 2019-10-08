@@ -15,7 +15,7 @@
 {{block.super}}
     {% include 'sales/_loader.html' %}
     <div class="page-content" id="content">
-        <div class="container-fluid app__background_gradient--pastel app__viewport">
+        <div class="container-fluid app__background_gradient--lemon app__viewport">
             <div class="row pt-3 pb-3">
                 <div class="col">
                     <a
@@ -32,7 +32,7 @@
             </div>
             <div class="row pt-3 pb-3">
                 <div class="col pb-1">
-                    <div class="app__background--white p-2 rounded shadow">
+                    <div class="app__background--white p-2 pt-3 rounded shadow">
                         <form action="{% url 'predictions:generate' %}" method="POST" id="predictForm">
                             {% csrf_token %}
                             <div class="form-row pb-2">

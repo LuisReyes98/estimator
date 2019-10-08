@@ -185,3 +185,52 @@ class CompanyUserFormPassword (forms.ModelForm):
             instance.save()
 
         return instance
+
+class CurrentUserFormFields (forms.ModelForm):
+    """Formulario de edicion de un usuario miembro de una empresa"""
+
+    # company = forms.IntegerField(required=True)
+
+    class Meta:
+        model = AppUser
+        fields = (
+            "email",
+            "first_name",
+            "last_name",
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(CurrentUserFormFields, self).__init__(*args, **kwargs)
+        # print(self.creator_company)
+        self.fields['first_name'].required = True
+        self.fields['last_name'].required = True
+
+        # self.fields['first_name'].initial = kwargs['instance'].user.first_name
+        # self.fields['last_name'].initial = kwargs['instance'].user.last_name
+        # self.fields['email'].initial = kwargs['instance'].user.email
+        # try:
+        #     pass
+        # except Exception:
+        #     pass
+
+        # import pdb; pdb.set_trace()
+
+
+    def save(self, commit=True):
+        """Logica de guardado guardando usuario"""
+        instance = super(CurrentUserFormFields, self).save(commit=False)
+        data = self.cleaned_data
+
+        # company_pk = data.pop('company')
+        # import pdb; pdb.set_trace()
+        if commit:
+            # user = instance.user
+            # user.first_name = data['first_name']
+            # user.last_name = data['last_name']
+            # user.email = data['email']
+            # user.save()
+            # # company_user = instance
+            # instance.user = user
+            instance.save()
+
+        return instance

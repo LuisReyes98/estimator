@@ -3,20 +3,27 @@
 {{block.super}}
 <div class="page-content" id="content">
 
-    <div class="container-fluid app__background_gradient--pastel app__viewport">
+    <div class="container-fluid app__background_gradient--lemon app__viewport">
         <div class="row pt-3 pb-3">
             <div class="col">
+                <a href="{% url 'settings:settings' %}"
+                   title="Volver"
+                   class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    <i class="mdi mdi-arrow-left"></i>
+                </a>
                 <h3 class="text-center font-weight-bold text-uppercase">
                     Lista de Usuarios
                 </h3>
             </div>
         </div>
-        <div class="row mb-3 pt-3 pb-3 app__border--gray-200 app__background--white">
+        <div class="row mb-3 pt-3 pb-3">
             <div class="col">
-                <a href="{% url 'settings:create_company_user' %}"
-                    class="rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-                    Nuevo Usuario
-                </a>
+                <div class="app__background--white p-2 rounded shadow">
+                    <a href="{% url 'settings:create_company_user' %}"
+                        class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                        Nuevo Usuario
+                    </a>
+                </div>
             </div>
         </div>
         <div class="row pt-2 pb-3">

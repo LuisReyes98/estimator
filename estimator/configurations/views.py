@@ -10,7 +10,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from users.models import CompanyUser
-from .forms import CompanyUserForm, CompanyUserFormFields, CompanyUserFormPassword
+from .forms import CompanyUserForm, CompanyUserFormFields, CompanyUserFormPassword, CurrentUserFormFields
 from django.contrib.auth.views import PasswordChangeView
 # Create your views here.
 
@@ -164,7 +164,34 @@ class CompanyUserDeleteView(LoginRequiredMixin, DeleteView):
             return redirect('settings:company_users_list')
         return super().get(request, *args, **kwargs)
 
+class CurrentUserUpdateView(LoginRequiredMixin, UpdateView):
+    model = CompanyUser
+    template_name = "settings/current_users_form.html"
+    success_url = reverse_lazy('settings:settings')
+    form_class = CurrentUserFormFields
 
+    # def get_form_kwargs(self):
+    #     form_kwargs = super(CompanyUserUpdateView, self).get_form_kwargs()
+
+    #     if self.request.user.is_superuser:
+    #         form_kwargs['creator_company'] = self.request.user.company
+    #     else:
+    #         form_kwargs['creator_company'] = self.request.user.companyuser.company
+    #     return form_kwargs
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def get_context_data(self, **kwargs):
+        """User and profile to context"""
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "company_users"
+        context["company"] = self.request.user.company
+        context["form_url"] = reverse_lazy(
+            'settings:update_current_user'
+        )
+        context["editing"] = True
+        return context
 
 """
 def get_form_kwargs(self):

@@ -46,6 +46,11 @@ users_urlpatterns = [
         view=views.CompanyUserDeleteView.as_view(),
         name="delete_company_user"
     ),
+    path(
+        route="update/current/",
+        view=views.CurrentUserUpdateView.as_view(),
+        name="update_current_user"
+    ),
 ]
 
 urlpatterns = [

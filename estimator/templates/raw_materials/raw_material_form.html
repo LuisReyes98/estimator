@@ -11,7 +11,7 @@
 {% block content %}
 {{block.super}}
 <div class="page-content" id="content">
-    <div class="container-fluid app__background_gradient--pastel app__viewport">
+    <div class="container-fluid app__background_gradient--lemon app__viewport">
         <div class="row pt-3 pb-3">
             <div class="col">
                 <a href="{% url 'raw_materials:materials' %}"
@@ -30,7 +30,7 @@
         </div>
         <div class="row pb-3">
             <div class="col-12 col-lg-6 m-auto">
-                <div class="card app__background--gray-200">
+                <div class="card app__background--gray-100 shadow">
                     <div class="card-body">
                         <div class="container-fluid">
                             <form action="{{form_url}}" method="POST">
