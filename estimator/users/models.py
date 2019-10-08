@@ -2,7 +2,6 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
 from django.utils.translation import ugettext as translate
 from estimator.model_mixins import TimeStampFields
-
 # Modelos para el control de usuarios
 
 
@@ -78,6 +77,24 @@ class AppUser(AbstractUser, TimeStampFields):
 
 class Company(TimeStampFields):
     """ Company user model """
+    USD = 'USD'
+    VEF = 'VEF'
+
+    # measurement unit
+    CURRENCY_TYPES = [
+        (USD, 'Dolares'),
+        (VEF, 'Bolivares'),
+    ]
+
+    currency = models.CharField(
+        "Unidad de medida",
+        max_length=2,
+        choices=CURRENCY_TYPES,
+        # default=VEF,
+        null=True,
+        blank=True,
+    )
+
     # Referencias
     user = models.OneToOneField(
         AppUser,
