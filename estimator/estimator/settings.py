@@ -137,7 +137,7 @@ LANGUAGES = (
     ('en', ugettext_lazy('English')),
 )
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Caracas'
 
 USE_I18N = True
 
