@@ -17,12 +17,12 @@
         rgba(255, 255, 255, 1) 100%
       );
     }
-    &--cyan {
-      background: rgb(106, 224, 202);
-      background: linear-gradient(
-        145deg,
-        rgba(106, 224, 202, 1) 0%,
-        rgba(26, 191, 171, 1) 100%
+    &--lemon {
+      background: rgb(249, 251, 231);
+      background: radial-gradient(
+        circle,
+        rgba(249, 251, 231, 1) 0%,
+        rgba(224, 247, 250, 1) 100%
       );
     }
   }
@@ -251,6 +251,12 @@
     }
   }
 
+  &__graph {
+    svg {
+      @extend .img-fluid;
+    }
+  }
+
   &__input {
     border-style: solid;
     border-width: 0px 0px 2px 0px;
@@ -444,14 +450,40 @@ button:focus {
 }
 /* Handle */
 *::-webkit-scrollbar-thumb {
-  background: rgba(map-get($project_colors, "gray-300"),0.5);
+  background: rgba(map-get($project_colors, "gray-400"), 0.9);
   border-radius: 0px;
 }
 /* Handle on hover */
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(map-get($project_colors, "gray-400"),0.6);
+  background: rgba(map-get($project_colors, "gray-500"), 0.9);
 }
 /* Handle on active */
 *::-webkit-scrollbar-thumb:active {
-  background: rgba(map-get($project_colors, "light_cyan"),0.9);
+  background: rgba(map-get($project_colors, "light_cyan"), 0.9);
+}
+
+.scrollbar_alt {
+  //Scrollbar options
+  /* width */
+  &::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+  }
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: rgba(map-get($project_colors, "gray-300"), 0.2);
+    border-radius: 0px;
+  }
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(map-get($project_colors, "gray-400"), 0.5);
+  }
+  /* Handle on active */
+  &::-webkit-scrollbar-thumb:active {
+    background: rgba(map-get($project_colors, "light_cyan"), 0.9);
+  }
 }
