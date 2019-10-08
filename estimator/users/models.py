@@ -87,7 +87,7 @@ class Company(TimeStampFields):
     ]
 
     currency = models.CharField(
-        "Unidad de medida",
+        translate("Denominación de la moneda"),
         max_length=2,
         choices=CURRENCY_TYPES,
         # default=VEF,
