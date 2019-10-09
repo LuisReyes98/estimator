@@ -116,8 +116,7 @@ class PredictionResultView(TemplateView):
 
     def build_materials_dataframes(self, raw_materials):
         # contruyendo grupos de datos
-        tz = pytz.timezone('America/Caracas')
-
+        # tz = pytz.timezone('America/Caracas')
 
         sales = list(Sale.objects.filter(
             company=self.request.user.safe_company.pk,
@@ -175,24 +174,11 @@ class PredictionResultView(TemplateView):
         xdf = dataframe.drop(y_column_name, axis=1)
         xdf = xdf.dropna()
 
-        # xdf = xdf.reset_index()
-        # ydf = ydf.reset_index()
-
-        # import pdb; pdb.set_trace()
-        x_train, x_test, y_train, y_test = train_test_split(xdf, ydf, test_size=0.35)
+        x_train, x_test, y_train, y_test = train_test_split(xdf, ydf, test_size=0.30)
 
         # entrenado al modelo
 
         model.fit(x_train, y_train)
-        # predecir los datos con los tests
-
-        # predicted = model.predict(x_test)
-
-        # verificar tamaño
-
-        # print("Predicted: " ,predicted)
-
-        # print("Predicted Shape: ", predicted.shape)
 
         print("Score: ", model.score(x_test, y_test))
 
@@ -243,24 +229,32 @@ class PredictionResultView(TemplateView):
             'dollar_price'
         )
 
-        print(Xall_df.head())
 
         """
         ElasticNet 0.42
+        LassoCV(cv=3) 0.48
         """
+        print(Xall_df.head())
+        print('all materials cost')
+
+        # modelo de predecir costos usando todas las materias primas
         all_materials_model_cost = self.train_model(
-            ElasticNet(),
-            Xall_df,
+            LassoCV(cv=3),
+            Xall_df.drop('amount', axis=1),
             'cost_dollar'
         )
 
+        print('all materials amount')
+        # modelos de prediccion de cantidades usando todas las materias primas
         all_materials_model_amount = self.train_model(
-            ElasticNet(),
-            Xall_df,
+            LassoCV(cv=3),
+            Xall_df.drop('cost_dollar', axis=1),
             'amount'
         )
+        print(Xall_df.head())
 
-        materials_models_dict = {}
+        materials_models_cost_dict = {}
+        materials_models_amount_dict = {}
 
         graphics.append({
             'name': 'temperatura todos los datos',
@@ -280,11 +274,21 @@ class PredictionResultView(TemplateView):
             ElasticNet()
             """
             print(df.shape)
-            materials_models_dict[key] = self.train_model(
+
+            # modelo de prediccion de costos de la materia prima seleccionada
+            materials_models_cost_dict[key] = self.train_model(
                 Lasso(),
-                df,
+                df.drop('amount', axis=1),
                 'cost_dollar'
             )
+
+            # modelo de prediccion de las cantidades seleccionadas
+            materials_models_amount_dict[key] = self.train_model(
+                Lasso(),
+                df.drop('cost_dollar', axis=1),
+                'amount'
+            )
+            print(df.head())
 
             graphics.append(
                 {
@@ -299,7 +303,6 @@ class PredictionResultView(TemplateView):
 
         context['raw_materials'] = raw_materials
         context['materials_dict'] = materials_dict
-        
 
         context['prediction_date'] = date
 
