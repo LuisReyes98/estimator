@@ -1,5 +1,6 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as translate
+
 from users.models import AppUser, Company, CompanyUser
 
 
@@ -186,10 +187,9 @@ class CompanyUserFormPassword (forms.ModelForm):
 
         return instance
 
-class CurrentUserFormFields (forms.ModelForm):
-    """Formulario de edicion de un usuario miembro de una empresa"""
 
-    # company = forms.IntegerField(required=True)
+class CurrentUserFormFields (forms.ModelForm):
+    """Formulario de edicion el usuario actual"""
 
     class Meta:
         model = AppUser
@@ -205,20 +205,6 @@ class CurrentUserFormFields (forms.ModelForm):
         self.fields['first_name'].required = True
         self.fields['last_name'].required = True
 
-
-
-    # def save(self, commit=True):
-    #     """Logica de guardado guardando usuario"""
-    #     instance = super(CurrentUserFormFields, self).save(commit=False)
-    #     data = self.cleaned_data
-
-    #     # company_pk = data.pop('company')
-    #     # import pdb; pdb.set_trace()
-    #     if commit:
-
-    #         instance.save()
-
-    #     return instance
 
 class CurrentUserFormPassword (forms.ModelForm):
     """Formulario de creacion de usuario miembro de una empresa"""
@@ -277,27 +263,27 @@ class CurrentUserFormPassword (forms.ModelForm):
 
         return instance
 
-class CurrencyFormFields (forms.ModelForm):
-    """Formulario de edicion de un usuario miembro de una empresa"""
 
-    # company = forms.IntegerField(required=True)
+# class CurrencyFormFields (forms.ModelForm):
+#     """Formulario de la moneda de una compañia"""
 
-    class Meta:
-        model = Company
-        fields = (
-            "currency",
-        )
+#     class Meta:
+#         model = Company
+#         fields = (
+#             "currency",
+#         )
 
-    def save(self, commit=True):
-        """Logica de guardado guardando usuario"""
-        instance = super(CurrencyFormFields, self).save(commit=False)
-        data = self.cleaned_data
+#     def save(self, commit=True):
+#         """Logica de guardado de datos"""
+#         instance = super(CurrencyFormFields, self).save(commit=False)
+#         data = self.cleaned_data
+#         print(instance)
 
-        # company_pk = data.pop('company')
-        # import pdb; pdb.set_trace()
-        if commit:
-            instance.currency = data['currency']
-            instance.save()
-            self.save_m2m()
 
-        return instance
+#         if commit:
+#             print(instance)
+#             instance.currency = data['currency']
+#             instance.save()
+#             self.save_m2m()
+
+#         return instance

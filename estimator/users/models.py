@@ -88,9 +88,9 @@ class Company(TimeStampFields):
 
     currency = models.CharField(
         translate("Denominación de la moneda"),
-        max_length=2,
+        max_length=6,
         choices=CURRENCY_TYPES,
-        # default=VEF,
+        default=VEF,
         null=True,
         blank=True,
     )
@@ -109,6 +109,11 @@ class Company(TimeStampFields):
         max_length=50,
         blank=False
     )
+
+    @property
+    def currency_name(self):
+        currency = dict(self.CURRENCY_TYPES)
+        return currency[self.currency]
 
     def __str__(self):
         # Retornar el nombre de la compañia

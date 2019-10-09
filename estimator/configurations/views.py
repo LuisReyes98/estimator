@@ -1,18 +1,17 @@
-from django.shortcuts import render
-from django.views.generic import (
-    TemplateView,
-    ListView,
-    CreateView,
-    DetailView,
-    UpdateView,
-    DeleteView
-)
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
-from users.models import CompanyUser, Company
-from .forms import CompanyUserForm, CompanyUserFormFields, CompanyUserFormPassword, CurrentUserFormFields, CurrencyFormFields, CurrentUserFormPassword
 from django.contrib.auth.views import PasswordChangeView
-# Create your views here.
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views.generic import (CreateView, DeleteView, DetailView, ListView,
+                                    TemplateView, UpdateView)
+
+from users.models import Company, CompanyUser
+
+from .forms import (CompanyUserForm, CompanyUserFormFields,
+                    CompanyUserFormPassword, CurrentUserFormFields,
+                    CurrentUserFormPassword)
+
+
 
 class TemplateView(TemplateView):
     template_name = "settings/settings.html"
@@ -127,6 +126,7 @@ class CompanyUserUpdatePasswordView(LoginRequiredMixin, UpdateView):
         context["editing"] = True
         return context
 
+
 class CompanyUserUpdateView(LoginRequiredMixin, UpdateView):
     model = CompanyUser
     template_name = "settings/company_users_form_fields.html"
@@ -170,15 +170,6 @@ class CurrentUserUpdateView(LoginRequiredMixin, UpdateView):
     success_url = reverse_lazy('settings:settings')
     form_class = CurrentUserFormFields
 
-    # def get_form_kwargs(self):
-    #     form_kwargs = super(CompanyUserUpdateView, self).get_form_kwargs()
-
-    #     if self.request.user.is_superuser:
-    #         form_kwargs['creator_company'] = self.request.user.company
-    #     else:
-    #         form_kwargs['creator_company'] = self.request.user.companyuser.company
-    #     return form_kwargs
-
     def get_object(self, queryset=None):
         return self.request.user
 
@@ -219,38 +210,18 @@ class CurrencyUpdateView(UpdateView):
     model = Company
     template_name = "settings/update_currency.html"
     success_url = reverse_lazy('settings:settings')
-    form_class = CurrencyFormFields
-
-    # def get_form_kwargs(self):
-    #     form_kwargs = super(CompanyUserUpdateView, self).get_form_kwargs()
-
-    #     if self.request.user.is_superuser:
-    #         form_kwargs['creator_company'] = self.request.user.company
-    #     else:
-    #         form_kwargs['creator_company'] = self.request.user.companyuser.company
-    #     return form_kwargs
+    fields = ['currency']
+    # form_class = CurrencyFormFields
 
     def get_object(self, queryset=None):
-        return self.request.user
+        return self.request.user.safe_company
 
     def get_context_data(self, **kwargs):
         """User and profile to context"""
         context = super().get_context_data(**kwargs)
         context["current_page"] = "company_users"
-        context["company"] = self.request.user.company
         context["form_url"] = reverse_lazy(
             'settings:update_currency'
         )
         context["editing"] = True
         return context
-
-
-"""
-def get_form_kwargs(self):
-        form_kwargs = super(RawMaterialCreateView, self).get_form_kwargs()
-
-        form_kwargs['creator_company'] = self.request.user.company
-
-        return form_kwargs
-
-"""
