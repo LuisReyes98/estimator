@@ -43,7 +43,6 @@ class PredictionResultView(TemplateView):
     template_name = "predictions/show_prediction.html"
     tz = pytz.timezone(settings.TIME_ZONE)
 
-
     def build_dolar_dataframes(self):
         """ Retorna dataframe de los precios del dolar"""
         dolar_prices = list(
@@ -130,7 +129,9 @@ class PredictionResultView(TemplateView):
         # model.fit(x_train, y_train)
 
         # print("Score: ", model.score(x_test, y_test))
-        print("X de entrenamiento" ,xdf.head())
+        # print("X de entrenamiento")
+        # print(xdf.head())
+
         model.fit(xdf, ydf)
 
         return model
@@ -183,17 +184,23 @@ class PredictionResultView(TemplateView):
             X_dolar,
             'dollar_price'
         )
-        pred_date = pd.DataFrame([1],[{'date': prediction_date.toordinal()}])
-        
+        # print(X_dolar.tail(4))
+        pred_df_date = prediction_date.toordinal()
+        # pred_date = pd.DataFrame(X_dolar.tail(4)).drop('dollar_price', axis=1)
+        pred_date = pd.DataFrame(
+            [{'date': pred_df_date} for i in range(4)]
+        )
+
         """
             Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.
         """
         # pred_date = pred_date.reshape(-1, 1)
 
-        print("prediccion dolar: ", dolar_model.predict(
-                [{'date': prediction_date.toordinal()}]
-            )
+        # [{'date': prediction_date.toordinal()}]
+        dolar_prediction = dolar_model.predict(
+            pred_date
         )
+        print("prediccion dolar: ", dolar_prediction  )
 
         """
         ElasticNet 0.42
@@ -250,7 +257,7 @@ class PredictionResultView(TemplateView):
                 df.drop('amount', axis=1),
                 'cost_dollar'
             )
-            print(df.drop('amount', axis=1).head)
+            # print(df.drop('amount', axis=1).head)
 
             # modelo de prediccion de las cantidades seleccionadas
             materials_models_amount_dict[key] = self.train_model(
@@ -258,7 +265,7 @@ class PredictionResultView(TemplateView):
                 df.drop('cost_dollar', axis=1),
                 'amount'
             )
-            print(df.drop('cost_dollar', axis=1).head)
+            # print(df.drop('cost_dollar', axis=1).head)
 
             # print(df.head())
 
@@ -272,6 +279,8 @@ class PredictionResultView(TemplateView):
             # )
 
         context['graphics'] = graphics
+        
+        context['dolar_prediction'] = dolar_prediction
 
         context['raw_materials'] = raw_materials
         context['materials_dict'] = materials_dict

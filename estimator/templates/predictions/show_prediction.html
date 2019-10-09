@@ -1,4 +1,8 @@
 {% extends 'layouts/base_app.html' %}
+
+{% load money_unit %}
+
+
 {% block content %}
 {{block.super}}
 <div class="page-content" id="content">
@@ -18,7 +22,18 @@
                             <div class="col">
                                 <p class="font-italic">Fecha:</p>
                                 <p class="font-weight-bold">{{prediction_date }}</p>
+                                <p class="font-weight-bold">
+                                    Valores predichos del dolar: 
+                                        <ul>
+                                            {% for v in dolar_prediction %}
+                                                <li>
+                                                    {{v | money_unit}}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                </p>
                             </div>
+
                         </div>
                         <div class="row pb-2">
                             <div class="col">
@@ -33,6 +48,7 @@
                                 <p class="font-weight-bold">
                                     {{materials_dict}}
                                 </p>
+
                             </div>
                         </div>
                         <div class="row">
