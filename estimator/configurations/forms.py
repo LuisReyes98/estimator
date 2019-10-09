@@ -220,6 +220,63 @@ class CurrentUserFormFields (forms.ModelForm):
 
     #     return instance
 
+class CurrentUserFormPassword (forms.ModelForm):
+    """Formulario de creacion de usuario miembro de una empresa"""
+
+    password_confirmation = forms.CharField(
+        label=translate('Password confirmation'),
+        max_length=70,
+        widget=forms.PasswordInput(),
+        required=True,
+    )
+
+    # company = forms.IntegerField(required=True)
+
+    class Meta:
+        model = AppUser
+        fields = (
+            "password",
+        )
+
+    def __init__(self, *args, **kwargs):
+        self.creator_company = kwargs.pop('creator_company')
+        super(CurrentUserFormPassword, self).__init__(*args, **kwargs)
+        # print(self.creator_company)
+        self.fields['password'].widget = forms.PasswordInput()
+
+        # import pdb; pdb.set_trace()
+
+    def clean(self):
+        """Logica de limpieza de datos Verificando que las contraseñas coinciden"""
+        data = super().clean()
+        # Debido a que se necesita acceder a dos datos
+        password = data['password']
+        password_confirmation = data['password_confirmation']
+
+        if password != password_confirmation:
+            raise forms.ValidationError('Contraseñas no coinciden')
+
+        return data
+
+    def save(self, commit=True):
+        """Logica de guardado guardando usuario"""
+        instance = super(CurrentUserFormPassword, self).save(commit=False)
+        data = self.cleaned_data
+
+        data.pop('password_confirmation')
+        # company_pk = data.pop('company')
+        data['is_superuser'] = False
+
+        if commit:
+            user = instance.user
+            user.set_password(data['password'])
+            user.save()
+            # company_user = instance
+            instance.user = user
+            instance.save()
+
+        return instance
+
 class CurrencyFormFields (forms.ModelForm):
     """Formulario de edicion de un usuario miembro de una empresa"""
 

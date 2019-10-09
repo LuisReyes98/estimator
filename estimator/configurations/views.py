@@ -10,7 +10,7 @@ from django.views.generic import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from users.models import CompanyUser, Company
-from .forms import CompanyUserForm, CompanyUserFormFields, CompanyUserFormPassword, CurrentUserFormFields, CurrencyFormFields
+from .forms import CompanyUserForm, CompanyUserFormFields, CompanyUserFormPassword, CurrentUserFormFields, CurrencyFormFields, CurrentUserFormPassword
 from django.contrib.auth.views import PasswordChangeView
 # Create your views here.
 
@@ -193,7 +193,27 @@ class CurrentUserUpdateView(LoginRequiredMixin, UpdateView):
         context["editing"] = True
         return context
 
-# class PasswordChangeView():
+class CurrentUserUpdatePasswordView(PasswordChangeView):
+    template_name = "settings/current_users_form_pass.html"
+    success_url = reverse_lazy('settings:settings')
+
+
+# class PasswordChangeView(LoginRequiredMixin, UpdateView):
+#     model = CompanyUser
+#     template_name = "settings/current_users_form_pass.html"
+#     success_url = reverse_lazy('settings:settings')
+#     form_class = CurrentUserFormPassword
+
+#     def get_context_data(self, **kwargs):
+#         """User and profile to context"""
+#         context = super().get_context_data(**kwargs)
+#         context["current_page"] = "company_users"
+#         context["company"] = self.request.user.company
+#         context["form_url"] = reverse_lazy(
+#             'settings:update_password_current_user'
+#         )
+#         context["editing"] = True
+#         return context
 
 class CurrencyUpdateView(UpdateView):
     model = Company

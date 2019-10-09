@@ -13,7 +13,7 @@
                     <i class="mdi mdi-arrow-left"></i>
                 </a>
                 <h4 class="text-center font-weight-bold text-uppercase">
-                    Actualizar Mi Perfil
+                    Actualizar Contraseña
                 </h4>
             </div>
         </div>
@@ -38,63 +38,58 @@
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="row pb-3">
-                                <div class="col">
-                                    <h5 class="">Nombre y Correo de Usuario</h5>
-                                </div>
-                            </div>
                             <form  method="POST" action="{{form_url}}" >
                                 {% csrf_token %}
                                 {% comment %} <input type="hidden" name="company" value="{{company.pk}}"> {% endcomment %}
                                 <div class="form-group">
                                     <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                                        {% if form.email.errors %}
-                                            {% render_field form.email class+="mdl-textfield__input" type="email" id="id_email" %}
+                                        {% if form.old_password.errors %}
+                                            {% render_field form.old_password class+="mdl-textfield__input" type="password" id="id_old_password" %}
                                             <span class="mdl-textfield__error text-danger">
-                                                {% for error in form.email.errors %}
+                                                {% for error in form.old_password.errors %}
                                                     {{ error }}
                                                 {% endfor %}
                                             </span>
                                         {% else %}
-                                            {% render_field form.email class+="mdl-textfield__input" type="email" id="id_email" %}
+                                            {% render_field form.old_password class+="mdl-textfield__input" type="password" id="id_old_password" %}
                                         {% endif %}
-                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_email">
-                                            <i class="mdi mdi-email mr-1"></i>{{ form.email.label }}
+                                        <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_old_password">
+                                            <i class="mdi mdi-key mr-1"></i>{{ form.old_password.label }}
                                         </label>
                                     </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="form-group col-md-6 col-sm-12">
+                                    <div class="form-group col-12 col-xl-6">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                                            {% if form.first_name.errors %}
-                                                {% render_field form.first_name class+="mdl-textfield__input" type="text" id="id_first_name" %}
+                                            {% if form.new_password1.errors %}
+                                                {% render_field form.new_password1 class+="mdl-textfield__input" type="password" id="id_new_password1" %}
                                                 <span class="mdl-textfield__error text-danger">
-                                                    {% for error in form.first_name.errors %}
+                                                    {% for error in form.new_password1.errors %}
                                                         {{ error }}
                                                     {% endfor %}
                                                 </span>
                                             {% else %}
-                                                {% render_field form.first_name class+="mdl-textfield__input" type="text" id="id_first_name" %}
+                                                {% render_field form.new_password1 class+="mdl-textfield__input" type="password" id="id_new_password1" %}
                                             {% endif %}
-                                            <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_first_name">
-                                                <i class="mdi mdi-alpha-f-box mr-1"></i>{{ form.first_name.label }}
+                                            <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_new_password1">
+                                                <i class="mdi mdi-textbox-password mr-1"></i>{{ form.new_password1.label }}
                                             </label>
                                         </div>
                                     </div>
-                                    <div class="form-group col-md-6 col-sm-12">
+                                    <div class="form-group col-12 col-xl-6">
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label w-100">
-                                            {% if form.last_name.errors %}
-                                                {% render_field form.last_name class+="mdl-textfield__input" type="text" id="id_last_name" %}
+                                            {% if form.new_password2.errors %}
+                                                {% render_field form.new_password2 class+="mdl-textfield__input" type="password" id="id_new_password2" %}
                                                 <span class="mdl-textfield__error text-danger">
-                                                    {% for error in form.last_name.errors %}
+                                                    {% for error in form.new_password2.errors %}
                                                         {{ error }}
                                                     {% endfor %}
                                                 </span>
                                             {% else %}
-                                                {% render_field form.last_name class+="mdl-textfield__input" type="text" id="id_last_name" %}
+                                                {% render_field form.new_password2 class+="mdl-textfield__input" type="password" id="id_new_password2" %}
                                             {% endif %}
-                                            <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_last_name">
-                                                <i class="mdi mdi-alpha-l-box mr-1"></i>{{ form.last_name.label }}
+                                            <label class="mdl-textfield__label focused__color__light_cyan material_fix label_placeholder" for="id_new_password2">
+                                                <i class="mdi mdi-textbox-password mr-1"></i>{{ form.new_password2.label }}
                                             </label>
                                         </div>
                                     </div>
@@ -118,25 +113,6 @@
                                     </div>
                                 </div>
                             </form>
-                            <hr>
-                            <div class="row pt-2 pb-3">
-                                <div class="col">
-                                    <h5 class="">Cambio de Contraseña</h5>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col m-auto text-center">
-                                    <div class="d-flex flex-row justify-content-center">
-                                        <a
-                                            href="{% url 'settings:update_password_current_user' %}"
-                                            class="m-1 rounded-pill app__button button--fab button--cyan mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
-                                            title="Cambiar Contraseña"
-                                        >
-                                            <i class="mdi mdi-key-change"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -52,6 +52,11 @@ users_urlpatterns = [
         name="update_current_user"
     ),
     path(
+        route="update/password/current/",
+        view=views.CurrentUserUpdatePasswordView.as_view(),
+        name="update_password_current_user"
+    ),
+    path(
         route="update/currency/",
         view=views.CurrencyUpdateView.as_view(),
         name="update_currency"
