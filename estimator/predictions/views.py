@@ -12,10 +12,11 @@ import pytz
 import seaborn as sns
 from django.urls import reverse_lazy
 from django.views.generic import FormView, TemplateView
+from django.conf import settings
 from matplotlib import pyplot as plt
-from sklearn.linear_model import Lasso, LassoCV, ElasticNet, ElasticNetCV
+from sklearn.linear_model import Lasso, LassoCV
 from sklearn.model_selection import (cross_val_score, cross_validate,
-                                     train_test_split)
+                                    train_test_split)
 
 from raw_materials.models import RawMaterial
 from sales.models import DolarPrice, Sale
@@ -40,65 +41,14 @@ class PredictionFormView(FormView):
 
 class PredictionResultView(TemplateView):
     template_name = "predictions/show_prediction.html"
+    tz = pytz.timezone(settings.TIME_ZONE)
 
-    def estimate_costs(self, date, xdf):
-        # print(np.any(np.isnan(xdf)))
-        # import pdb; pdb.set_trace()
-        # print(xdf)
-
-        ydf = xdf['cost_dollar']
-        ydf = ydf.dropna()
-
-        xdf = xdf.drop('cost_dollar', axis=1)
-        xdf = xdf.dropna()
-        # xdf.dropna()
-
-        print("Cabecera del df", xdf.head(1))
-
-        print("Hay valores nulos: ", np.any(np.isnan(xdf)))
-        xdf = xdf.reset_index()
-        ydf = ydf.reset_index()
-
-        # import pdb; pdb.set_trace()
-        x_train, x_test, y_train, y_test = train_test_split(xdf, ydf, test_size=0.3)
-
-        # chequeando columnas
-        model = MultiTaskLasso()  # usando el modelo Lasso
-
-        # results = cross_validate(model,xdf,ydf,return_train_score=True,cv=5)
-        # print("cross validation: ",results)
-        # entrenado al modelo
-
-        model.fit(x_train, y_train)
-        # predecir los datos con los tests
-
-        # predicted = model.predict(x_test)
-
-        # verificar tamaño
-        # print("Shape: ", predicted.shape)
-
-        print("Score: ", model.score(x_test, y_test))
-
-
-        """
-            Primer score obtenido es 0.9997392317240795
-            Lo mas probable es que no encontremos
-            que el algoritmo esta en overfitting
-        """
-        # plt.hist(predicted)
-        plt.hist(predicted)
-        my_stringIObytes = io.StringIO()
-        plt.savefig(my_stringIObytes, format='svg')
-        plt.close()
-
-        return my_stringIObytes.getvalue()
 
     def build_dolar_dataframes(self):
         """ Retorna dataframe de los precios del dolar"""
-        tz = pytz.timezone('America/Caracas')
         dolar_prices = list(
             DolarPrice.objects.filter(
-                date__gte=datetime(2018, 8, 19, 0, 0, 0, 0, tz)  # fecha despues del cambio de moneda
+                date__gte=datetime(2018, 8, 19, 0, 0, 0, 0, self.tz)  # fecha despues del cambio de moneda
             ).exclude(
                 date__isnull=True
             ).order_by('date')
@@ -116,7 +66,6 @@ class PredictionResultView(TemplateView):
 
     def build_materials_dataframes(self, raw_materials):
         # contruyendo grupos de datos
-        # tz = pytz.timezone('America/Caracas')
 
         sales = list(Sale.objects.filter(
             company=self.request.user.safe_company.pk,
@@ -174,13 +123,15 @@ class PredictionResultView(TemplateView):
         xdf = dataframe.drop(y_column_name, axis=1)
         xdf = xdf.dropna()
 
-        x_train, x_test, y_train, y_test = train_test_split(xdf, ydf, test_size=0.30)
+        # x_train, x_test, y_train, y_test = train_test_split(xdf, ydf, test_size=0.30)
 
         # entrenado al modelo
 
-        model.fit(x_train, y_train)
+        # model.fit(x_train, y_train)
 
-        print("Score: ", model.score(x_test, y_test))
+        # print("Score: ", model.score(x_test, y_test))
+        print("X de entrenamiento" ,xdf.head())
+        model.fit(xdf, ydf)
 
         return model
 
@@ -203,10 +154,13 @@ class PredictionResultView(TemplateView):
         graphics = []  # vector de diccionari con name y fig
         context = super().get_context_data(**kwargs)
 
-        date = datetime.strptime(
+        prediction_date = datetime.strptime(
             request.session['prediction_date'],
             '%Y-%m-%d'
         )
+
+        prediction_date = prediction_date.replace(tzinfo=self.tz)
+        print('prediction_date: ', prediction_date)
 
         raw_materials = json.loads(request.session['prediction_raw_materials'])
         materials_dict = {}
@@ -219,22 +173,33 @@ class PredictionResultView(TemplateView):
 
         X_dolar = self.build_dolar_dataframes()
 
-        print(X_dolar.head())
         """
         LassoCV(cv=4) 0.81
+
+        para predecir solo necesita la fecha
         """
         dolar_model = self.train_model(
             LassoCV(cv=4),
             X_dolar,
             'dollar_price'
         )
+        pred_date = pd.DataFrame([1],[{'date': prediction_date.toordinal()}])
+        
+        """
+            Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.
+        """
+        # pred_date = pred_date.reshape(-1, 1)
 
+        print("prediccion dolar: ", dolar_model.predict(
+                [{'date': prediction_date.toordinal()}]
+            )
+        )
 
         """
         ElasticNet 0.42
         LassoCV(cv=3) 0.48
         """
-        print(Xall_df.head())
+        # print(Xall_df.head())
         print('all materials cost')
 
         # modelo de predecir costos usando todas las materias primas
@@ -251,29 +216,33 @@ class PredictionResultView(TemplateView):
             Xall_df.drop('cost_dollar', axis=1),
             'amount'
         )
-        print(Xall_df.head())
+        # print(Xall_df.head())
 
         materials_models_cost_dict = {}
         materials_models_amount_dict = {}
 
-        graphics.append({
-            'name': 'temperatura todos los datos',
-            'fig': self.generate_data_frame_tempeture_corr(Xall_df)
-        })
-        graphics.append({
-            'name': 'dolares',
-            'fig': self.generate_data_frame_tempeture_corr(X_dolar)
-        })
+        # graphics.append({
+        #     'name': 'temperatura todos los datos',
+        #     'fig': self.generate_data_frame_tempeture_corr(Xall_df)
+        # })
+        # graphics.append({
+        #     'name': 'dolares',
+        #     'fig': self.generate_data_frame_tempeture_corr(X_dolar)
+        # })
 
         for key, df in Xm_df_dict.items():
             print(materials_dict[key])
-            print(df.head())
+            # print(df.head())
             """
             LassoCV(cv=3)
             Lasso() el mas estable de los 3
             ElasticNet()
             """
-            print(df.shape)
+            """
+                Para predecir se requiere el
+                - precio del dolar
+                - fecha
+            """
 
             # modelo de prediccion de costos de la materia prima seleccionada
             materials_models_cost_dict[key] = self.train_model(
@@ -281,6 +250,7 @@ class PredictionResultView(TemplateView):
                 df.drop('amount', axis=1),
                 'cost_dollar'
             )
+            print(df.drop('amount', axis=1).head)
 
             # modelo de prediccion de las cantidades seleccionadas
             materials_models_amount_dict[key] = self.train_model(
@@ -288,22 +258,24 @@ class PredictionResultView(TemplateView):
                 df.drop('cost_dollar', axis=1),
                 'amount'
             )
-            print(df.head())
+            print(df.drop('cost_dollar', axis=1).head)
 
-            graphics.append(
-                {
-                    'name': materials_dict[key],
-                    'fig': self.generate_data_frame_tempeture_corr(
-                        df
-                    )
-                }
-            )
+            # print(df.head())
+
+            # graphics.append(
+            #     {
+            #         'name': materials_dict[key],
+            #         'fig': self.generate_data_frame_tempeture_corr(
+            #             df
+            #         )
+            #     }
+            # )
 
         context['graphics'] = graphics
 
         context['raw_materials'] = raw_materials
         context['materials_dict'] = materials_dict
 
-        context['prediction_date'] = date
+        context['prediction_date'] = prediction_date
 
         return self.render_to_response(context)
