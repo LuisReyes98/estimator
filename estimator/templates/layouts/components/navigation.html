@@ -66,10 +66,10 @@
           <a
             href="{% url 'sales:calendar' %}"
             class="app__text--light_gray app__nav--link nav-link d-flex flex-row align-items-center pl-0"
-            tooltipMenu="Calendario Predictor"
+            tooltipMenu="Calendario"
           >
             <i class="mdi mdi-calendar"></i>
-            <span class="small pl-2">Calendario Predictor</span>
+            <span class="small pl-2">Calendario</span>
           </a>
         </li>
         <li class="nav-item">
@@ -80,6 +80,16 @@
           >
             <i class="mdi mdi-view-list"></i>
             <span class="small pl-2">Lista de Compras</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
+            href="{% url 'predictions:generate' %}"
+            class="app__text--light_gray app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+            tooltipMenu="Realizar Predicción"
+          >
+            <i class="mdi mdi-graph-outline"></i>
+            <span class="small pl-2">Realizar Predicción</span>
           </a>
         </li>
       </div>
