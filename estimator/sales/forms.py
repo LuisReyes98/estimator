@@ -255,6 +255,9 @@ class SaleFileForm(forms.ModelForm):
             for row in reader:
                 if i == 0:
                     header = row
+                elif i > 0:
+                    print(row)
+
                 i += 1
                 row_count += 1
         except csv.Error:
@@ -263,9 +266,9 @@ class SaleFileForm(forms.ModelForm):
                 code='invalid',
             )
 
-        if row_count > 150:
+        if row_count > 10000:
             raise forms.ValidationError(
-                _('El maximo permitido por archivo son 150 ventas (151 filas)'),
+                _('El maximo permitido por archivo son 10000 ventas (10001 filas)'),
                 code='invalid',
             )
 

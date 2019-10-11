@@ -225,3 +225,23 @@ class CurrencyUpdateView(UpdateView):
         )
         context["editing"] = True
         return context
+
+class CompanyFieldsUpdateView(UpdateView):
+    model = Company
+    template_name = "settings/update_company.html"
+    success_url = reverse_lazy('settings:settings')
+    fields = ['company_name']
+
+    def get_object(self, queryset=None):
+        return self.request.user.safe_company
+
+    def get_context_data(self, **kwargs):
+        """User and profile to context"""
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "company_users"
+        context["form_url"] = reverse_lazy(
+            'settings:update_company'
+        )
+        context["editing"] = True
+        context["user"] = self.request.user
+        return context
