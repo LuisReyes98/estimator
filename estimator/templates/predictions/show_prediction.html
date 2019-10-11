@@ -1,6 +1,6 @@
 {% extends 'layouts/base_app.html' %}
 
-{% load money_unit %}
+{% load es_money %}
 
 
 {% block content %}
@@ -27,18 +27,13 @@
                                         <ul>
                                             {% for v in dolar_prediction %}
                                                 <li>
-                                                    {{v | money_unit}}
+                                                    {{v | es_money}}
                                                 </li>
                                             {% endfor %}
                                         </ul>
                                 </p>
                             </div>
 
-                        </div>
-                        <div class="row pb-2">
-                            <div class="col">
-                                <h5 class="font-weight-bold text-uppercase">Gráfico</h5>
-                            </div>
                         </div>
                         <div class="row pb-2">
                             <div class="col">
@@ -51,20 +46,9 @@
 
                             </div>
                         </div>
-                        <div class="row">
-                        <p>Predicciones con referencial de todos</p>
-                            {% for pred in predicted_materials_by_all %}
-                                <ul>
-                                    <li>Materia prima {{pred.raw_material}}</li>
-                                    <li>Costos {{pred.cost_collar}}</li>
-                                    <li>Cantidad {{pred.amount}}</li>
-                                </ul>
-                            {% endfor %}
-
-                        </div>
 
                         <div class="row">
-                        <p>Predicciones con referencial por materia prima</p>
+                            <p>Predicciones con referencial por materia prima</p>
                             {% for pred in predicted_materials %}
                                 <ul>
                                     <li>Materia prima {{pred.raw_material}}</li>
@@ -74,6 +58,12 @@
                             {% endfor %}
 
                         </div>
+                        <div class="row pb-2">
+                            <div class="col">
+                                <h5 class="font-weight-bold text-uppercase">Gráfico</h5>
+                            </div>
+                        </div>
+
                         <div class="row">
                             {% for graph in graphics %}
                                 <div class="col-12 p-4">
