@@ -2,14 +2,11 @@
 {% block content %}
 {{ block.super }}
 <div class="page-content" id="content">
-    {% comment %} <a href="{% url 'home' %}">Volver</a> {% endcomment %}
-
     <div class="container-fluid app__background_gradient--lemon app__viewport">
         <div class="row pt-3 pb-3">
             <div class="col">
                 <h3 class="text-center font-weight-bold text-uppercase">
                     Lista de Proveedores
-                    {% comment %} Proveedores de <span class="app__text--deep_blue">{{ company }}</span> {% endcomment %}
                 </h3>
             </div>
         </div>
@@ -17,7 +14,7 @@
             <div class="col-lg-8 col-md-10 col-sm-12 m-auto">
                 <div class="app__background--white p-2 rounded shadow">
                     <a href="{% url 'raw_materials:new_provider' %}"
-                       class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                        class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                         Nuevo Proveedor
                     </a>
                 </div>
@@ -32,7 +29,7 @@
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Nombre</th>
-                                    <th scope="col">Compañía</th>
+                                    {% comment %} <th scope="col">Compañía</th> {% endcomment %}
                                     <th scope="col" class="text-center">Acciones</th>
                                 </tr>
                             </thead>
@@ -41,16 +38,16 @@
                                 <tr>
                                     <th scope="row">{{ forloop.counter }}</th>
                                     <td>{{ provider.name }}</td>
-                                    <td>{{ provider.company }}</td>
+                                    {% comment %} <td>{{ provider.company }}</td> {% endcomment %}
                                     <td class="text-center" style="cursor: default;">
                                         <a href="{% url 'raw_materials:provider' provider.pk %}"
-                                           class="app__button--icon" title="Detalles">
+                                            class="app__button--icon" title="Detalles">
                                             <i class="mdi mdi-eye"></i></a>
                                         <a href="{% url 'raw_materials:update_provider' provider.pk %}"
-                                           class="app__button--icon" title="Editar">
+                                            class="app__button--icon" title="Editar">
                                             <i class="mdi mdi-pencil"></i></a>
                                         <a href="{% url 'raw_materials:delete_provider' provider.pk %}"
-                                           class="app__button--icon icon--trash" title="Eliminar">
+                                            class="app__button--icon icon--trash" title="Eliminar">
                                             <i class="mdi mdi-trash-can"></i></a>
                                     </td>
                                 </tr>

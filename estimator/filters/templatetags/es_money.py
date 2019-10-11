@@ -7,7 +7,7 @@ register = Library()
 
 
 @register.filter(is_safe=True)
-def money_unit(obj):
+def es_money(obj):
     try:
         num = float(obj)
         m = Money(('%.2f' % num), 'VEF')

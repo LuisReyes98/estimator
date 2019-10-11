@@ -1,4 +1,7 @@
 {% extends 'layouts/base_app.html' %}
+
+{% load es_money %}
+
 {% block content %}
 {{ block.super }}
 <div class="page-content" id="content">
@@ -46,7 +49,7 @@
                                 <p>Precio del Dólar ($)</p>
                             </div>
                             <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                                <p>{{sale.dollar_price}}</p>
+                                <p>{{sale.dollar_price.dollar_price | es_money }}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -54,7 +57,7 @@
                                 <p>Total ($)</p>
                             </div>
                             <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                                <p>{{sale.total_cost_dollar}}</p>
+                                <p>{{sale.total_cost_dollar | es_money}}</p>
                             </div>
                         </div>
                         <div class="row">
@@ -62,7 +65,7 @@
                                 <p class="mb-0">Total (Moneda Local)</p>
                             </div>
                             <div class="col-6 col-md-3 col-lg-2 mr-auto font-weight-bold">
-                                <p class="mb-0">{{sale.total_cost_local}}</p>
+                                <p class="mb-0">{{sale.total_cost_local | es_money}}</p>
                             </div>
                         </div>
                     </div>
@@ -96,11 +99,11 @@
                                             </p>
                                             <p class="small">
                                                 <span class="app__text--gray-600">Dólar ($):</span> <br>
-                                                <span class="font-weight-bold">{{ relation.cost_dollar}}</span>
+                                                <span class="font-weight-bold">{{ relation.cost_dollar | es_money}}</span>
                                             </p>
                                             <p class="small">
                                                 <span class="app__text--gray-600">Moneda Local:</span> <br>
-                                                <span class="font-weight-bold">{{ relation.cost_local}}</span>
+                                                <span class="font-weight-bold">{{ relation.cost_local | es_money}}</span>
                                             </p>
                                         </div>
                                     </div>

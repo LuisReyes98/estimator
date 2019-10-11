@@ -1,4 +1,7 @@
 {% extends 'layouts/base_app.html' %}
+
+{% load es_money %}
+
 {% block content %}
 {{block.super}}
 
@@ -63,10 +66,10 @@
                                     <th scope="row">{{ forloop.counter | add:page_counter }}</th>
                                     <td>{{sale.date}}</td>
                                     <td class="font-weight-bold">
-                                        {{sale.total_cost_dollar | floatformat:2}}
+                                        {{sale.total_cost_dollar | es_money}}
                                     </td>
                                     <td class="font-weight-bold">
-                                        {{sale.total_cost_local | floatformat:2}}
+                                        {{sale.total_cost_local | es_money}}
                                     </td>
                                     <td>
                                         <ul class="list-unstyled small">
