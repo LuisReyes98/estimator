@@ -65,8 +65,8 @@ class PredictionResultView(TemplateView):
 
     def build_materials_dataframes(self, raw_materials):
         materials_dict = {}
-        materials_values = []
-        all_materials_array = []
+        # materials_values = []
+        # all_materials_array = []
         # contruyendo grupos de datos
 
         sales = list(Sale.objects.filter(
@@ -78,12 +78,12 @@ class PredictionResultView(TemplateView):
             ).order_by('date')
         )
 
-        raw_materials_query = RawMaterial.objects.filter(
-            company=self.request.user.safe_company.pk
-        )
-        # dataframe de todas las materias primas
-        for mat in raw_materials_query:
-            materials_values.append(mat.pk)
+        # raw_materials_query = RawMaterial.objects.filter(
+        #     company=self.request.user.safe_company.pk
+        # )
+        # # dataframe de todas las materias primas
+        # for mat in raw_materials_query:
+        #     materials_values.append(mat.pk)
 
         for material in raw_materials:
             materials_dict[material['pk']] = []
@@ -98,22 +98,22 @@ class PredictionResultView(TemplateView):
                             'dollar_price': sale.dollar_price.dollar_price,
                             'date': sale.date.toordinal(),
                         }
-                all_materials_array.append(value)
+                # all_materials_array.append(value)
                 if material.raw_material.pk in materials_dict:
                     materials_dict[material.raw_material.pk].append(
                         value
                     )
 
-        Xall_df = pd.DataFrame(all_materials_array)
+        # Xall_df = pd.DataFrame(all_materials_array)
 
-        Xall_df = Xall_df.dropna()
+        # Xall_df = Xall_df.dropna()
 
         # codificador de categorias (nombre de materia prima)
-        Xall_df = self.encoding_raw_material(
-            'raw_material',
-            Xall_df,
-            materials_values
-        )
+        # Xall_df = self.encoding_raw_material(
+        #     'raw_material',
+        #     Xall_df,
+        #     materials_values
+        # )
 
         # diccionario de dataframes de las materias primas seleccionadas
         Xm_df_dict = {}
@@ -124,7 +124,7 @@ class PredictionResultView(TemplateView):
 
             Xm_df_dict[key] = df.drop('raw_material', 1)
 
-        return (Xall_df, Xm_df_dict, materials_values)
+        return Xm_df_dict
 
     def train_model(self, model, dataframe, y_column_name):
         ydf = dataframe[y_column_name]
@@ -184,11 +184,11 @@ class PredictionResultView(TemplateView):
         for el in raw_materials:
             materials_dict[el['pk']] = el['name']
 
-        materials_dataframes = self.build_materials_dataframes(raw_materials)
+        # materials_dataframes = self.build_materials_dataframes(raw_materials)
 
-        Xall_df = materials_dataframes[0]
-        Xm_df_dict = materials_dataframes[1]
-        materials_values = materials_dataframes[2]
+        # Xall_df = materials_dataframes[0]
+        Xm_df_dict = self.build_materials_dataframes(raw_materials)
+        # materials_values = materials_dataframes[2]
 
         X_dolar = self.build_dolar_dataframes()
 
@@ -222,40 +222,40 @@ class PredictionResultView(TemplateView):
             LassoCV(cv=3) 0.48
         """
         # modelo de predecir costos usando todas las materias primas
-        all_materials_model_cost = self.train_model(
-            LassoCV(cv=3),
-            Xall_df.drop('amount', axis=1),
-            'cost_dollar'
-        )
+        # all_materials_model_cost = self.train_model(
+        #     LassoCV(cv=3),
+        #     Xall_df.drop('amount', axis=1),
+        #     'cost_dollar'
+        # )
 
         # modelos de prediccion de cantidades usando todas las materias primas
         """
             para predecir
             Lasso Cross Validation
         """
-        all_materials_model_amount = self.train_model(
-            LassoCV(cv=3),
-            Xall_df.drop('cost_dollar', axis=1),
-            'amount'
-        )
+        # all_materials_model_amount = self.train_model(
+        #     LassoCV(cv=3),
+        #     Xall_df.drop('cost_dollar', axis=1),
+        #     'amount'
+        # )
 
-        for el in raw_materials:
-            # for each material create a df to predict its value
-            temp_df = copy.copy(prediction_df)  # clona el valor del df
-            # genera un arreglo para la materia priam
-            temp_df['raw_material'] = el['pk']  # agrega el arreglo al df
-            temp_df = self.encoding_raw_material(
-                'raw_material',
-                temp_df,
-                materials_values
-            )
-            p_dollars_all = all_materials_model_cost.predict(temp_df)
-            p_amount_all = all_materials_model_amount.predict(temp_df)
-            predicted_materials_by_all.append({
-                'raw_material': el['pk'],
-                'cost_collar': p_dollars_all,
-                'amount': p_amount_all,
-            })
+        # for el in raw_materials:
+        #     # for each material create a df to predict its value
+        #     temp_df = copy.copy(prediction_df)  # clona el valor del df
+        #     # genera un arreglo para la materia priam
+        #     temp_df['raw_material'] = el['pk']  # agrega el arreglo al df
+        #     temp_df = self.encoding_raw_material(
+        #         'raw_material',
+        #         temp_df,
+        #         materials_values
+        #     )
+        #     p_dollars_all = all_materials_model_cost.predict(temp_df)
+        #     p_amount_all = all_materials_model_amount.predict(temp_df)
+        #     predicted_materials_by_all.append({
+        #         'raw_material': el['pk'],
+        #         'cost_collar': p_dollars_all,
+        #         'amount': p_amount_all,
+        #     })
 
         print(prediction_df)
         # print(predicted_materials_by_all)
@@ -303,7 +303,7 @@ class PredictionResultView(TemplateView):
 
         context['dolar_prediction'] = dolar_prediction
 
-        context['predicted_materials_by_all'] = predicted_materials_by_all
+        # context['predicted_materials_by_all'] = predicted_materials_by_all
         
         context['predicted_materials'] = predicted_materials
 
