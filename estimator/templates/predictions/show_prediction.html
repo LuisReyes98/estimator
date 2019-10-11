@@ -52,6 +52,29 @@
                             </div>
                         </div>
                         <div class="row">
+                        <p>Predicciones con referencial de todos</p>
+                            {% for pred in predicted_materials_by_all %}
+                                <ul>
+                                    <li>Materia prima {{pred.raw_material}}</li>
+                                    <li>Costos {{pred.cost_collar}}</li>
+                                    <li>Cantidad {{pred.amount}}</li>
+                                </ul>
+                            {% endfor %}
+
+                        </div>
+
+                        <div class="row">
+                        <p>Predicciones con referencial por materia prima</p>
+                            {% for pred in predicted_materials %}
+                                <ul>
+                                    <li>Materia prima {{pred.raw_material}}</li>
+                                    <li>Costos {{pred.cost_collar}}</li>
+                                    <li>Cantidad {{pred.amount}}</li>
+                                </ul>
+                            {% endfor %}
+
+                        </div>
+                        <div class="row">
                             {% for graph in graphics %}
                                 <div class="col-12 p-4">
                                     <p class="mb-1 app__vertical_border--cyan pl-2">
@@ -63,6 +86,7 @@
                                 </div>
                             {% endfor %}
                         </div>
+
                     </div>
                 </div>
             </div>

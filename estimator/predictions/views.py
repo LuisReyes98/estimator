@@ -64,6 +64,9 @@ class PredictionResultView(TemplateView):
         return xdf
 
     def build_materials_dataframes(self, raw_materials):
+        materials_dict = {}
+        materials_values = []
+        all_materials_array = []
         # contruyendo grupos de datos
 
         sales = list(Sale.objects.filter(
@@ -75,8 +78,13 @@ class PredictionResultView(TemplateView):
             ).order_by('date')
         )
 
-        materials_dict = {}
-        all_materials_array = []
+        raw_materials_query = RawMaterial.objects.filter(
+            company=self.request.user.safe_company.pk
+        )
+        # dataframe de todas las materias primas
+        for mat in raw_materials_query:
+            materials_values.append(mat.pk)
+
         for material in raw_materials:
             materials_dict[material['pk']] = []
         # construyendo diccionario de datos a utilizar
@@ -95,13 +103,17 @@ class PredictionResultView(TemplateView):
                     materials_dict[material.raw_material.pk].append(
                         value
                     )
-        # dataframe de todas las materias primas
+
         Xall_df = pd.DataFrame(all_materials_array)
 
         Xall_df = Xall_df.dropna()
 
-        encoder = ce.BinaryEncoder(cols=['raw_material'])
-        Xall_df = encoder.fit_transform(Xall_df)
+        # codificador de categorias (nombre de materia prima)
+        Xall_df = self.encoding_raw_material(
+            'raw_material',
+            Xall_df,
+            materials_values
+        )
 
         # diccionario de dataframes de las materias primas seleccionadas
         Xm_df_dict = {}
@@ -112,25 +124,14 @@ class PredictionResultView(TemplateView):
 
             Xm_df_dict[key] = df.drop('raw_material', 1)
 
-        return (Xall_df, Xm_df_dict)
+        return (Xall_df, Xm_df_dict, materials_values)
 
     def train_model(self, model, dataframe, y_column_name):
-        # df = dataframe
         ydf = dataframe[y_column_name]
         ydf = ydf.dropna()
 
         xdf = dataframe.drop(y_column_name, axis=1)
         xdf = xdf.dropna()
-
-        # x_train, x_test, y_train, y_test = train_test_split(xdf, ydf, test_size=0.30)
-
-        # entrenado al modelo
-
-        # model.fit(x_train, y_train)
-
-        # print("Score: ", model.score(x_test, y_test))
-        # print("X de entrenamiento")
-        # print(xdf.head())
 
         model.fit(xdf, ydf)
 
@@ -146,6 +147,16 @@ class PredictionResultView(TemplateView):
         heatmapIO = heatmapIO.getvalue()
         return heatmapIO
 
+    # def predict_dolar(self, date)
+    def encoding_raw_material(self, column_name, dataframe, columns_values):
+        df = copy.copy(dataframe)
+
+        for val in columns_values:
+            new_col_name = column_name + '_' + str(val)
+            df[new_col_name] = (df[column_name] == val).astype(int)
+
+        return df.drop(column_name, 1)
+
     def get(self, request, *args, **kwargs):
         """
             Se recibira por la sesion
@@ -154,6 +165,11 @@ class PredictionResultView(TemplateView):
         """
         graphics = []  # vector de diccionari con name y fig
         context = super().get_context_data(**kwargs)
+        materials_dict = {}
+        predicted_materials = []
+        predicted_materials_by_all = []
+        materials_models_cost_dict = {}
+        materials_models_amount_dict = {}
 
         prediction_date = datetime.strptime(
             request.session['prediction_date'],
@@ -161,16 +177,18 @@ class PredictionResultView(TemplateView):
         )
 
         prediction_date = prediction_date.replace(tzinfo=self.tz)
-        print('prediction_date: ', prediction_date)
+        # print('prediction_date: ', prediction_date)
 
         raw_materials = json.loads(request.session['prediction_raw_materials'])
-        materials_dict = {}
+
         for el in raw_materials:
             materials_dict[el['pk']] = el['name']
 
         materials_dataframes = self.build_materials_dataframes(raw_materials)
+
         Xall_df = materials_dataframes[0]
         Xm_df_dict = materials_dataframes[1]
+        materials_values = materials_dataframes[2]
 
         X_dolar = self.build_dolar_dataframes()
 
@@ -184,31 +202,25 @@ class PredictionResultView(TemplateView):
             X_dolar,
             'dollar_price'
         )
-        # print(X_dolar.tail(4))
+
         pred_df_date = prediction_date.toordinal()
-        # pred_date = pd.DataFrame(X_dolar.tail(4)).drop('dollar_price', axis=1)
-        pred_date = pd.DataFrame(
+        prediction_df = pd.DataFrame(
             [{'date': pred_df_date} for i in range(4)]
         )
 
-        """
-            Reshape your data either using array.reshape(-1, 1) if your data has a single feature or array.reshape(1, -1) if it contains a single sample.
-        """
-        # pred_date = pred_date.reshape(-1, 1)
-
-        # [{'date': prediction_date.toordinal()}]
         dolar_prediction = dolar_model.predict(
-            pred_date
+            prediction_df
         )
-        print("prediccion dolar: ", dolar_prediction  )
+        prediction_df['dollar_price'] = dolar_prediction
 
         """
-        ElasticNet 0.42
-        LassoCV(cv=3) 0.48
-        """
-        # print(Xall_df.head())
-        print('all materials cost')
+            Para predecir necesitan
+            fecha
+            precio del dolar
+            materia prima encodeada a binario
 
+            LassoCV(cv=3) 0.48
+        """
         # modelo de predecir costos usando todas las materias primas
         all_materials_model_cost = self.train_model(
             LassoCV(cv=3),
@@ -216,35 +228,48 @@ class PredictionResultView(TemplateView):
             'cost_dollar'
         )
 
-        print('all materials amount')
         # modelos de prediccion de cantidades usando todas las materias primas
+        """
+            para predecir
+            Lasso Cross Validation
+        """
         all_materials_model_amount = self.train_model(
             LassoCV(cv=3),
             Xall_df.drop('cost_dollar', axis=1),
             'amount'
         )
-        # print(Xall_df.head())
 
-        materials_models_cost_dict = {}
-        materials_models_amount_dict = {}
+        for el in raw_materials:
+            # for each material create a df to predict its value
+            temp_df = copy.copy(prediction_df)  # clona el valor del df
+            # genera un arreglo para la materia priam
+            temp_df['raw_material'] = el['pk']  # agrega el arreglo al df
+            temp_df = self.encoding_raw_material(
+                'raw_material',
+                temp_df,
+                materials_values
+            )
+            p_dollars_all = all_materials_model_cost.predict(temp_df)
+            p_amount_all = all_materials_model_amount.predict(temp_df)
+            predicted_materials_by_all.append({
+                'raw_material': el['pk'],
+                'cost_collar': p_dollars_all,
+                'amount': p_amount_all,
+            })
 
+        print(prediction_df)
+        # print(predicted_materials_by_all)
         # graphics.append({
         #     'name': 'temperatura todos los datos',
         #     'fig': self.generate_data_frame_tempeture_corr(Xall_df)
         # })
+
         # graphics.append({
         #     'name': 'dolares',
         #     'fig': self.generate_data_frame_tempeture_corr(X_dolar)
         # })
 
         for key, df in Xm_df_dict.items():
-            print(materials_dict[key])
-            # print(df.head())
-            """
-            LassoCV(cv=3)
-            Lasso() el mas estable de los 3
-            ElasticNet()
-            """
             """
                 Para predecir se requiere el
                 - precio del dolar
@@ -257,7 +282,6 @@ class PredictionResultView(TemplateView):
                 df.drop('amount', axis=1),
                 'cost_dollar'
             )
-            # print(df.drop('amount', axis=1).head)
 
             # modelo de prediccion de las cantidades seleccionadas
             materials_models_amount_dict[key] = self.train_model(
@@ -265,22 +289,23 @@ class PredictionResultView(TemplateView):
                 df.drop('cost_dollar', axis=1),
                 'amount'
             )
-            # print(df.drop('cost_dollar', axis=1).head)
+            p_dollars = materials_models_cost_dict[key].predict(prediction_df)
+            p_amount = materials_models_amount_dict[key].predict(prediction_df)
+            predicted_materials.append({
+                'raw_material': key,
+                'cost_collar': p_dollars,
+                'amount': p_amount,
+            })
 
-            # print(df.head())
-
-            # graphics.append(
-            #     {
-            #         'name': materials_dict[key],
-            #         'fig': self.generate_data_frame_tempeture_corr(
-            #             df
-            #         )
-            #     }
-            # )
+            # predicted_materials
 
         context['graphics'] = graphics
-        
+
         context['dolar_prediction'] = dolar_prediction
+
+        context['predicted_materials_by_all'] = predicted_materials_by_all
+        
+        context['predicted_materials'] = predicted_materials
 
         context['raw_materials'] = raw_materials
         context['materials_dict'] = materials_dict
