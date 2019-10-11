@@ -56,4 +56,11 @@ urlpatterns = [
             namespace="settings"
         )
     ),
+    path(
+        'graphics/',
+        include(
+            ('graphics_statistics.urls', 'graphics_statistics'),
+            namespace="graphics"
+        )
+    ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

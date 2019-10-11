@@ -225,18 +225,20 @@ class SaleFileForm(forms.ModelForm):
     def clean(self, *args, **kwargs):
         # Confirmando que sea un archivo csv
         cleaned_data = super(SaleFileForm, self).clean()
+        errors = []
+
         try:
             cleaned_data['sale_upload']
         except KeyError:
-            raise forms.ValidationError(
+            errors.append(forms.ValidationError(
                 _('El archivo es requerido'),
                 code='invalid',
-            )
+            ))
         if not cleaned_data['sale_upload'].name.endswith('.csv'):
-            raise forms.ValidationError(
+            errors.append(forms.ValidationError(
                 _('Debe ser un archivo en formato csv'),
                 code='invalid',
-            )
+            ))
         readable_file = copy.copy(cleaned_data['sale_upload'])
 
         build_path = getattr(settings, 'MEDIA_ROOT')+'/tmp/'+readable_file.name
@@ -246,40 +248,64 @@ class SaleFileForm(forms.ModelForm):
             delimiter=';',
             quoting=csv.QUOTE_NONE
         )
+
         file_path = default_storage.save(build_path, ContentFile(readable_file.read()))
         fo = open(file_path, 'r')
         reader = csv.reader(fo, 'semi_col')
-        i = 0
+        # i = 0
         row_count = 0
         try:
-            for row in reader:
-                if i == 0:
+            for index, row in enumerate(reader):
+                print(index)
+                if index == 0:
                     header = row
-                elif i > 0:
+                    print(header)
+
+                elif index > 0:
+                    # validando primera columna
+                    try:
+                        datetime.strptime(row[0], '%Y-%m-%d')
+
+                    except Exception:
+                        errors.append(forms.ValidationError(
+                            _(
+                                'El valor <b>%(date)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no es una fecha'
+                            ),
+                            code='invalid',
+                            params={
+                                'date': row[0],
+                                'index': index + 1,
+                                'col': header[0],
+                            },
+                        ))
+
+                    # validando segunda columna
+
                     print(row)
 
-                i += 1
                 row_count += 1
         except csv.Error:
-            raise forms.ValidationError(
+            errors.append(forms.ValidationError(
                 _('El archivo esta mal formulado o dañado'),
                 code='invalid',
-            )
+            ))
 
         if row_count > 10000:
-            raise forms.ValidationError(
+            errors.append(forms.ValidationError(
                 _('El maximo permitido por archivo son 10000 ventas (10001 filas)'),
                 code='invalid',
-            )
+            ))
 
         if not self.is_valid_csv_header(header):
-            raise forms.ValidationError(
+            errors.append(forms.ValidationError(
                 _('El archivo no posee el formato correcto de las cabeceras'),
                 code='invalid',
-            )
+            ))
         fo.close()
         default_storage.delete(file_path)
 
+        if errors:
+            raise forms.ValidationError(errors)
         # Todo correcto retorna la data
         return cleaned_data
 

@@ -51,8 +51,7 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
         try:
             result[0] = datetime.strptime(row[0],'%Y-%m-%d')
         except Exception:
-            if int(row[0]) == 0:
-                result[0] = datetime.now()
+            raise Exception("First column must be a date")
 
         result[1] = float(row[1])
         result[2] = float(row[2])

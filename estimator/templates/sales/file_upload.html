@@ -28,7 +28,7 @@
                                 <div class="d-flex flex-row align-items-center justify-content-center">
                                     <i class="app__icon--alert mdi mdi-alert text-danger"></i>
                                     <p class="app__form--error text-danger mb-0 ml-3">
-                                        {{ error }}
+                                        {{ error | safe }}
                                     </p>
                                 </div>
                             {% endfor %}

@@ -37,20 +37,12 @@ class CalendarView(LoginRequiredMixin, TemplateView):
 
         return some_dates
 
-    # def salesDate(self):
-    #     result = list(Sale.objects.filter(
-    #         company=self.request.user.safe_company,).values(
-    #             'date',
-    #             'pk',
-    #         ))
-    #     for el in result:
-    #         el['date'] = el['date'].strftime("%Y-%m-%d")
-    #     return result
-
     def salesObject(self):
         sales = Sale.objects.filter(
             company=self.request.user.safe_company.pk,
-        ).order_by('-created')
+        ).order_by('-created').exclude(
+            date__isnull=True,
+        )
         sales_date_dict = {}
         js_dict = {}
         for sale in sales:
