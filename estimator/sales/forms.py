@@ -317,9 +317,11 @@ class SaleFileForm(forms.ModelForm):
     def is_invalid_raw_material(self, value, row_num, col_name, can_be_empty=False):
 
         if value == "" and can_be_empty:
-            return False
+            return {'status': False}
         elif value == "":
-            return forms.ValidationError(
+            return {
+                'status': True,
+                'error': forms.ValidationError(
                     _(
                         'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no puede ser vacio.'
                     ),
@@ -330,13 +332,14 @@ class SaleFileForm(forms.ModelForm):
                         'col': col_name,
                     },
                 )
+            }
         try:
             # se busca por nombre levantara un error de no encontrar nada
             temp_material = RawMaterial.objects.get(
                 name=value,
                 company=self.creator_company
             )
-            return False
+            return {'status': False, 'pk': temp_material.pk }
         except Exception:
             try:
                 # se busca por nombre levantara un error de no encontrar nada
@@ -344,19 +347,22 @@ class SaleFileForm(forms.ModelForm):
                     pk=int(value),
                     company=self.creator_company
                 )
-                return False
+                return {'status': False, 'pk': temp_material.pk }
             except Exception:
-                return forms.ValidationError(
-                    _(
-                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no pertenece a ninguna materia prima de la compañia.'
-                    ),
-                    code='invalid',
-                    params={
-                        'value': value,
-                        'index': row_num,
-                        'col': col_name,
-                    },
-                )
+                return {
+                    'status': True,
+                    'error': forms.ValidationError(
+                        _(
+                            'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no pertenece a ninguna materia prima de la compañia.'
+                        ),
+                        code='invalid',
+                        params={
+                            'value': value,
+                            'index': row_num,
+                            'col': col_name,
+                        },
+                    )
+                }
 
     def is_invalid_date(self, value, row_num, col_name):
         """
@@ -464,6 +470,7 @@ class SaleFileForm(forms.ModelForm):
                             errors.append(num_invalid)
 
                     start = False
+                    raw_material_dict = {}
                     for j in range(4, len(row), 6):
                         # columna de materia prima j
                         if j > 4:
@@ -475,8 +482,25 @@ class SaleFileForm(forms.ModelForm):
                             start
                         )
 
-                        if raw_material_invalid:
-                            errors.append(raw_material_invalid)
+                        if raw_material_invalid['status']:
+                            errors.append(raw_material_invalid['error'])
+                        elif raw_material_invalid.get('pk'):
+
+                            if raw_material_dict.get(raw_material_invalid['pk']):
+                                errors.append(forms.ValidationError(
+                                    _(
+                                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> es una materia prima repetida'
+                                    ),
+                                    code='invalid',
+                                    params={
+                                        'value': row[j],
+                                        'index': index + 1,
+                                        'col': header[j],
+                                    },
+                                ))
+                            else:
+                                raw_material_dict[raw_material_invalid['pk']] = raw_material_invalid['pk']
+
 
                         for k in range(1, 4):
                             if k == 1:
@@ -518,7 +542,8 @@ class SaleFileForm(forms.ModelForm):
                 _('El archivo esta mal formulado o dañado.'),
                 code='invalid',
             ))
-        except Exception:
+        except Exception as ex:
+            print(ex)
             errors.append(forms.ValidationError(
                 _('El archivo no cumple el formato aceptado.'),
                 code='invalid',
