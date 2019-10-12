@@ -222,6 +222,184 @@ class SaleFileForm(forms.ModelForm):
 
         return True
 
+    def is_invalid_num(self, value, row_num, col_name, can_be_empty=False,greater_than_one=False):
+        """
+            Valida si el valor es un numero
+            y si es positivo ,
+            si no hay problema retorna Falso
+        """
+        if can_be_empty and value == "":
+            return False
+        try:
+            num = float(value)
+            if greater_than_one and num < 1:
+                return forms.ValidationError(
+                    _(
+                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no puede ser menor que 1'
+                    ),
+                    code='invalid',
+                    params={
+                        'value': value,
+                        'index': row_num,
+                        'col': col_name,
+                    },
+                )
+            elif num < 0:
+                return forms.ValidationError(
+                    _(
+                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no puede ser negativo'
+                    ),
+                    code='invalid',
+                    params={
+                        'value': value,
+                        'index': row_num,
+                        'col': col_name,
+                    },
+                )
+            return False
+
+        except Exception:
+            return forms.ValidationError(
+                    _(
+                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no es un número'
+                    ),
+                    code='invalid',
+                    params={
+                        'value': value,
+                        'index': row_num,
+                        'col': col_name,
+                    },
+                )
+
+    def is_invalid_provider(self, value, row_num, col_name, can_be_empty=False):
+        if value == "" and can_be_empty:
+            return False
+        elif value == "":
+            return forms.ValidationError(
+                    _(
+                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no puede ser vacio.'
+                    ),
+                    code='invalid',
+                    params={
+                        'value': value,
+                        'index': row_num,
+                        'col': col_name,
+                    },
+                )
+        try:
+            # se busca por nombre levantara un error de no encontrar nada
+            temp_provider = Provider.objects.get(
+                name=value,
+                company=self.creator_company
+            )
+            return False
+        except Exception:
+            try:
+                # se busca por nombre levantara un error de no encontrar nada
+                temp_provider = Provider.objects.get(
+                    pk=int(value),
+                    company=self.creator_company
+                )
+                return False
+            except Exception:
+                return forms.ValidationError(
+                    _(
+                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no pertenece a ningun proveedor de la compañia.'
+                    ),
+                    code='invalid',
+                    params={
+                        'value': value,
+                        'index': row_num,
+                        'col': col_name,
+                    },
+                )
+
+    def is_invalid_raw_material(self, value, row_num, col_name, can_be_empty=False):
+
+        if value == "" and can_be_empty:
+            return False
+        elif value == "":
+            return forms.ValidationError(
+                    _(
+                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no puede ser vacio.'
+                    ),
+                    code='invalid',
+                    params={
+                        'value': value,
+                        'index': row_num,
+                        'col': col_name,
+                    },
+                )
+        try:
+            # se busca por nombre levantara un error de no encontrar nada
+            temp_material = RawMaterial.objects.get(
+                name=value,
+                company=self.creator_company
+            )
+            return False
+        except Exception:
+            try:
+                # se busca por nombre levantara un error de no encontrar nada
+                temp_material = RawMaterial.objects.get(
+                    pk=int(value),
+                    company=self.creator_company
+                )
+                return False
+            except Exception:
+                return forms.ValidationError(
+                    _(
+                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no pertenece a ninguna materia prima de la compañia.'
+                    ),
+                    code='invalid',
+                    params={
+                        'value': value,
+                        'index': row_num,
+                        'col': col_name,
+                    },
+                )
+
+    def is_invalid_date(self, value, row_num, col_name):
+        """
+            Valida si el valor es una fecha
+            si no hay problema retorna Falso
+        """
+        try:
+            datetime.strptime(value, '%Y-%m-%d')
+
+        except Exception:
+            return forms.ValidationError(
+                _(
+                    'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no es una fecha'
+                ),
+                code='invalid',
+                params={
+                    'value': value,
+                    'index': row_num,
+                    'col': col_name,
+                },
+            )
+        return False
+
+    def is_invalid_yes_no(self, value, row_num, col_name, can_be_empty=False):
+        if value == "" and can_be_empty:
+            return False
+
+        upcase = value.upper()
+
+        if upcase == 'SI' or upcase == 'NO':
+            return False
+        return forms.ValidationError(
+                _(
+                    'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no es valido'
+                ),
+                code='invalid',
+                params={
+                    'value': value,
+                    'index': row_num,
+                    'col': col_name,
+                },
+            )
+
     def clean(self, *args, **kwargs):
         # Confirmando que sea un archivo csv
         cleaned_data = super(SaleFileForm, self).clean()
@@ -249,44 +427,100 @@ class SaleFileForm(forms.ModelForm):
             quoting=csv.QUOTE_NONE
         )
 
-        file_path = default_storage.save(build_path, ContentFile(readable_file.read()))
+        file_path = default_storage.save(
+            build_path,
+            ContentFile(readable_file.read())
+        )
         fo = open(file_path, 'r')
         reader = csv.reader(fo, 'semi_col')
-        # i = 0
         row_count = 0
         try:
             for index, row in enumerate(reader):
-                print(index)
+                # print(index)
                 if index == 0:
                     header = row
-                    print(header)
+                    # print(header)
 
                 elif index > 0:
                     # validando primera columna
-                    try:
-                        datetime.strptime(row[0], '%Y-%m-%d')
-
-                    except Exception:
-                        errors.append(forms.ValidationError(
-                            _(
-                                'El valor <b>%(date)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no es una fecha'
-                            ),
-                            code='invalid',
-                            params={
-                                'date': row[0],
-                                'index': index + 1,
-                                'col': header[0],
-                            },
-                        ))
+                    date_invalid = self.is_invalid_date(
+                        row[0],
+                        index + 1,
+                        header[0]
+                    )
+                    if date_invalid:
+                        errors.append(date_invalid)
 
                     # validando segunda columna
+                    # validando tercera columna
+                    # validando cuarta columna
+                    for i in range(1,4):
+                        num_invalid = self.is_invalid_num(
+                            row[i],
+                            index + 1,
+                            header[i]
+                        )
+                        if num_invalid:
+                            errors.append(num_invalid)
 
-                    print(row)
+                    start = False
+                    for j in range(4, len(row), 6):
+                        # columna de materia prima j
+                        if j > 4:
+                            start = True
+                        raw_material_invalid = self.is_invalid_raw_material(
+                            row[j],
+                            index + 1,
+                            header[j],
+                            start
+                        )
+
+                        if raw_material_invalid:
+                            errors.append(raw_material_invalid)
+
+                        for k in range(1, 4):
+                            if k == 1:
+                                greater_than_one = True
+                            else:
+                                greater_than_one = False
+
+                            m_num_invalid = self.is_invalid_num(
+                                row[j + k],
+                                index + 1,
+                                header[j + k],
+                                start,
+                                greater_than_one
+                            )
+                            if m_num_invalid:
+                                errors.append(m_num_invalid)
+
+                        invalid_yes_no = self.is_invalid_yes_no(
+                            row[j + 4],
+                            index + 1,
+                            header[j + 4],
+                            start
+                        )
+                        if invalid_yes_no:
+                            errors.append(invalid_yes_no)
+
+                        invalid_provider = self.is_invalid_provider(
+                            row[j + 5],
+                            index + 1,
+                            header[j + 5],
+                            start
+                        )
+                        if invalid_provider:
+                            errors.append(invalid_provider)
 
                 row_count += 1
         except csv.Error:
             errors.append(forms.ValidationError(
-                _('El archivo esta mal formulado o dañado'),
+                _('El archivo esta mal formulado o dañado.'),
+                code='invalid',
+            ))
+        except Exception:
+            errors.append(forms.ValidationError(
+                _('El archivo no cumple el formato aceptado.'),
                 code='invalid',
             ))
 

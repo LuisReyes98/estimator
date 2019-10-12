@@ -8,8 +8,8 @@
         <div class="row pt-3 pb-3">
             <div class="col">
                 <a href="{% url 'sales:sales_list' %}"
-                   title="Volver"
-                   class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    title="Volver"
+                    class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
                     <i class="mdi mdi-arrow-left"></i>
                 </a>
                 <h4 class="text-center font-weight-bold text-uppercase">
@@ -27,7 +27,7 @@
                             {% for error in form.non_field_errors %}
                                 <div class="d-flex flex-row align-items-center justify-content-center">
                                     <i class="app__icon--alert mdi mdi-alert text-danger"></i>
-                                    <p class="app__form--error text-danger mb-0 ml-3">
+                                    <p class="text-danger mb-0 ml-3 h6">
                                         {{ error | safe }}
                                     </p>
                                 </div>
@@ -67,16 +67,6 @@
                                 </h5>
                             </div>
                         </div>
-                        {% comment %} <div class="row pb-3 px-2">
-                            <div class="col">
-                                <p>
-                                    A continuación puede ver una lista de las abreviaturas permitidas para referirse a los proveedores y materia prima.
-                                </p>
-                                <p>
-                                    Pulse la opción "Formato de columnas" para ver una lista con los valores aceptados para la construcción de sus propios archivos .csv de compras.
-                                </p>
-                            </div>
-                        </div> {% endcomment %}
                         <div class="row pb-3">
                             <div class="col-12 col-md-6 m-auto app__border_alt--gray-200">
                                 <ul class="list-group list-group-flush app__nav--system">
@@ -135,7 +125,7 @@
                                     <a
                                         class="text-decoration-none list-group-item"
                                         href="{{ download_url }}"
-                                        target="_blank"
+                                        download
                                     >
                                         <li class="d-flex justify-content-between align-items-center">
                                             <div class="">
