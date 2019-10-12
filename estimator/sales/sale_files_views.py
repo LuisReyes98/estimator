@@ -43,25 +43,6 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
 
         return form_kwargs
 
-    def parse_row_to_materials_sale(self, row, company):
-        pass
-
-    def validate_first_cols(self, row):
-        result = [0, 0, 0, 0]
-        try:
-            result[0] = datetime.strptime(row[0],'%Y-%m-%d')
-        except Exception:
-            raise Exception("First column must be a date")
-
-        result[1] = float(row[1])
-        result[2] = float(row[2])
-        result[3] = float(row[3])
-
-        if result[1] < 0 or result[2] < 0 or result[3] < 0:
-            raise Exception("No se permiten valores negativos")
-
-        return result
-
     def validate_provider(self, value, raw_material):
         # print(value)
         try:
@@ -95,33 +76,11 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
 
         return temp_material
 
-    def validate_bought(self, bought_in_dollars):
-        result = False
-        int_value = False
-
-        try:
-            result = int(bought_in_dollars)
-            int_value = True
-
-        except Exception:
-            result = bought_in_dollars.upper()
-
-        if int_value:
-            if result == 1:
-                result = True
-            elif result == 0:
-                result = False
-            else:
-                raise Exception('Valor no valido')
-        else:
-            if result == 'SI':
-                result = True
-            elif result == 'NO':
-                result = False
-            else:
-                raise Exception('Valor no valido')
-
-        return result
+    def validate_yes_no(self, value):
+        up_case = value.upper()
+        if up_case == 'SI':
+            return True
+        return False
 
     def validate_amount_costs(self, amount, cost_dollar, cost_local, bought_in_dollars, dollar_price):
 
@@ -133,7 +92,7 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
         if result['amount'] < 1 or result['cost_dollar'] < 0 or result['cost_local'] < 0:
             raise Exception("No se aceptan numeros negativos")
 
-        result['bought_in_dollars'] = self.validate_bought(bought_in_dollars)
+        result['bought_in_dollars'] = self.validate_yes_no(bought_in_dollars)
 
         if result['bought_in_dollars']:
             result['cost_local'] = result['cost_dollar'] * result['amount'] * dollar_price
@@ -141,6 +100,9 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
             result['cost_dollar'] = result['cost_local'] * result['amount'] / dollar_price
 
         return result
+
+    def format_date(self, date):
+        return datetime.strptime(date, '%Y-%m-%d')
 
     def save_csv_to_sales(self, file_uploaded, user):
         """
@@ -176,12 +138,18 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
                     if company_user:
                         sale_data['company_user'] = company_user
 
-                    first_values = self.validate_first_cols(row)
+                    # primera columna fecha
+                    sale_data['date'] = self.format_date(row[0])
 
-                    sale_data['date'] = first_values[0]
-                    sale_data['dollar_price'] = first_values[1]
-                    sale_data['total_cost_dollar'] = first_values[2]
-                    sale_data['total_cost_local'] = first_values[3]
+                    # segunda columna precio del dollar
+                    sale_data['dollar_price'] = float(row[1])
+
+                    # tercera columna precio total de la compra en dolares
+                    sale_data['total_cost_dollar'] = float(row[2])
+
+                    # cuarta columna precio total local
+                    sale_data['total_cost_local'] = float(row[3])
+
                     # for i desde la primera coluna numerada
                     for i in range(4, len(row), 6):
                         if row[i] != '':
