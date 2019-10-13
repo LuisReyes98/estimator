@@ -15,8 +15,7 @@ from django.views.generic import FormView, TemplateView
 from django.conf import settings
 from matplotlib import pyplot as plt
 from sklearn.linear_model import Lasso, LassoCV
-from sklearn.model_selection import (cross_val_score, cross_validate,
-                                    train_test_split)
+from sklearn.model_selection import (cross_val_score, cross_validate)
 
 from raw_materials.models import RawMaterial
 from sales.models import DolarPrice, Sale
@@ -24,6 +23,12 @@ from sales.models import DolarPrice, Sale
 from .forms import SelectPredictionForm
 
 matplotlib.use('Agg')
+
+"""
+20 de agosto de 2018 fue el cambio a bolivar soberano
+la moneda se dividio 100.000
+
+"""
 
 
 class PredictionFormView(FormView):
