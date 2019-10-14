@@ -36,19 +36,23 @@
                     <div class="app__background--white p-2 pt-3 rounded shadow">
                         <form action="{% url 'predictions:generate' %}" method="POST" id="predictForm">
                             {% if form.non_field_errors %}
-                                {% for error in form.non_field_errors %}
-                                    <div class="d-flex flex-row align-items-center justify-content-center">
-                                        <i class="app__icon--alert mdi mdi-alert text-danger"></i>
-                                        <p class="text-danger mb-0 ml-3 h6">
-                                            {{ error | safe }}
-                                        </p>
+                                <div class="form-row pb-3">
+                                    <div class="col">
+                                        {% for error in form.non_field_errors %}
+                                            <div class="d-flex flex-row align-items-center justify-content-center">
+                                                <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+                                                <p class="text-danger mb-0 ml-3 h6">
+                                                    {{ error | safe }}
+                                                </p>
+                                            </div>
+                                        {% endfor %}
                                     </div>
-                                {% endfor %}
+                                </div>
                             {% endif %}
                             {% csrf_token %}
-                            <div class="form-row pb-2">
-                                <div class="form-group col-12 col-md-6 m-auto">
-                                    {% render_field form.date class="form-control" id="input_date"  type="text" placeholder="Seleccione una fecha" %}
+                            <div class="form-row pb-3">
+                                <div class="form-group col-12 col-md-6 m-auto app__form--date">
+                                    {% render_field form.date class="form-control" id="input_date" type="text" placeholder="Seleccione una fecha" %}
                                 </div>
                             </div>
                             <div class="form-row">
@@ -92,10 +96,6 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var loader = document.getElementById("loaderApp");
-        var formulario = document.getElementById("predictForm");
-        var fecha = document.getElementById("input_date");
-        var materias = document.getElementById("input_raw_material");
 
         $('#input_date').datepicker({
             locale: 'es-es',
@@ -103,6 +103,10 @@
         });
 
     });
+    var loader = document.getElementById("loaderApp");
+    var formulario = document.getElementById("predictForm");
+    var fecha = document.getElementById("input_date");
+    var materias = document.getElementById("input_raw_material");
 
     function enviar_formulario(){
 
