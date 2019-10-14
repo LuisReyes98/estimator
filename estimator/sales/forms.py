@@ -370,7 +370,7 @@ class SaleFileForm(forms.ModelForm):
             si no hay problema retorna Falso
         """
         try:
-            datetime.strptime(value, '%Y-%m-%d')
+            datetime.strptime(value, '%d/%m/%Y')
 
         except Exception:
             return forms.ValidationError(

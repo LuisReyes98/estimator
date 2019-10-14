@@ -20,59 +20,75 @@
                     <div class="container-fluid">
                         <div class="row pb-2">
                             <div class="col">
-                                <p class="font-italic">Fecha:</p>
-                                <p class="font-weight-bold">{{prediction_date }}</p>
-                                <p class="font-weight-bold">
-                                    Valores predichos del dolar: 
-                                        <ul>
-                                            {% for v in dolar_prediction %}
-                                                <li>
-                                                    {{v | es_money}}
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
+                                <p>
+                                    Fecha: 
+                                    <span class="font-weight-bold">{{prediction_date}}</span>
                                 </p>
                             </div>
-
                         </div>
-                        <div class="row pb-2">
+                        <div class="row pb-4">
+                            <div class="col-12 text-center">
+                                <p class="font-weight-bold text-uppercase">
+                                    Valores estimados del dólar: 
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-8 col-lg-6 m-auto">
+                                <ul class="list-group font-weight-bold">
+                                    {% for v in dolar_prediction %}
+                                        <li class="list-group-item p-2">
+                                            {{v | es_money}}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                        {% comment %} <div class="row mb-2 app__border--gray-400">
                             <div class="col">
-                                <p class="font-weight-bold">
+                                <p>
                                     {{raw_materials}}
                                 </p>
-                                <p class="font-weight-bold">
+                                <p>
                                     {{materials_dict}}
                                 </p>
 
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <p>Predicciones con referencial por materia prima</p>
-                            {% for pred in predicted_materials %}
-                                <ul>
-                                    <li>Materia prima {{pred.raw_material}}</li>
-                                    <li>Costos {{pred.cost_collar}}</li>
-                                    <li>Cantidad {{pred.amount}}</li>
-                                </ul>
-                            {% endfor %}
-
-                        </div>
-                        <div class="row pb-2">
-                            <div class="col">
-                                <h5 class="font-weight-bold text-uppercase">Gráfico</h5>
+                        </div> {% endcomment %}
+                        <div class="row pb-4">
+                            <div class="col-12 text-center">
+                                <p class="font-weight-bold text-uppercase">
+                                    Predicciones con referencial por materia prima:
+                                </p>
+                            </div>
+                            <div class="col-12 col-md-8 col-lg-6 m-auto">
+                                {% for pred in predicted_materials %}
+                                    <ul class="list-group">
+                                        <li class="list-group-item p-2">Materia Prima: 
+                                            <span class="font-weight-bold">{{pred.raw_material}}</span>
+                                        </li>
+                                        <li class="list-group-item p-2">Costos: 
+                                            <span class="font-weight-bold">{{pred.cost_collar}}</span>
+                                        </li>
+                                        <li class="list-group-item p-2">Cantidad: 
+                                            <span class="font-weight-bold">{{pred.amount}}</span>
+                                        </li>
+                                    </ul>
+                                {% endfor %}
                             </div>
                         </div>
-
+                        <div class="row pb-2">
+                            <div class="col text-center">
+                                <h6 class="font-weight-bold text-uppercase">Gráficos</h6>
+                            </div>
+                        </div>
                         <div class="row">
                             {% for graph in graphics %}
-                                <div class="col-12 p-4">
-                                    <p class="mb-1 app__vertical_border--cyan pl-2">
-                                        {{graph.name}}
-                                    </p>
+                                <div class="col-12 col-lg-6 text-center text-capitalize">
                                     <div class="text-center app__graph">
                                         {{graph.fig | safe}}
                                     </div>
+                                    <p class="mb-1 pl-2 text-uppercase font-weight-bold small">
+                                        {{graph.name}}
+                                    </p>
                                 </div>
                             {% endfor %}
                         </div>

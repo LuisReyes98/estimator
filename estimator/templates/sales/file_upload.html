@@ -4,7 +4,7 @@
 {% block content %}
 {{ block.super }}
 <div class="page-content" id="content">
-    <div class="container-fluid app__background_gradient--lemon app__viewport">
+    <div class="container-fluid app__background_gradient--lemon app__viewport predictions__form">
         <div class="row pt-3 pb-3">
             <div class="col">
                 <a href="{% url 'sales:sales_list' %}"
@@ -22,16 +22,25 @@
                 <div class="app__background--white p-2 pt-3 rounded shadow">
                     <form action="{% url 'sales:upload_file' %}" enctype="multipart/form-data"  method="POST">
                     {% csrf_token %}
-    
                         {% if form.non_field_errors %}
-                            {% for error in form.non_field_errors %}
-                                <div class="d-flex flex-row align-items-center justify-content-center">
-                                    <i class="app__icon--alert mdi mdi-alert text-danger"></i>
-                                    <p class="text-danger mb-0 ml-3 h6">
-                                        {{ error | safe }}
-                                    </p>
+                            <div class="form-row pb-2">
+                                <div class="col text-center">
+                                    <h6 class="text-uppercase text-danger font-weight-bold">Ocurrieron Errores</h6>
+                                    <p>Revise el formato e intente cargar de nuevo el documento:</p>
                                 </div>
-                            {% endfor %}
+                            </div>
+                            <div class="form-row pb-3 px-5">
+                                <div class="col-12 col-lg-8 m-auto py-0 px-2 app__border--gray-200 overflow-y-scroll files__list">
+                                    <ul class="list-group my-2">
+                                        {% for error in form.non_field_errors %}
+                                            <li class="list-group-item small p-2">
+                                            <i class="mdi mdi-alert text-danger mr-2"></i>
+                                                {{ error | safe }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
                         {% endif %}
                         <div class="form-row pb-1">
                             <div class="form-group col-12 col-md-6 m-auto">
