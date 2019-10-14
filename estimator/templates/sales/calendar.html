@@ -218,7 +218,7 @@
 
     function formatDate(date) {
         let day = date.getDate();
-        let month = date.getMonth();
+        let month = date.getMonth() + 1;
         let year = date.getFullYear();
 
         let d = '';
@@ -273,17 +273,12 @@
             },
 
             dayRender: function (dayRenderInfo) {
-                // let contenedorToday = Array.from(
-                //     document.getElementsByClassName("fc-today")
-                // )[0];
-
-                // contenedorToday.classList.add("calendar-day--today");
-
                 formated_date = formatDate(dayRenderInfo.date)
 
                 if (dates[formated_date]) {
                     console.log(dates[formated_date]);
                     console.log(formated_date);
+
                     let template = document.getElementById('salesCalendar_' + formated_date);
 
                     let tem = template.cloneNode(true);

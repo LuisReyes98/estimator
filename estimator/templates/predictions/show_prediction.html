@@ -36,7 +36,7 @@
                                 <ul class="list-group font-weight-bold">
                                     {% for v in dolar_prediction %}
                                         <li class="list-group-item p-2">
-                                            {{v | es_money}}
+                                            {{dolar_prediction.0 | es_money}}
                                         </li>
                                     {% endfor %}
                                 </ul>
@@ -66,10 +66,10 @@
                                             <span class="font-weight-bold">{{pred.raw_material}}</span>
                                         </li>
                                         <li class="list-group-item p-2">Costos: 
-                                            <span class="font-weight-bold">{{pred.cost_collar}}</span>
+                                            <span class="font-weight-bold">{{pred.cost_dollar.0 | es_money }}</span>
                                         </li>
                                         <li class="list-group-item p-2">Cantidad: 
-                                            <span class="font-weight-bold">{{pred.amount}}</span>
+                                            <span class="font-weight-bold">{{pred.amount.0 | floatformat:"0" }}</span>
                                         </li>
                                     </ul>
                                 {% endfor %}

@@ -5,7 +5,8 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.translation import gettext as _
 
 from raw_materials.models import RawMaterial
-
+from sales.models import MaterialSaleRelation
+from datetime import date, datetime
 
 class SelectPredictionForm(forms.Form):
 
@@ -30,10 +31,46 @@ class SelectPredictionForm(forms.Form):
         )
 
     def clean(self):
+        errors = []
         data = super(SelectPredictionForm, self).clean()
+        date_string_error = data['date'].strftime("%m/%d/%Y")
+        date_string = data['date'].strftime("%Y-%m-%d")
 
-        self.request.session['prediction_date'] = data['date'].strftime("%Y-%m-%d")
+        if data['date'] < datetime.now().date():
+            errors.append(forms.ValidationError(
+                _('Error de fecha se escogio la fecha <b>%(value)s</b>, la cual es del pasado.'),
+                code='invalid',
+                params={
+                    'value': date_string_error,
+                },
+            ))
 
+        for material in data['raw_materials']:
+            sales_relation_count = MaterialSaleRelation.objects.filter(
+                raw_material=material.pk
+            ).count()
+
+            if sales_relation_count == 0:
+                errors.append(forms.ValidationError(
+                    _('La materia prima <b>%(value)s</b> no ha formado parte de ninguna compra.'),
+                    code='invalid',
+                    params={
+                        'value': material.name,
+                    },
+                ))
+            elif sales_relation_count == 1:
+                errors.append(forms.ValidationError(
+                    _('La materia prima <b>%(value)s</b> se ha comprado una unica vez, siendo no apta para predicciones.'),
+                    code='invalid',
+                    params={
+                        'value': material.name,
+                    },
+                ))
+
+        if errors:
+            raise forms.ValidationError(errors)
+
+        self.request.session['prediction_date'] = date_string
         self.request.session['prediction_raw_materials'] = json.dumps(
             list(
                 data['raw_materials'].values(
@@ -43,6 +80,7 @@ class SelectPredictionForm(forms.Form):
             ),
             cls=DjangoJSONEncoder
         )
+        self.request.session['prediction_to_save'] = True
 
         return data
 

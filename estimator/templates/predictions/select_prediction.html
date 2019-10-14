@@ -34,6 +34,16 @@
                 <div class="col pb-1">
                     <div class="app__background--white p-2 pt-3 rounded shadow">
                         <form action="{% url 'predictions:generate' %}" method="POST" id="predictForm">
+                            {% if form.non_field_errors %}
+                                {% for error in form.non_field_errors %}
+                                    <div class="d-flex flex-row align-items-center justify-content-center">
+                                        <i class="app__icon--alert mdi mdi-alert text-danger"></i>
+                                        <p class="text-danger mb-0 ml-3 h6">
+                                            {{ error | safe }}
+                                        </p>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
                             {% csrf_token %}
                             <div class="form-row pb-2">
                                 <div class="form-group col-12 col-md-6 m-auto">
