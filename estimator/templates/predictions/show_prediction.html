@@ -2,7 +2,6 @@
 
 {% load es_money %}
 
-
 {% block content %}
 {{block.super}}
 <div class="page-content" id="content">
@@ -21,54 +20,41 @@
                         <div class="row pb-2">
                             <div class="col">
                                 <p>
-                                    Fecha: 
-                                    <span class="font-weight-bold">{{prediction_date}}</span>
+                                    Fecha:
+                                    <span class="font-weight-bold">{{prediction_date.date}}</span>
                                 </p>
                             </div>
                         </div>
                         <div class="row pb-4">
                             <div class="col-12 text-center">
                                 <p class="font-weight-bold text-uppercase">
-                                    Valores estimados del dólar: 
+                                    Valores estimados del dólar:
                                 </p>
                             </div>
                             <div class="col-12 col-md-8 col-lg-6 m-auto">
                                 <ul class="list-group font-weight-bold">
-                                    {% for v in dolar_prediction %}
-                                        <li class="list-group-item p-2">
-                                            {{dolar_prediction.0 | es_money}}
-                                        </li>
-                                    {% endfor %}
+                                    <li class="list-group-item p-2">
+                                        {{dolar_prediction.0 | es_money}}
+                                    </li>
                                 </ul>
                             </div>
                         </div>
-                        {% comment %} <div class="row mb-2 app__border--gray-400">
-                            <div class="col">
-                                <p>
-                                    {{raw_materials}}
-                                </p>
-                                <p>
-                                    {{materials_dict}}
-                                </p>
-
-                            </div>
-                        </div> {% endcomment %}
                         <div class="row pb-4">
                             <div class="col-12 text-center">
                                 <p class="font-weight-bold text-uppercase">
-                                    Predicciones con referencial por materia prima:
+                                    Predicciones por materia prima:
                                 </p>
                             </div>
                             <div class="col-12 col-md-8 col-lg-6 m-auto">
                                 {% for pred in predicted_materials %}
                                     <ul class="list-group">
-                                        <li class="list-group-item p-2">Materia Prima: 
+                                        <li class="list-group-item p-2">Materia Prima:
                                             <span class="font-weight-bold">{{pred.raw_material}}</span>
                                         </li>
-                                        <li class="list-group-item p-2">Costos: 
+                                        <li class="list-group-item p-2">Costos:
                                             <span class="font-weight-bold">{{pred.cost_dollar.0 | es_money }}</span>
                                         </li>
-                                        <li class="list-group-item p-2">Cantidad: 
+                                        <li class="list-group-item p-2">Cantidad:
                                             <span class="font-weight-bold">{{pred.amount.0 | floatformat:"0" }}</span>
                                         </li>
                                     </ul>

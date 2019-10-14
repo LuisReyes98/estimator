@@ -5,6 +5,7 @@
 
 {% block head %}
 {{block.super}}
+<link rel="stylesheet" href="{% static 'css/gijgo.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/bootstrap-select.min.css' %}">
 
 {% endblock head %}
@@ -47,20 +48,20 @@
                             {% csrf_token %}
                             <div class="form-row pb-2">
                                 <div class="form-group col-12 col-md-6 m-auto">
-                                    {% render_field form.date type="date" class="form-control" id="inputDate" %}
+                                    {% render_field form.date class="form-control" id="input_date"  type="text" placeholder="Seleccione una fecha" %}
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-12 col-md-3 offset-md-3">
                                     <div class="app__form--textfield w-100">
-                                        <label for="">
+                                        <label for="input_raw_material">
                                             {{ form.raw_materials.label }}
                                         </label>
                                     </div>
                                 </div>
                                 <div class="form-group col-12 col-md-3">
                                     <div class="app__form--select w-100">
-                                        {% render_field form.raw_materials class+="selectpicker" multiple="" data-live-search="true" title="Selecciona" id="inputRawMaterial" %}
+                                        {% render_field form.raw_materials class+="selectpicker" multiple="" data-live-search="true" title="Selecciona" id="input_raw_material" %}
                                     </div>
                                 </div>
                             </div>
@@ -81,18 +82,30 @@
         </div>
     </div>
 {% endblock content%}
+
 {% block javascript %}
 {{block.super}}
 
 <script src="{% static 'js/bootstrap_select/bootstrap-select.min.js' %}"></script>
+<script src="{% static 'js/gijgo/gijgo.min.js' %}"></script>
+<script src="{% static 'js/messages/messages.es-es.min.js' %}"></script>
 
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var loader = document.getElementById("loaderApp");
+        var formulario = document.getElementById("predictForm");
+        var fecha = document.getElementById("input_date");
+        var materias = document.getElementById("input_raw_material");
+
+        $('#input_date').datepicker({
+            locale: 'es-es',
+            format: 'dd/mm/yyyy'
+        });
+
+    });
+
     function enviar_formulario(){
 
-        loader = document.getElementById("loaderApp");
-        formulario = document.getElementById("predictForm");
-        fecha = document.getElementById("inputDate");
-        materias = document.getElementById("inputRawMaterial");
 
         if (fecha.validity.valid && materias.validity.valid) {
             loader.classList.remove("d-none");

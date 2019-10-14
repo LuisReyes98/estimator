@@ -33,8 +33,16 @@ class SelectPredictionForm(forms.Form):
     def clean(self):
         errors = []
         data = super(SelectPredictionForm, self).clean()
-        date_string_error = data['date'].strftime("%m/%d/%Y")
-        date_string = data['date'].strftime("%Y-%m-%d")
+
+        try:
+            date_string_error = data['date'].strftime("%m/%d/%Y")
+            date_string = data['date'].strftime("%Y-%m-%d")
+        except (Exception, KeyError) as ex:
+            raise forms.ValidationError(
+                _('Se introdujo una fecha no valida.'),
+                code='invalid',
+            )
+
 
         if data['date'] < datetime.now().date():
             errors.append(forms.ValidationError(
