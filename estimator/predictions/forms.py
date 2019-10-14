@@ -5,6 +5,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.utils.translation import gettext as _
 
 from raw_materials.models import RawMaterial
+from sales.models import MaterialSaleRelation
 
 
 class SelectPredictionForm(forms.Form):
@@ -30,6 +31,7 @@ class SelectPredictionForm(forms.Form):
         )
 
     def clean(self):
+        errors = []
         data = super(SelectPredictionForm, self).clean()
 
         self.request.session['prediction_date'] = data['date'].strftime("%Y-%m-%d")
@@ -44,6 +46,32 @@ class SelectPredictionForm(forms.Form):
             cls=DjangoJSONEncoder
         )
 
+        print(data['raw_materials'])
+
+        for material in data['raw_materials']:
+            sales_relation_count = MaterialSaleRelation.objects.filter(
+                raw_material=material.pk
+            ).count()
+
+            if sales_relation_count == 0:
+                errors.append(forms.ValidationError(
+                    _('La materia prima <b>%(value)s</b> no ha formado parte de ninguna compra.'),
+                    code='invalid',
+                    params={
+                        'value': material.name,
+                    },
+                ))
+            elif sales_relation_count == 1:
+                errors.append(forms.ValidationError(
+                    _('La materia prima <b>%(value)s</b> se ha comprado una unica vez, siendo no apta para predicciones.'),
+                    code='invalid',
+                    params={
+                        'value': material.name,
+                    },
+                ))
+
+        if errors:
+            raise forms.ValidationError(errors)
         return data
 
     class Meta:
