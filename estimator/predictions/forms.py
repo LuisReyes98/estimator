@@ -6,7 +6,7 @@ from django.utils.translation import gettext as _
 
 from raw_materials.models import RawMaterial
 from sales.models import MaterialSaleRelation
-
+from datetime import date, datetime
 
 class SelectPredictionForm(forms.Form):
 
@@ -33,20 +33,17 @@ class SelectPredictionForm(forms.Form):
     def clean(self):
         errors = []
         data = super(SelectPredictionForm, self).clean()
+        date_string_error = data['date'].strftime("%m/%d/%Y")
+        date_string = data['date'].strftime("%Y-%m-%d")
 
-        self.request.session['prediction_date'] = data['date'].strftime("%Y-%m-%d")
-
-        self.request.session['prediction_raw_materials'] = json.dumps(
-            list(
-                data['raw_materials'].values(
-                    'name',
-                    'pk',
-                )
-            ),
-            cls=DjangoJSONEncoder
-        )
-
-        print(data['raw_materials'])
+        if data['date'] < datetime.now().date():
+            errors.append(forms.ValidationError(
+                _('Error de fecha se escogio la fecha <b>%(value)s</b>, la cual es del pasado.'),
+                code='invalid',
+                params={
+                    'value': date_string_error,
+                },
+            ))
 
         for material in data['raw_materials']:
             sales_relation_count = MaterialSaleRelation.objects.filter(
@@ -70,8 +67,21 @@ class SelectPredictionForm(forms.Form):
                     },
                 ))
 
+
         if errors:
             raise forms.ValidationError(errors)
+
+        self.request.session['prediction_date'] = date_string
+        self.request.session['prediction_raw_materials'] = json.dumps(
+            list(
+                data['raw_materials'].values(
+                    'name',
+                    'pk',
+                )
+            ),
+            cls=DjangoJSONEncoder
+        )
+
         return data
 
     class Meta:
