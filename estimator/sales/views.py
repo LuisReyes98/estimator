@@ -23,20 +23,6 @@ from django.shortcuts import redirect, render
 class CalendarView(LoginRequiredMixin, TemplateView):
     template_name = "sales/calendar.html"
 
-    def exampleDates(self):
-        now = datetime.now()
-        some_dates = []
-
-        for i in range(10):
-            some_dates.append(
-                {
-                    'date': (now - timedelta(days=i)).strftime("%Y-%m-%d"),
-                    'pk': i,
-                }
-            )
-
-        return some_dates
-
     def salesObject(self):
         sales = Sale.objects.filter(
             company=self.request.user.safe_company.pk,
