@@ -420,8 +420,8 @@ button:focus {
   -moz-box-shadow: none !important;
   -webkit-box-shadow: none !important;
 }
-.form-control:focus {
-  border-color: map-get($project_colors, "deep_blue") !important;
+.form-control:focus, .custom-file-input:focus {
+  border-color: rgba(map-get($project_colors, "deep_blue"), 0.5) !important;
 }
 
 .reset_select_picker {
@@ -441,8 +441,8 @@ button:focus {
 //Scrollbar options
 /* width */
 *::-webkit-scrollbar {
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
 }
 /* Track */
 *::-webkit-scrollbar-track {
@@ -466,8 +466,8 @@ button:focus {
   //Scrollbar options
   /* width */
   &::-webkit-scrollbar {
-    width: 9px;
-    height: 9px;
+    width: 10px;
+    height: 10px;
   }
   /* Track */
   &::-webkit-scrollbar-track {

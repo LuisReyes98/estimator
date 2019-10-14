@@ -34,14 +34,16 @@
         <div class="row mb-3 pt-3 pb-3">
             <div class="col">
                 <div class="app__background--white p-2 rounded shadow">
-                    <a
-                        href="registerSales"
-                        data-toggle="modal"
-                        data-target="#registerSales"
-                        class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
-                    >
-                        Registrar Compra
-                    </a>
+                    {% if user.is_superuser or user.is_staff %}
+                        <a
+                            href="registerSales"
+                            data-toggle="modal"
+                            data-target="#registerSales"
+                            class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                        >
+                            Registrar Compra
+                        </a>
+                    {% endif %}
                     {% comment %} <a href="{% url 'sales:new_sale' %}"
                        class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
                         Registrar Compra
@@ -134,7 +136,7 @@
                     tooltip="tooltip"
                     data-target="#salesCalendarModal_{{key}}"
                     class="app__button--icon icon--calendar_sale ml-1"
-                    data-placement="right"
+                    data-placement="top"
                     title="Compras"
                 >
                     <i class="mdi mdi-cart"></i>
@@ -185,12 +187,14 @@
                                         <a href="{% url 'sales:sale' sale.pk %}"
                                             class="app__button--icon" title="Detalles">
                                             <i class="mdi mdi-eye"></i></a>
-                                        <a href="{% url 'sales:update_sale' sale.pk %}"
-                                            class="app__button--icon" title="Editar">
-                                            <i class="mdi mdi-pencil"></i></a>
-                                        <a href="{% url 'sales:delete_sale' sale.pk %}"
-                                            class="app__button--icon icon--trash" title="Eliminar">
-                                            <i class="mdi mdi-trash-can"></i></a>
+                                        {% if user.is_superuser or user.is_staff %}
+                                            <a href="{% url 'sales:update_sale' sale.pk %}"
+                                                class="app__button--icon" title="Editar">
+                                                <i class="mdi mdi-pencil"></i></a>
+                                            <a href="{% url 'sales:delete_sale' sale.pk %}"
+                                                class="app__button--icon icon--trash" title="Eliminar">
+                                                <i class="mdi mdi-trash-can"></i></a>
+                                        {% endif %}
                                     </td>
                                 </tr>
                                 {% endfor %}
