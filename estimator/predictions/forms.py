@@ -67,7 +67,6 @@ class SelectPredictionForm(forms.Form):
                     },
                 ))
 
-
         if errors:
             raise forms.ValidationError(errors)
 
@@ -81,6 +80,7 @@ class SelectPredictionForm(forms.Form):
             ),
             cls=DjangoJSONEncoder
         )
+        self.request.session['prediction_to_save'] = True
 
         return data
 

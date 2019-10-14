@@ -25,24 +25,24 @@
                                 <p class="font-weight-bold">
                                     Valores predichos del dolar: 
                                         <ul>
-                                            {% for v in dolar_prediction %}
-                                                <li>
-                                                    {{v | es_money}}
-                                                </li>
-                                            {% endfor %}
+                                            <li>
+                                                {{dolar_prediction.0 | es_money}}
+                                            </li>
                                         </ul>
                                 </p>
                             </div>
 
                         </div>
 
+                        <h3>
+                            Predicciones por materia prima
+                        </h3>
                         <div class="row">
-                            <p>Predicciones con referencial por materia prima</p>
                             {% for pred in predicted_materials %}
                                 <ul>
                                     <li>Materia prima {{pred.raw_material}}</li>
-                                    <li>Costos {{pred.cost_collar}}</li>
-                                    <li>Cantidad {{pred.amount}}</li>
+                                    <li>Costos en dolares{{pred.cost_dollar.0 | es_money }}</li>
+                                    <li>Cantidad {{pred.amount.0 | floatformat:"0" }}</li>
                                 </ul>
                             {% endfor %}
 

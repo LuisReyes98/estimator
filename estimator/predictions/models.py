@@ -47,6 +47,11 @@ class PredicitonMaterialRelated(TimeStampFields):
         _("Costo en la moneda local"),
     )
 
+    dollar_price = models.FloatField(
+        _("Precio del dolar"),
+        default=0
+    )
+
     # Referencias
     raw_material = models.ForeignKey(
         "raw_materials.RawMaterial",

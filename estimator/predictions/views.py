@@ -20,13 +20,14 @@ from sklearn.model_selection import (cross_val_score, cross_validate)
 from raw_materials.models import RawMaterial
 from sales.models import DolarPrice, Sale
 
+from .models import PredictionSale, PredicitonMaterialRelated
 from .forms import SelectPredictionForm
 
 matplotlib.use('Agg')
 
 """
 20 de agosto de 2018 fue el cambio a bolivar soberano
-la moneda se dividio 100.000
+la moneda se dividio 100.000,00
 
 """
 
@@ -47,23 +48,33 @@ class PredictionFormView(FormView):
 class PredictionResultView(TemplateView):
     template_name = "predictions/show_prediction.html"
     tz = pytz.timezone(settings.TIME_ZONE)
+    SOBERANO_CHANGE = 100000.00
+    # fechas menores o igual a esta ocurrieron antes del cambio de moneda
+    SOBERANO_DATE = datetime(2018, 8, 18, 0, 0, 0, 0, tz)
 
     def build_dolar_dataframes(self):
         """ Retorna dataframe de los precios del dolar"""
         dolar_prices = list(
-            DolarPrice.objects.filter(
-                date__gte=datetime(2018, 8, 19, 0, 0, 0, 0, self.tz)  # fecha despues del cambio de moneda
-            ).exclude(
+            DolarPrice.objects.exclude(
                 date__isnull=True
             ).order_by('date')
         )
-        dolar_prices = [
-            {
+
+        dolar_prices_array = []
+
+        for el in dolar_prices:
+            dolar = el.dollar_price
+            # if el precio no es en soberano
+            if el.date <= self.SOBERANO_DATE:
+                dolar = dolar / self.SOBERANO_CHANGE
+
+            dolar_prices_array.append({
                 'date': el.date.toordinal(),
-                'dollar_price': el.dollar_price
-            } for el in dolar_prices
-        ]
-        xdf = pd.DataFrame(dolar_prices)
+                'dollar_price': dolar
+            })
+        # print(dolar_prices_array)
+
+        xdf = pd.DataFrame(dolar_prices_array)
         xdf.dropna()
 
         return xdf
@@ -87,11 +98,15 @@ class PredictionResultView(TemplateView):
 
         for sale in sales:
             for material in sale.materials_sale_relation:
+                dolar = sale.dollar_price.dollar_price
+                if sale.date <= self.SOBERANO_DATE:
+                    dolar = dolar / self.SOBERANO_CHANGE
+
                 value = {
                             'cost_dollar': material.cost_dollar,
                             'amount': material.amount,
                             'raw_material': material.raw_material.pk,
-                            'dollar_price': sale.dollar_price.dollar_price,
+                            'dollar_price': dolar,
                             'date': sale.date.toordinal(),
                         }
                 # all_materials_array.append(value)
@@ -111,14 +126,20 @@ class PredictionResultView(TemplateView):
 
         return Xm_df_dict
 
-    def train_model(self, model, dataframe, y_column_name):
-        ydf = dataframe[y_column_name]
-        ydf = ydf.dropna()
+    def train_model(self, model, dataframe, y_column_name, x_column_name='x',two_value_prediction=False):
+        if two_value_prediction:
+            ydf = dataframe[y_column_name].values.reshape(-1, 1)
+            xdf = dataframe[x_column_name].values.reshape(-1, 1)
 
-        xdf = dataframe.drop(y_column_name, axis=1)
-        xdf = xdf.dropna()
+        else:
+            ydf = dataframe[y_column_name]
+            xdf = dataframe.drop(y_column_name, axis=1)
+
+            ydf = ydf.dropna()
+            xdf = xdf.dropna()
 
         model.fit(xdf, ydf)
+        print('Train score: ', model.score(xdf, ydf))
 
         return model
 
@@ -182,26 +203,34 @@ class PredictionResultView(TemplateView):
 
         """
         LassoCV(cv=4) 0.81
-
-        para predecir solo necesita la fecha
+        LinearRegression
+        para predecir solo  necesita la fecha
         """
+        # LassoCV(cv=4),
         dolar_model = self.train_model(
-            LassoCV(cv=4),
+            LassoCV(cv=4, positive=True),
             X_dolar,
-            'dollar_price'
+            'dollar_price',
+            # x_column_name='date',
+            # two_value_prediction=True,
         )
 
         pred_df_date = prediction_date.toordinal()
         prediction_df = pd.DataFrame(
-            [{'date': pred_df_date} for i in range(4)]
+            [{'date': pred_df_date} for i in range(2)]
         )
 
         dolar_prediction = dolar_model.predict(
             prediction_df
         )
-        prediction_df['dollar_price'] = dolar_prediction
+
+        # prediction_df['dollar_price'] = dolar_prediction
 
         # print(prediction_df)
+        graphics.append({
+            'name': "Precio del dolar",
+            'fig': self.generate_linear_plot('date', 'dollar_price', X_dolar)
+        })
 
         for key, df in Xm_df_dict.items():
             """
@@ -219,29 +248,62 @@ class PredictionResultView(TemplateView):
                 'fig': self.generate_linear_plot('date', 'amount', df)
             })
 
-            print(df.shape)
+            # print(df.shape)
             # modelo de prediccion de costos de la materia prima seleccionada
+            # LinearRegression(),
             materials_models_cost_dict[key] = self.train_model(
-                Lasso(),
-                df.drop('amount', axis=1),
+                Lasso(positive=True),
+                df.drop(['amount','dollar_price'], axis=1),
                 'cost_dollar'
             )
 
             # modelo de prediccion de las cantidades seleccionadas
+            # LinearRegression(),
             materials_models_amount_dict[key] = self.train_model(
-                Lasso(),
-                df.drop('cost_dollar', axis=1),
+                Lasso(positive=True),
+                df.drop(['cost_dollar','dollar_price'], axis=1),
                 'amount'
             )
             p_dollars = materials_models_cost_dict[key].predict(prediction_df)
             p_amount = materials_models_amount_dict[key].predict(prediction_df)
+
+            if p_amount[0] < 1:
+                p_amount[0] = 1
+
             predicted_materials.append({
                 'raw_material': materials_dict[key],
-                'cost_collar': p_dollars,
+                'raw_material_pk': key,
+                'cost_dollar': p_dollars,
                 'amount': p_amount,
             })
 
             # predicted_materials
+        if self.request.session['prediction_to_save']:
+            print('Debug saving prediction')
+            prediction_sale = PredictionSale(**{
+                'prediction_date': prediction_date,
+                'company': self.request.user.safe_company
+            })
+            prediction_sale.save()
+
+            for pred in predicted_materials:
+                d_price = round(dolar_prediction[0], 4)
+                c_dollar = round(pred['cost_dollar'][0], 4)
+                r_material = RawMaterial.objects.get(pk=pred['raw_material_pk'])
+
+                pred_material_related = PredicitonMaterialRelated(
+                    **{
+                        'prediction_date': prediction_date,
+                        'amount': round(pred['amount'][0]),
+                        'cost_dollar': c_dollar,
+                        'cost_local': c_dollar * d_price,
+                        'dollar_price': d_price,
+                        'raw_material': r_material,
+                        'prediction_sale': prediction_sale,
+                    }
+                )
+                pred_material_related.save()
+            self.request.session['prediction_to_save'] = False
 
         context['graphics'] = graphics
 
