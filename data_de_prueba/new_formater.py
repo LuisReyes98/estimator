@@ -12,6 +12,57 @@ FILE_PATH = './finales/ventas_agrupadas.csv'
 FILE_PATH_2 = './finales/ventas_agrupadas_2.csv'
 
 
+def convert_name(name):
+    if name == 'FRANELA':
+        name = 'HERRAMIENTA_1'
+
+    elif name == 'FRANELA NIÑO':
+        name = 'HERRAMIENTA_2'
+    elif name == 'VASO':
+        name = 'HERRAMIENTA_3'
+    elif name == 'TAZA':
+        name = 'HERRAMIENTA_4'
+    elif name == 'GORRA':
+        name = 'HERRAMIENTA_5'
+
+    elif name == 'CARTUCHERA':
+        name = 'HERRAMIENTA_6'
+
+    elif name == 'BANDOLERA':
+        name = 'HERRAMIENTA_7'
+
+    elif name == 'LLAVERO':
+        name = 'HERRAMIENTA_8'
+
+    elif name == 'TULA':
+        name = 'HERRAMIENTA_9'
+
+    elif name == 'PORTA COSMETICO':
+        name = 'HERRAMIENTA_10'
+
+    elif name == 'BODY BEBE':
+        name = 'HERRAMIENTA_11'
+
+    elif name == 'BODY BEBE':
+        name = 'HERRAMIENTA_12'
+
+    elif name == 'FRANELILLA':
+        name = 'HERRAMIENTA_13'
+
+    elif name == 'PULSERA':
+        name = 'HERRAMIENTA_14'
+
+    elif name == 'COLLAR MAPA':
+        name = 'HERRAMIENTA_15'
+
+    elif name == 'VIAJERA':
+        name = 'HERRAMIENTA_16'
+
+    elif name == 'BRAZALETE':
+        name = 'HERRAMIENTA_17'
+    return name
+
+
 def group_by_name():
     year_month_dict = {}
     fo = open(FILE_PATH, 'r')
@@ -23,7 +74,7 @@ def group_by_name():
         elif index > 0:
             date = datetime.strptime(row[0], '%Y-%m-%d').date()
             string_date = "%d-%d" % (date.year, date.month)
-            name = row[4]
+            name = convert_name(row[4])
 
             dollar_price = float(row[1])
 
@@ -63,6 +114,8 @@ def group_by_name():
         row = []
         row.append(key + '-1')
         row.append(value['dollar_price'])
+        row.append(0)
+        row.append(0)
 
         for k, val in value['items'].items():
 
@@ -71,6 +124,7 @@ def group_by_name():
             row.append(val['cost_dollar'])
             row.append(0)
             row.append('SI')
+            row.append('HERRAMIENTAS_CA')
 
         file_writer.writerow(row)
 
