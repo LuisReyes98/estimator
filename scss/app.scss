@@ -332,6 +332,22 @@
       }
     }
 
+    &--date {
+      input {
+        border-radius: 0;
+        border-color: map-get($project_colors, "gray-400") !important;
+
+        &:focus {
+          border-color: map-get($project_colors, "dark_blue") !important;
+        }
+      }
+
+      i {
+        top: 12% !important;
+        color: map-get($project_colors, "gray-700");
+      }
+    }
+
     &--switch {
       // font-size: 18px;
 
@@ -420,9 +436,10 @@ button:focus {
   -moz-box-shadow: none !important;
   -webkit-box-shadow: none !important;
 }
-.form-control:focus, .custom-file-input:focus {
-  border-color: rgba(map-get($project_colors, "deep_blue"), 0.5) !important;
-}
+// .form-control:focus,
+// .custom-file-input:focus {
+//   border-color: rgba(map-get($project_colors, "deep_blue"), 0.5) !important;
+// }
 
 .reset_select_picker {
   .dropdown {
