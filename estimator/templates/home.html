@@ -1,8 +1,10 @@
 {% extends 'layouts/base_app.html' %}
 {% block content %}
+{% load es_money %}
+
 {{ block.super }}
 <div class="page-content" id="content">
-  <div class="container-fluid">
+  <div class="container-fluid app__background_gradient--lemon vh-100 overflow-y-scroll">
     <div class="row pt-3 pb-3">
       <div class="col">
         <h3 class="text-center font-weight-bold text-uppercase">
@@ -24,28 +26,34 @@
         <div class="col-12">
           <h3>Ultima prediccion hecha el {{prediction.created.date}}</h3>
           <p>
-            La prediccion se hizo para predecir el comportamiento de las materias primas el <b>{{prediction.prediction_date}}</b>
+            La prediccion se hizo para predecir el comportamiento de las materias primas el <b class="h4">{{prediction.prediction_date}}</b>
           </p>
+          <p>Se estimo el precio del dolar a <b>{{prediction.dollar_price | es_money }} Bs</b></p>
           <p>Se busco predecir las siguientes materias primas:</p>
-          {% for pred in prediction.predictions %}
-            {{pred.raw_material}}
-          {% endfor %}
-          <ul>
-            <li>
-              40 Lorem , precio aprox ***** local , **$
-            </li>
-            <li>
-              40 Lorem , precio aprox ***** local , **$
-            </li>
-            <li>
-              40 Lorem , precio aprox ***** local , **$
-            </li>
-            <li>
-              40 Lorem , precio aprox ***** local , **$
-            </li>
+          <ul class="list-group list-group-flush app__background--gray-300">
+            {% for pred in prediction.predictions %}
+              <li class="list-group-item app__background--gray-300">
+                Para <b>{{pred.raw_material}}</b> se estima: 
+                <div>
+                  comprar <b>{{pred.amount}} {{pred.raw_material.unit_name}}</b>
+                </div>
+                <div>
+                  con un costo individual en dolares de <b>$ {{pred.cost_dollar | es_money }}</b>
+                </div>
+                <div>
+                  y con costo individual en en la moneda local a <b>{{pred.cost_local | es_money }} Bs</b>
+                </div>
+              </li>
+            {% endfor %}
           </ul>
           <p>
-            Precio total aproximado de la compra : *******$
+            Precio total aproximado de la compra: 
+            <div>
+              En dolares <b>$ {{prediction.total_dollar | es_money }}</b>
+            </div>
+            <div>
+              En moneda local <b>{{prediction.total_local | es_money }} Bs</b>
+            </div>
           </p>
         </div>
       {% else %}

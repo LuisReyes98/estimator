@@ -7,6 +7,11 @@ from django.utils.translation import ugettext as _
 
 class PredictionSale(TimeStampFields):
 
+    dollar_price = models.FloatField(
+        _("Precio del dolar"),
+        default=0
+    )
+
     prediction_date = models.DateField(
         _("Fecha de Prediccion"),
         auto_now=False,
@@ -24,9 +29,34 @@ class PredictionSale(TimeStampFields):
 
     @property
     def predictions(self):
-        return PredictionMaterialRelated.objects.filter(
-            prediction_sale=self.pk
+        # print(self.pk)
+        predicteds = PredictionMaterialRelated.objects.filter(
+            prediction_sale=self,
         )
+
+        return predicteds
+
+    @property
+    def total_dollar(self):
+        predicteds = PredictionMaterialRelated.objects.filter(
+            prediction_sale=self,
+        )
+        total = 0
+        for el in predicteds:
+            total = total + el.cost_dollar
+
+        return total
+
+    @property
+    def total_local(self):
+        predicteds = PredictionMaterialRelated.objects.filter(
+            prediction_sale=self,
+        )
+        total = 0
+        for el in predicteds:
+            total = total + el.cost_local
+
+        return total
 
     class Meta:
         verbose_name = "Prediccion de Venta"

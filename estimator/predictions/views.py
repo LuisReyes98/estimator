@@ -279,15 +279,16 @@ class PredictionResultView(TemplateView):
 
             # predicted_materials
         if self.request.session['prediction_to_save']:
+            d_price = round(dolar_prediction[0], 4)
             print('Debug saving prediction')
             prediction_sale = PredictionSale(**{
                 'prediction_date': prediction_date,
-                'company': self.request.user.safe_company
+                'company': self.request.user.safe_company,
+                'dollar_price': d_price
             })
             prediction_sale.save()
 
             for pred in predicted_materials:
-                d_price = round(dolar_prediction[0], 4)
                 c_dollar = round(pred['cost_dollar'][0], 4)
                 r_material = RawMaterial.objects.get(pk=pred['raw_material_pk'])
 
