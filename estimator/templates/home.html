@@ -12,38 +12,52 @@
     </div>
     <div class="row mb-3 pt-2 pb-2 app__background--cyan">
       <div class="col text-light">
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia
-          officiis, magni ipsa assumenda impedit alias! Pariatur error optio
-          natus amet numquam, et aliquam reprehenderit modi. Voluptate
-          perferendis consequatur reprehenderit illum.
-        </p>
+        
+          <h4>
+            <b>Estimador. </b>Registra tus compras de materia prima para realizar una prediccion de sus costos y cantidad a comprar.
+          </h4>
+        
       </div>
     </div>
     <div class="row app__background--gray-300 rounded m-4 p-2">
-      <div class="col-12">
-        <h3>Ultima prediccion hecha el XX/XX/XX</h3>
-        <p>
-          La prediccion recomienda comprar el XX/XX/XX
-        </p>
-        <ul>
-          <li>
-            40 Lorem , precio aprox ***** local , **$
-          </li>
-          <li>
-            40 Lorem , precio aprox ***** local , **$
-          </li>
-          <li>
-            40 Lorem , precio aprox ***** local , **$
-          </li>
-          <li>
-            40 Lorem , precio aprox ***** local , **$
-          </li>
-        </ul>
-        <p>
-          Precio total aproximado de la compra : *******$
-        </p>
-      </div>
+      {% if prediction %}
+        <div class="col-12">
+          <h3>Ultima prediccion hecha el {{prediction.created.date}}</h3>
+          <p>
+            La prediccion se hizo para predecir el comportamiento de las materias primas el <b>{{prediction.prediction_date}}</b>
+          </p>
+          <p>Se busco predecir las siguientes materias primas:</p>
+          {% for pred in prediction.predictions %}
+            {{pred.raw_material}}
+          {% endfor %}
+          <ul>
+            <li>
+              40 Lorem , precio aprox ***** local , **$
+            </li>
+            <li>
+              40 Lorem , precio aprox ***** local , **$
+            </li>
+            <li>
+              40 Lorem , precio aprox ***** local , **$
+            </li>
+            <li>
+              40 Lorem , precio aprox ***** local , **$
+            </li>
+          </ul>
+          <p>
+            Precio total aproximado de la compra : *******$
+          </p>
+        </div>
+      {% else %}
+        <div class="col-12">
+          <h3>No hay nada que ver aquí.</h3>
+          <p>
+            Registra tus compras y realiza una predicción para ver aquí la ultima prediccion realizada.
+          </p>
+        </div>
+      {% endif %}
+
+
     </div>
   </div>
 </div>

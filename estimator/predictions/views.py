@@ -20,7 +20,7 @@ from sklearn.model_selection import (cross_val_score, cross_validate)
 from raw_materials.models import RawMaterial
 from sales.models import DolarPrice, Sale
 
-from .models import PredictionSale, PredicitonMaterialRelated
+from .models import PredictionSale, PredictionMaterialRelated
 from .forms import SelectPredictionForm
 
 matplotlib.use('Agg')
@@ -291,7 +291,7 @@ class PredictionResultView(TemplateView):
                 c_dollar = round(pred['cost_dollar'][0], 4)
                 r_material = RawMaterial.objects.get(pk=pred['raw_material_pk'])
 
-                pred_material_related = PredicitonMaterialRelated(
+                pred_material_related = PredictionMaterialRelated(
                     **{
                         'prediction_date': prediction_date,
                         'amount': round(pred['amount'][0]),

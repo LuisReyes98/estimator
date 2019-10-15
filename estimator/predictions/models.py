@@ -22,12 +22,18 @@ class PredictionSale(TimeStampFields):
         null=True,
     )
 
+    @property
+    def predictions(self):
+        return PredictionMaterialRelated.objects.filter(
+            prediction_sale=self.pk
+        )
+
     class Meta:
         verbose_name = "Prediccion de Venta"
         verbose_name_plural = "Predicciones de Ventas"
 
 
-class PredicitonMaterialRelated(TimeStampFields):
+class PredictionMaterialRelated(TimeStampFields):
 
     prediction_date = models.DateField(
         _("Fecha de Prediccion"),
