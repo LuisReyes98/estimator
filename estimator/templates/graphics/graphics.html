@@ -3,6 +3,11 @@
 {% load safe_js %}
 {% load static %}
 
+{% block head %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'css/apexcharts.css' %}">
+
+{% endblock head %}
 
 {% block content %}
 {{block.super}}
@@ -11,12 +16,12 @@
 
     <div class="row">
         <h2>Comportamiento del dolar</h2>
+        <div class="col-12">
+            <apexchart type=line height=350 :options="chartOptions" :series="series" />
+        </div>
     </div>
 
-    <div id="dolar_prices_graph" class="col-8" style="height: 350px;"></div>
 
-    {% comment %} [[dolar_prices]] {% endcomment %}
- 
 
 </div>
 
@@ -25,104 +30,86 @@
 
 {% block javascript %}
 {{block.super}}
-<script src="{% static 'js/google_charts/loader.js' %}"></script>
-<!-- <script src="{% static 'js/google_charts/jsapi.js' %}"></script> -->
 
+<script src="{% static 'js/apexcharts/apexcharts.min.js' %}" ></script>
+<script src="{% static 'js/apexcharts/vue-apexcharts.js' %}"></script>
+<script src="{% static 'js/apexcharts/es_locale.js' %}" ></script>
 
 <script type="text/javascript">
 
-google.charts.load('visualization', '1.0', { 'packages': ['corechart','controls'], 'callback': drawChart });
+function buildTable(title, yaxis_title, first_date) {
+    let charDefaultsOptions = {
+        chart: {
+            height: 350,
+            locales: [apexchart_locale_es],
+            defaultLocale: 'es',
+            stacked: false,
+            zoom: {
+                enabled: true,
+            },
+            toolbar: {
+                autoSelected: 'zoom'
+            }
+        },
+        dataLabels: {
+            enabled: true
+        },
+        stroke: {
+            curve: 'straight'
+        },
+        title: {
+            text: title,
+            align: 'center'
+        },
+        grid: {
+            row: {
+                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                opacity: 0.5
+            },
+        },
+        yaxis: {
+            'title': {
+                'text': yaxis_title
+            },
+            'min': 0,
 
-// google.load('visualization', '1.0', {
-//     'packages': ['corechart']
-// });
-
-function buildData(columns, rows) {
-    let data = new google.visualization.DataTable();
-    columns.forEach(el => {
-        data.addColumn(el.type , el.label );
-    });
-    data.addRows(rows);
-    return data
-}
-
-function drawChart() {
-
-    let columns = {{ dolar_prices_cols | safe }};
-    let rows = {{ dolar_prices_rows | safe }};
-
-    let options = {
-        title: 'Precio del dolar',
-        hAxis: { title: 'Fecha', titleTextStyle: { color: '#333' } },
-        vAxis: { minValue: 0 }
-    };
-    let html_id = 'dolar_prices_graph';
-
-    let data = buildData(columns, rows)
-
-    var cha = new Graph2D(html_id,data, options);
-    cha.drawLine();
-}
-
-class Graph2D{
-    constructor(html_id,data, options){
-        this.html_id = html_id;
-        // this.data = new google.visualization.DataTable();
-        // this.columns = columns; // vector de diccionarios con type y label
-        // this.rows = rows;
-        this.data = data;
-        this.options = options;
-        this.component = document.getElementById(html_id);
-        this.chart = new google.visualization.ChartWrapper(
-            this.component
-        );
-
-        // this.buildData();
-        // this.drawLine();
-        // console.log(this.component);
+        },
+        xaxis: {
+            type: 'datetime',
+            min: new Date(first_date).getTime(),
+            tickAmount: 6,
+        },
+        tooltip: {
+            x: {
+                format: 'dd MMMM yyyy'
+            }
+        }
     }
-
-    // buildData(){
-    //     self = this;
-    //     this.columns.forEach(el => {
-    //         self.data.addColumn(el.type , el.label );
-    //     });
-    //     this.data.addRows(this.rows);
-    // }
-
-    drawChart(){
-        this.chart.draw(this.data, this.options);
-    }
-
-    drawLine(){
-        this.setChartType('LineChart');
-        this.drawChart();
-    }
-
-    setChartType(chartType){
-        this.chart.setChartType(chartType);
-    }
-
-    setChartData(data){
-        this.chart.setDataTable(data);
-    }
-
+    return charDefaultsOptions;
 }
 
 
 var app = new Vue({
     delimiters: ['[[', ']]'],
     el: '#app',
-    data:{
-        'dolar_prices': {
-            name: 'Precios del dolar',
-            data: {{dolar_prices_rows | safe }},
-            cols: ['Fecha', 'Precio del Dolar']
-        },
-    }
+    components: {
+        apexchart: VueApexCharts,
+    },
+    data: function(){
+        return {
+            series: {{dolar_prices_series.series | safe }},
+            chartOptions: buildTable(
+                '{{ dolar_prices_series.title | safe }}',
+                '{{ dolar_prices_series.yaxis_title | safe }}',
+                '{{ dolar_prices_series.first_date | safe }}',
+            ),
+        }
+    },
+    methods: {
+        
+    },
 })
 
-
-
 </script>
+
 {% endblock javascript %}

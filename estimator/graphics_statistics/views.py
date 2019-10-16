@@ -24,33 +24,31 @@ class GraphicsView(TemplateView):
             ).order_by('date')
         )
 
-        dolar_prices_cols = [
-            {
-                'label': 'Fecha',
-                'type': 'string'
-            },
-            {
-                'label': 'Precio del dolar en bolívares',
-                'type': 'number'
-            }
-        ]
+        dolar_prices_series = {}
 
-        dolar_prices_rows = []
+        dolar_prices_series['series'] = []
 
-        for el in dolar_prices:
+        dollar_data = []
+        for index, el in enumerate(dolar_prices):
+            if index == 0:
+                dolar_prices_series['first_date'] = el.date.strftime("%m/%d/%Y")
             dolar = el.dollar_price
             # if el precio no es en soberano
             if el.date <= self.SOBERANO_DATE:
                 dolar = dolar / self.SOBERANO_CHANGE
 
-            dolar_prices_rows.append(
-                [
-                    el.date.strftime("%m/%d/%Y"),
-                    round(dolar, 3)
-                ]
-            )
+            dollar_data.append([el.date.strftime("%m/%d/%Y"),round(dolar, 3)])
 
-        context['dolar_prices_rows'] = dolar_prices_rows
-        context['dolar_prices_cols'] = dolar_prices_cols
+        dolar_prices_series['series'].append(
+            {
+                'name': 'Precio del Dolar',
+                'data': dollar_data,
+            }
+        )
+        dolar_prices_series['yaxis_title'] = 'Precio del dolar'
+            
+        dolar_prices_series['title'] = 'Precio del dolar a lo largo del tiempo'
+
+        context['dolar_prices_series'] = dolar_prices_series
 
         return context
