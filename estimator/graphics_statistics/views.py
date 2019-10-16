@@ -43,7 +43,8 @@ class GraphicsView(TemplateView):
         raw_materials = RawMaterial.objects.filter(
             company=self.request.user.safe_company.pk,
         )
-        materials_graph = []
+        materials_graph = {}
+        materials_options = []
 
         raw_materials_dict = {}
         # rellenar diccionario por cada materia prima de la empresa
@@ -147,7 +148,7 @@ class GraphicsView(TemplateView):
                     ]
                 )
 
-        for key,value in raw_materials_dict.items():
+        for key, value in raw_materials_dict.items():
             if (len(value['dolar_cost']) > 0):
                 
                 dolar_data = []
@@ -190,10 +191,16 @@ class GraphicsView(TemplateView):
                         'data': value['pred_amount']
                     }
                 )
+                materials_options.append(
+                    {
+                        'name': value['name'],
+                        'key': value['pk'],
+                    }
+                )
 
-                materials_graph.append({
+                materials_graph[key] = {
                     'name': value['name'],
-                    'key': value['key'],
+                    'key': value['pk'],
                     'graphs': [
                         {
                             'series': dolar_data,
@@ -220,9 +227,10 @@ class GraphicsView(TemplateView):
                             ),
                         }
                     ]
-                })
+                }
 
         context['materials_graph'] = materials_graph
+        context['materials_options'] = materials_options
 
         context['dolar_prices_series'] = dolar_prices_series
 
