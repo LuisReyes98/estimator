@@ -11,17 +11,50 @@
 
 {% block content %}
 {{block.super}}
-<div class="page-content container" id="content">
-    <h1>Gráficas y estadisticas</h1>
-
-    <div class="row">
-        <h2>Comportamiento del dolar</h2>
-        <div class="col-12">
-            <apexchart type=line height=350 :options="chartOptions" :series="series" />
+<div class="page-content" id="content">
+    <div class="container-fluid app__background_gradient--lemon vh-100 overflow-y-scroll">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <h3 class="text-center font-weight-bold text-uppercase">
+                    Gráficas y estadisticas
+                </h3>
+            </div>
         </div>
+        <div class="row pt-3 pb-3">
+            <div class="col-12">
+                <h4 class="text-center  font-weight-bold text-uppercase">
+                    Comportamiento del dolar
+                    <a class="text-decoration-none text-dark" href="#dollar_price"><i class="mdi mdi-link-variant"></i></a>
+                </h4>
+            </div>
+            <div class="col-12 ">
+                <div class="container app__background--white rounded">
+                    <!-- <div> Agregar botones para cambiar el tipo de grafica</div> -->
+                    <apexchart class="" type=line height=400 :options="buildOptions(dolar_chart.title,dolar_chart.yaxis)" :series="dolar_chart.series" />
+                </div>
+            </div>
+
+        </div>
+        <div class="row pt-3 pb-3">
+            <div class="col-12">
+                <h4 class="text-center  font-weight-bold text-uppercase">
+                    Comportamiento de las materias primas
+                </h4>
+            </div>
+        </div>
+        <div class="row pt-3 pb-3" v-for="(g_graph, index) in materials_graph" :key="index">
+            <div class="col-12">
+                <h5 class="text-center  font-weight-bold text-uppercase">
+                    [[g_graph.name]]
+                </h5>
+            </div>
+            <div class="col-12" v-for="(graph, index) in g_graph.graphs" :key="index" >
+                <apexchart class="" type=line height=400 :options="buildOptions(graph.title,graph.yaxis_title)" :series="graph.series" />
+            </div>
+        </div>
+
+
     </div>
-
-
 
 </div>
 
@@ -37,58 +70,6 @@
 
 <script type="text/javascript">
 
-function buildTable(title, yaxis_title, first_date) {
-    let charDefaultsOptions = {
-        chart: {
-            height: 350,
-            locales: [apexchart_locale_es],
-            defaultLocale: 'es',
-            stacked: false,
-            zoom: {
-                enabled: true,
-            },
-            toolbar: {
-                autoSelected: 'zoom'
-            }
-        },
-        dataLabels: {
-            enabled: true
-        },
-        stroke: {
-            curve: 'straight'
-        },
-        title: {
-            text: title,
-            align: 'center'
-        },
-        grid: {
-            row: {
-                colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-                opacity: 0.5
-            },
-        },
-        yaxis: {
-            'title': {
-                'text': yaxis_title
-            },
-            'min': 0,
-
-        },
-        xaxis: {
-            type: 'datetime',
-            min: new Date(first_date).getTime(),
-            tickAmount: 6,
-        },
-        tooltip: {
-            x: {
-                format: 'dd MMMM yyyy'
-            }
-        }
-    }
-    return charDefaultsOptions;
-}
-
-
 var app = new Vue({
     delimiters: ['[[', ']]'],
     el: '#app',
@@ -97,16 +78,60 @@ var app = new Vue({
     },
     data: function(){
         return {
-            series: {{dolar_prices_series.series | safe }},
-            chartOptions: buildTable(
-                '{{ dolar_prices_series.title | safe }}',
-                '{{ dolar_prices_series.yaxis_title | safe }}',
-                '{{ dolar_prices_series.first_date | safe }}',
-            ),
+            dolar_chart: {{dolar_prices_series | safe }},
+            materials_graph: {{ materials_graph | safe}},
+            selected_graph: null,
         }
     },
     methods: {
-        
+        buildOptions: function(title, yaxis_title) {
+            let charDefaultsOptions = {
+                chart: {
+                    locales: [apexchart_locale_es],
+                    defaultLocale: 'es',
+                    stacked: false,
+                    zoom: {
+                        enabled: true,
+                    },
+                    toolbar: {
+                        autoSelected: 'zoom'
+                    }
+                },
+                dataLabels: {
+                    enabled: true
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                title: {
+                    text: title,
+                    align: 'center'
+                },
+                grid: {
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                },
+                yaxis: {
+                    'title': {
+                        'text': yaxis_title
+                    },
+                    'min': 0,
+
+                },
+                xaxis: {
+                    type: 'datetime',
+                    tickAmount: 6,
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd MMMM yyyy'
+                    }
+                }
+            }
+            return charDefaultsOptions;
+        },
     },
 })
 

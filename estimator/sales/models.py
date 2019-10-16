@@ -75,21 +75,6 @@ class Sale(TimeStampFields):
             sale=self.pk,
         )
 
-    @property
-    def date_format(self):
-        utc = tz.tzutc()
-        local = tz.tzlocal()
-        fecha = self.created
-
-        print(fecha)
-
-        local_now = fecha.replace(tzinfo=utc).astimezone(local)
-
-        print(local_now)
-        print("--")
-
-        return self.created.replace(tzinfo=utc).astimezone(local)
-
     def __str__(self):
         return '%s %d' % (self._meta.verbose_name, self.pk)
 
