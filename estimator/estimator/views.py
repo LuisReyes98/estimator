@@ -13,7 +13,7 @@ class HomeView(LoginRequiredMixin, TemplateView):
         # context["title"] = "Bienvenido"
         try:
             context['prediction'] = PredictionSale.objects.filter(
-                company= self.request.user.safe_company
+                company=self.request.user.safe_company
             ).latest('created')
         except Exception:
             context['prediction'] = None

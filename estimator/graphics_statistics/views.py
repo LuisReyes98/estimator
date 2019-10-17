@@ -9,6 +9,7 @@ from raw_materials.models import RawMaterial
 from predictions.models import PredictionSale
 from .models import BolivarControl
 
+
 def generateRawMaterialDolarGraphData(company, raw_materials):
 
     predicted_sales = PredictionSale.objects.filter(
@@ -120,7 +121,7 @@ def generateRawMaterialDolarGraphData(company, raw_materials):
     # por cada venta realiza cargar los datos
     for sale in sales:
         for material_relation in sale.materials_sale_relation:
-            if raw_materials_dict.get(predic.raw_material.pk):
+            if raw_materials_dict.get(material_relation.raw_material.pk):
                 # si la materia prima pertenece al grupo seleccionado
                 raw_materials_dict[material_relation.raw_material.pk]['dolar_cost'].append(
                     [
@@ -236,10 +237,6 @@ def generateRawMaterialDolarGraphData(company, raw_materials):
 
 class GraphicsView(TemplateView):
     template_name = "graphics/graphics.html"
-    # tz = pytz.timezone(settings.TIME_ZONE)
-    # SOBERANO_CHANGE = 100000.00
-    # # fechas menores o igual a esta ocurrieron antes del cambio de moneda
-    # SOBERANO_DATE = datetime(2018, 8, 18, 0, 0, 0, 0, tz)
 
     def get_context_data(self, **kwargs):
         """Añadiendo variables al contexto """

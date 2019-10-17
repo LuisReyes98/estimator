@@ -22,6 +22,7 @@ from sales.models import DolarPrice, Sale
 
 from .models import PredictionSale, PredictionMaterialRelated
 from .forms import SelectPredictionForm
+from graphics_statistics.views import generateRawMaterialDolarGraphData as g_graph
 
 matplotlib.use('Agg')
 
@@ -180,8 +181,9 @@ class PredictionResultView(TemplateView):
             Lista de materia prima a predecir
         """
         context = super().get_context_data(**kwargs)
-        graphics = []  # vector de diccionari con name y fig
+        # graphics = []  # vector de diccionari con name y fig
         materials_dict = {}
+        chart_materials = []
         predicted_materials = []
         materials_models_cost_dict = {}
         materials_models_amount_dict = {}
@@ -196,6 +198,8 @@ class PredictionResultView(TemplateView):
 
         for el in raw_materials:
             materials_dict[el['pk']] = el['name']
+            mat = RawMaterial.objects.get(pk=el['pk'])
+            chart_materials.append(mat)
 
         Xm_df_dict = self.build_materials_dataframes(raw_materials)
 
@@ -224,29 +228,12 @@ class PredictionResultView(TemplateView):
             prediction_df
         )
 
-        # prediction_df['dollar_price'] = dolar_prediction
-
-        # print(prediction_df)
-        graphics.append({
-            'name': "Precio del dolar",
-            'fig': self.generate_linear_plot('date', 'dollar_price', X_dolar)
-        })
-
         for key, df in Xm_df_dict.items():
             """
                 Para predecir se requiere el
                 - precio del dolar "dollar_price"
                 - fecha "date"
             """
-
-            graphics.append({
-                'name': materials_dict[key] + " costo",
-                'fig': self.generate_linear_plot('date', 'cost_dollar', df)
-            })
-            graphics.append({
-                'name': materials_dict[key] + " cantidad",
-                'fig': self.generate_linear_plot('date', 'amount', df)
-            })
 
             # print(df.shape)
             # modelo de prediccion de costos de la materia prima seleccionada
@@ -306,7 +293,16 @@ class PredictionResultView(TemplateView):
                 pred_material_related.save()
             self.request.session['prediction_to_save'] = False
 
-        context['graphics'] = graphics
+        # context['graphics'] = graphics
+
+        graphs = g_graph(
+            company=self.request.user.safe_company,
+            raw_materials=chart_materials,
+        )
+
+        context['materials_graph'] = graphs['materials_graph']
+
+        context['dolar_graph'] = graphs['dolar_graph']
 
         context['dolar_prediction'] = dolar_prediction
 

@@ -1,6 +1,13 @@
 {% extends 'layouts/base_app.html' %}
 
 {% load es_money %}
+{% load static %}
+
+{% block head %}
+{{block.super}}
+<link rel="stylesheet" href="{% static 'css/apexcharts.css' %}">
+{% endblock head %}
+
 
 {% block content %}
 {{block.super}}
@@ -32,13 +39,6 @@
                                     <span class="font-weight-bold">{{dolar_prediction.0 | es_money}} Bs</span>
                                 </p>
                             </div>
-                            {% comment %} <div class="col-12 col-md-8 col-lg-6 m-auto">
-                                <ul class="list-group font-weight-bold">
-                                    <li class="list-group-item p-2">
-                                        {{dolar_prediction.0 | es_money}}
-                                    </li>
-                                </ul>
-                            </div> {% endcomment %}
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -80,18 +80,136 @@
                                 <h6 class="font-weight-bold text-uppercase">Gráficos</h6>
                             </div>
                         </div>
+                        {% comment %}
+                            Graficas de la prediccion
+                        {% endcomment %}
                         <div class="row">
-                            {% for graph in graphics %}
-                                <div class="col-12 col-lg-6 text-center text-capitalize">
-                                    <div class="text-center app__graph">
-                                        {{graph.fig | safe}}
+                            <div class="col-12 my-1 col-lg-6 text-center text-capitalize">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <h6 class="font-weight-bold m-0">
+                                                [[dolar_chart.title]]
+                                            </h6>
+                                            <i class="mdi mdi-cube-outline h5 m-0"></i>
+                                        </div>
                                     </div>
-                                    <p class="mb-1 pl-2 text-uppercase font-weight-bold small">
-                                        {{graph.name}}
-                                    </p>
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-center align-content-center p-3" >
+                                            <i class=" mdi mdi-chart-line mdi-24px px-2  "
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                style="cursor: pointer;"
+                                                title="Gráfica de Línea"
+                                                @click="setObjLine(dolar_chart)"
+                                                v-bind:class="{ 'text-primary': dolar_chart.type=='line' }"
+                                            ></i>
+                                            <i class="mdi mdi-chart-areaspline-variant mdi-24px px-2  "
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                style="cursor: pointer;"
+                                                title="Gráfica de Área"
+                                                @click="setObjArea(dolar_chart)"
+                                                v-bind:class="{ 'text-primary': dolar_chart.type=='area' }"
+                                            ></i>
+                                            <i class="mdi mdi-chart-line-variant mdi-24px px-2  "
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                style="cursor: pointer;"
+                                                title="Línea de Gráfica Recta"
+                                                @click="setObjStraightLine(dolar_chart)"
+                                                v-bind:class="{ 'text-primary': dolar_chart.line_stroke=='straight' }"
+                                            ></i>
+                                            <i class="mdi mdi-chart-bell-curve mdi-24px px-2  "
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                style="cursor: pointer;"
+                                                title="Línea de Gráfica Curva"
+                                                @click="setObjCurveLine(dolar_chart)"
+                                                v-bind:class="{ 'text-primary': dolar_chart.line_stroke=='smooth' }"
+                                            ></i>
+                                            <i class="mdi mdi-chart-histogram mdi-24px px-2  "
+                                                data-toggle="tooltip"
+                                                data-placement="top"
+                                                style="cursor: pointer;"
+                                                title="Línea de Gráfica Pasos"
+                                                @click="setObjStepLine(dolar_chart)"
+                                                v-bind:class="{ 'text-primary': dolar_chart.line_stroke=='stepline' }"
+                                            ></i>
+                                        </div>
+                                        <apexchart class="" :type="dolar_chart.type" height=400 :options="buildOptions(dolar_chart.title,dolar_chart.yaxis,dolar_chart.line_stroke)" :series="dolar_chart.series" />
+
+                                    </div>
+                                
                                 </div>
-                            {% endfor %}
+                            </div>
+
+                            <template v-for="(m_graph, index) in materials_graph" >
+                                <div
+                                    class="my-1 col-12 col-lg-6 text-center text-capitalize"
+                                    v-for="(graph, index2) in m_graph.graphs" :key="'g' + index2  + 'm_' + index">
+                                    <div class="card ">
+
+                                        <div class="card-header">
+                                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                                <h6 class="font-weight-bold m-0">
+                                                    [[graph.title]]
+                                                </h6>
+                                                <i class="mdi mdi-cube-outline h5 m-0"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-center align-content-center p-3" >
+                                                <i class="mdi mdi-chart-line mdi-24px px-2  "
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    style="cursor: pointer;"
+                                                    title="Gráfica de Línea"
+                                                    @click="setObjLine(graph)"
+                                                    v-bind:class="{ 'text-primary': graph.type=='line' }"
+                                                ></i>
+                                                <i class="mdi mdi-chart-areaspline-variant mdi-24px px-2  "
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    style="cursor: pointer;"
+                                                    title="Gráfica de Área"
+                                                    @click="setObjArea(graph)"
+                                                    v-bind:class="{ 'text-primary': graph.type=='area' }"
+                                                ></i>
+                                                <i class="mdi mdi-chart-line-variant mdi-24px px-2  "
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    style="cursor: pointer;"
+                                                    title="Línea de Gráfica Recta"
+                                                    @click="setObjStraightLine(graph)"
+                                                    v-bind:class="{ 'text-primary': graph.line_stroke=='straight' }"
+                                                ></i>
+                                                <i class="mdi mdi-chart-bell-curve mdi-24px px-2  "
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    style="cursor: pointer;"
+                                                    title="Línea de Gráfica Curva"
+                                                    @click="setObjCurveLine(graph)"
+                                                    v-bind:class="{ 'text-primary': graph.line_stroke=='smooth' }"
+                                                ></i>
+                                                <i class="mdi mdi-chart-histogram mdi-24px px-2  "
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    style="cursor: pointer;"
+                                                    title="Línea de Gráfica Pasos"
+                                                    @click="setObjStepLine(graph)"
+                                                    v-bind:class="{ 'text-primary': graph.line_stroke=='stepline' }"
+                                                ></i>
+                                            </div>
+                                            <apexchart class="" :type="graph.type" height=400 :options="buildOptions(graph.title,graph.yaxis_title,graph.line_stroke)" :series="graph.series" />
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </template>
+
                         </div>
+
                         <div class="row pt-3">
                             <div class="col text-center">
                                 <a
@@ -109,3 +227,111 @@
     </div>
 </div>
 {% endblock content%}
+
+{% block javascript %}
+{{block.super}}
+
+<script src="{% static 'js/apexcharts/apexcharts.min.js' %}" ></script>
+<script src="{% static 'js/apexcharts/vue-apexcharts.js' %}"></script>
+<script src="{% static 'js/apexcharts/es_locale.js' %}" ></script>
+
+<script type="text/javascript">
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+var app = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#app',
+    components: {
+        apexchart: VueApexCharts,
+    },
+    data: function(){
+        return {
+            dolar_chart: {{dolar_graph | safe }},
+            materials_graph: {{ materials_graph | safe}},
+        }
+    },
+    methods: {
+        buildOptions: function(title, yaxis_title, lineStroke) {
+            let charDefaultsOptions = {
+                chart: {
+                    locales: [apexchart_locale_es],
+                    defaultLocale: 'es',
+                    stacked: false,
+                    zoom: {
+                        enabled: true,
+                    },
+                    toolbar: {
+                        autoSelected: 'zoom'
+                    }
+                },
+                colors: ['#04a08e', '#F4B030'],
+                dataLabels: {
+                    enabled: true
+                },
+                stroke: {
+                    curve: lineStroke
+                },
+                // title: {
+                //     text: title,
+                //     align: 'left',
+                //     style: {
+                //         fontSize: '18px',
+                //     },
+                // },
+                grid: {
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                },
+                yaxis: {
+                    'title': {
+                        'text': yaxis_title
+                    },
+                    'min': 0,
+
+                },
+                xaxis: {
+                    type: 'datetime',
+                    tickAmount: 6,
+                },
+                tooltip: {
+                    x: {
+                        format: 'dd MMMM yyyy'
+                    }
+                }
+            }
+
+            return charDefaultsOptions;
+        },
+        setObjArea: function(obj){
+            obj.type = 'area';
+        },
+        setObjLine: function(obj){
+            obj.type = 'line';
+        },
+        setObjStraightLine: function(obj){
+            obj.line_stroke = 'straight';
+        },
+        setObjCurveLine: function(obj){
+            obj.line_stroke = 'smooth';
+        },
+        setObjStepLine: function(obj){
+            obj.line_stroke = 'stepline';
+        },
+        updateToolTip: function(){
+            setTimeout(function () {
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                })
+            },0);
+        },
+    }
+})
+
+</script>
+
+{% endblock javascript %}
