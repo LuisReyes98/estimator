@@ -258,3 +258,7 @@ class GraphicsView(TemplateView):
         context['dolar_graph'] = graphs['dolar_graph']
 
         return context
+
+
+class ReportsView(TemplateView):
+    template_name = "graphics/reports.html"
