@@ -23,9 +23,9 @@
     </div> {% endcomment %}
     <div class="row pt-2 pb-4">
       <div class="col-12">
-        <ul class="list-group list-group-horizontal-sm app__border--gray-200 py-1">
-          <li class="pr-5 m-0 h5 d-flex flex-row justify-content-start">
-            <i class="mdi mdi-account-circle-outline mr-3 app__text--cyan"></i>
+        <ul class="list-group list-group-horizontal-sm py-1">
+          <li class="pr-5 m-0 d-flex flex-row justify-content-start">
+            <i class="mdi mdi-account-circle-outline h5 mr-2 app__text--cyan"></i>
             <p class="m-0">
               <span class="app__text--800">{{user}}</span>
               {% if user.is_superuser %}
@@ -35,8 +35,8 @@
               {% endif %}
             </p>
           </li>
-          <li class="pr-5 m-0 h5 d-flex  flex-row justify-content-start">
-            <i class="mdi mdi-factory mr-3 app__text--cyan"></i>
+          <li class="pr-5 m-0 d-flex  flex-row justify-content-start">
+            <i class="mdi mdi-factory h5 mr-2 app__text--cyan"></i>
             <p class="m-0">
             	<span class="app__text--800">{{user.safe_company}}</span>
             </p>
@@ -75,12 +75,17 @@
                   Materias primas:
                 </p>
                 <div class="container-fluid">
-                  <div class="row m-auto">
+                  <div class="row justify-content-md-center">
                     {% for pred in prediction.predictions %}
-                      <div class="col-12 col-md-6 pb-3">
+                      <div class="col-12 col-md-6 col-lg-3 pb-3">
                         <div class="card">
                         <div class="card-header">
-                          <h6 class="font-weight-bold">{{pred.raw_material}}</h6>
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <h6 class="font-weight-bold m-0">
+                              {{pred.raw_material}}
+                            </h6>
+                            <i class="mdi mdi-cube-outline h5 m-0"></i>
+                          </div>
                         </div>
                           <div class="card-body">
                             <p class="">

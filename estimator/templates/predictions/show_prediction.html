@@ -14,52 +14,66 @@
             </div>
         </div>
         <div class="row pt-3 pb-3">
-            <div class="col pb-1">
+            <div class="col">
                 <div class="app__background--white p-2 rounded shadow">
                     <div class="container-fluid">
                         <div class="row pb-2">
                             <div class="col">
-                                <p>
-                                    Fecha:
+                                <p class="h5">
+                                    Fecha a Estimar:
                                     <span class="font-weight-bold">{{prediction_date.date}}</span>
                                 </p>
                             </div>
                         </div>
                         <div class="row pb-4">
-                            <div class="col-12 text-center">
-                                <p class="font-weight-bold text-uppercase">
-                                    Valores estimados del dólar:
+                            <div class="col-12">
+                                <p class="h5">
+                                    Valor estimado del Dólar:
+                                    <span class="font-weight-bold">{{dolar_prediction.0 | es_money}} Bs</span>
                                 </p>
                             </div>
-                            <div class="col-12 col-md-8 col-lg-6 m-auto">
+                            {% comment %} <div class="col-12 col-md-8 col-lg-6 m-auto">
                                 <ul class="list-group font-weight-bold">
                                     <li class="list-group-item p-2">
                                         {{dolar_prediction.0 | es_money}}
                                     </li>
                                 </ul>
-                            </div>
+                            </div> {% endcomment %}
                         </div>
-                        <div class="row pb-4">
-                            <div class="col-12 text-center">
-                                <p class="font-weight-bold text-uppercase">
-                                    Predicciones por materia prima:
+                        <div class="row">
+                            <div class="col-12">
+                                <p class="">
+                                    Predicciones de Materia Prima:
                                 </p>
                             </div>
-                            <div class="col-12 col-md-8 col-lg-6 m-auto">
-                                {% for pred in predicted_materials %}
-                                    <ul class="list-group">
-                                        <li class="list-group-item p-2">Materia Prima:
-                                            <span class="font-weight-bold">{{pred.raw_material}}</span>
-                                        </li>
-                                        <li class="list-group-item p-2">Costos:
-                                            <span class="font-weight-bold">{{pred.cost_dollar.0 | es_money }}</span>
-                                        </li>
-                                        <li class="list-group-item p-2">Cantidad:
-                                            <span class="font-weight-bold">{{pred.amount.0 | floatformat:"0" }}</span>
-                                        </li>
-                                    </ul>
-                                {% endfor %}
-                            </div>
+                        </div>
+                        <div class="row pb-4 justify-content-md-center">
+                            {% for pred in predicted_materials %}
+                                <div class="col-12 col-md-6 col-lg-3 pb-3">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                                <h6 class="font-weight-bold m-0">
+                                                    {{pred.raw_material}}
+                                                </h6>
+                                                <i class="mdi mdi-cube-outline h5 m-0"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="">
+                                                Precio estimado:
+                                                <span class="font-weight-bold">$ {{pred.cost_dollar.0 | es_money }}</span>
+                                            </p>
+                                            <p class="">
+                                                Se recomienda comprar:
+                                                <span class="font-weight-bold">
+                                                    {{pred.amount.0 | floatformat:"0" }} Unidades
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                         <div class="row pb-2">
                             <div class="col text-center">
@@ -78,7 +92,16 @@
                                 </div>
                             {% endfor %}
                         </div>
-
+                        <div class="row pt-3">
+                            <div class="col text-center">
+                                <a
+                                    href="{% url 'sales:calendar' %}"
+                                    class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
+                                >
+                                    Continuar
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
