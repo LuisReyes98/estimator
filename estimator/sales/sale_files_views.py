@@ -102,7 +102,11 @@ class SaleUploadFileView(LoginRequiredMixin, CreateView):
         return result
 
     def format_date(self, date):
-        return datetime.strptime(date, '%d/%m/%Y')
+        try:
+            result = datetime.strptime(date, '%d/%m/%Y')
+        except Exception:
+            result = datetime.strptime(date, '%Y-%m-%d')
+        return result
 
     def save_csv_to_sales(self, file_uploaded, user):
         """

@@ -371,19 +371,21 @@ class SaleFileForm(forms.ModelForm):
         """
         try:
             datetime.strptime(value, '%d/%m/%Y')
-
         except Exception:
-            return forms.ValidationError(
-                _(
-                    'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no es una fecha'
-                ),
-                code='invalid',
-                params={
-                    'value': value,
-                    'index': row_num,
-                    'col': col_name,
-                },
-            )
+            try:
+                datetime.strptime(value, '%Y-%m-%d')
+            except Exception:
+                return forms.ValidationError(
+                    _(
+                        'El valor <b>%(value)s</b> en la fila <b>%(index)d</b> en la columna <b>%(col)s</b> no es una fecha'
+                    ),
+                    code='invalid',
+                    params={
+                        'value': value,
+                        'index': row_num,
+                        'col': col_name,
+                    },
+                )
         return False
 
     def is_invalid_yes_no(self, value, row_num, col_name, can_be_empty=False):

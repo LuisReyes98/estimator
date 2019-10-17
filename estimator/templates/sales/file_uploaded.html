@@ -2,7 +2,7 @@
 
 {% block content %}
 {{ block.super }}
-<div class="container-fluid bg__black_gradient app__viewport predictions__form scrollbar_alt">
+<div class="container-fluid bg__black_gradient d-flex justify-content-center align-items-md-center align-items-start app__viewport predictions__form scrollbar_alt">
     <div class="row pt-3 pb-3">
         <div class="col-12 col-lg-10 m-auto">
             <div class="card app__background--white">
@@ -15,7 +15,16 @@
                                 </h4>
                             </div>
                         </div>
-                        <div class="row pb-0">
+                        <div class="row pb-3">
+                            <div class="col py-5 text-center">
+                                <p class="m-0 text-uppercase">
+                                    Se registraron con éxito
+                                    <span class="font-weight-bold">{{counter_success}}</span>
+                                    compras
+                                </p>
+                            </div>
+                        </div>
+                        {% comment %} <div class="row pb-0">
                             <div class="col pt-1 pb-0">
                                 <p>
                                     Se registraron con éxito 
@@ -42,11 +51,6 @@
                                                         <p class="list-group-item small p-2 mt-1 mb-1">
                                                             {{fail}}
                                                         </p>
-                                                        {% comment %} <ul class="list-group">
-                                                                <li class="list-group-item small pt-1 pb-1">
-                                                                    {{fail}}
-                                                                </li>
-                                                        </ul> {% endcomment %}
                                                     </div>
                                                 {% endfor %}
                                             </div>
@@ -54,7 +58,7 @@
                                     </div>
                                 {% endif %}
                             </div>
-                        </div>
+                        </div> {% endcomment %}
                         <div class="row">
                             <div class="col text-center">
                                 <a
