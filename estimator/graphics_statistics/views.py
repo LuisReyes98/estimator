@@ -125,6 +125,8 @@ class GraphicsView(TemplateView):
         # datos de configuracion
         dolar_prices_series['yaxis_title'] = 'Precio del dolar'
         dolar_prices_series['title'] = 'Precio del dolar a lo largo del tiempo'
+        dolar_prices_series['type'] = 'line'
+        dolar_prices_series['line_stroke'] = 'straight'
 
         # por cada venta realiza cargar los datos
         for sale in sales:
@@ -150,7 +152,7 @@ class GraphicsView(TemplateView):
 
         for key, value in raw_materials_dict.items():
             if (len(value['dolar_cost']) > 0):
-                
+
                 dolar_data = []
                 dolar_data.append(
                     {
@@ -209,6 +211,8 @@ class GraphicsView(TemplateView):
                                 value['unit'],
                                 value['name'],
                             ),
+                            'type': 'line',
+                            'line_stroke': 'straight',
                         },
                         {
                             'series': local_data,
@@ -217,6 +221,8 @@ class GraphicsView(TemplateView):
                                 value['unit'],
                                 value['name'],
                             ),
+                            'type': 'line',
+                            'line_stroke': 'straight',
                         },
                         {
                             'series': amount_data,
@@ -225,6 +231,8 @@ class GraphicsView(TemplateView):
                                 value['unit'],
                                 value['name'],
                             ),
+                            'type': 'line',
+                            'line_stroke': 'straight',
                         }
                     ]
                 }
