@@ -17,56 +17,54 @@
         <div class="row pt-3 pb-3">
             <div class="col">
                 <h3 class="text-center font-weight-bold text-uppercase">
-                    Gráficas y estadisticas
+                    Gráficas y Estadísticas
                 </h3>
             </div>
         </div>
         <div class="row pt-3 pb-3">
             <div class="col-12">
-                <h4 class="text-center  font-weight-bold text-uppercase">
-                    Comportamiento del dolar
+                <h4 class="text-center font-weight-bold text-uppercase">
+                    Comportamiento del Dólar
                     <a class="text-decoration-none text-dark" href="#dollar_price"><i class="mdi mdi-link-variant"></i></a>
                 </h4>
             </div>
-            <div class="col-12 ">
-                <div class="container app__background--white rounded">
+            <div class="col-12">
+                <div class="container-fluid pt-3 app__background--white rounded shadow">
                     <!-- <div> Agregar botones para cambiar el tipo de grafica</div> -->
                     <apexchart class="" type=line height=400 :options="buildOptions(dolar_chart.title,dolar_chart.yaxis)" :series="dolar_chart.series" />
                 </div>
             </div>
-
         </div>
-        <div class="row pt-3 pb-5 mb-5">
+        <div class="row pt-3 mt-3">
             <div class="col-12">
-                <h4 class="text-center  font-weight-bold text-uppercase">
-                    Comportamiento de las materias primas
-                </h4>
-                <div class="text-center ">
-                    <label for="graphs_material">Escoge Materias Primas a graficar</label>
-                    <select id="graphs_material" v-model="selected_graph" class="selectpicker" data-live-search="true" title="Selecciona">
-                        <option v-for="option in materials_options" v-bind:value="option.key">
-                            [[option.name]]
-                        </option>
-                    </select>
+                <div class="container-fluid pt-3 pb-3 app__background--white rounded shadow">
+                    <h4 class="text-center font-weight-bold text-uppercase">
+                        Comportamiento de las Materias Primas
+                    </h4>
+                    <div class="form-group text-center">
+                        <label for="graphs_material">Seleccione una materia prima para graficar</label>
+                        <select id="graphs_material" v-model="selected_graph" class="selectpicker" data-live-search="true" title="Selecciona">
+                            <option v-for="option in materials_options" v-bind:value="option.key">
+                                [[option.name]]
+                            </option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="row pt-3 pb-3" v-if="selected_graph != 0">
+        <div class="row pt-3 pb-3 mt-3" v-if="selected_graph != 0">
             <div class="col-12">
-                <h5 class="text-center  font-weight-bold text-uppercase">
+                <h5 class="text-center font-weight-bold text-uppercase">
                     [[current_graph.name]]
                 </h5>
             </div>
             <div class="col-12" v-for="(graph, index) in current_graph.graphs" :key="index">
-                <div class="container app__background--white rounded">
+                <div class="container-fluid pt-3 app__background--white rounded shadow">
                     <apexchart class="" type=line height=400 :options="buildOptions(graph.title,graph.yaxis_title)" :series="graph.series" />
                 </div>
             </div>
         </div>
-
-
     </div>
-
 </div>
 
 {% endblock content %}
