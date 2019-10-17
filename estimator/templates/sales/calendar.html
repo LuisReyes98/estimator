@@ -158,6 +158,20 @@
                         <i class="mdi mdi-chart-line"></i>
                     </a>
                 {% endif %}
+                {% if value.expire %}
+                    <a
+                        href="pred_{{key}}"
+                        id="tooltip_{{key}}"
+                        data-toggle="modal"
+                        tooltip="tooltip"
+                        data-target="#salesCalendarModal_{{key}}"
+                        class="app__button--icon icon--calendar_expire ml-1"
+                        data-placement="left"
+                        title="Expiración"
+                    >
+                        <i class="mdi mdi-information-variant"></i>
+                    </a>
+                {% endif %}
             </span>
         </div>
 
@@ -284,6 +298,47 @@
                                 </div>
                             {% endif %}
                         </div>
+                        {% if value.expire %}
+                            <hr>
+                            <div class="row justify-content-lg-center">
+                                <div class="col-12 col-lg-6">
+                                    <h6 class="font-weight-bold text-uppercase text-center">
+                                        Materias primas que expiran hoy
+                                    </h6>
+                                    <table class="table table-sm table-hover" style="white-space: nowrap;">
+                                        <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Materias Primas</th>
+                                                <th scope="col" colspan="2" class="text-center">Fecha de Compra</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for sale in value.expire %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>
+                                                    <ul class="list-unstyled small">
+                                                        {% for relation in sale.materials_sale_relation %}
+                                                            {% if relation.raw_material.can_expire %}
+                                                                <li>
+                                                                    {{relation.raw_material.name}}
+                                                                </li>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+                                                <td class="font-weight-bold">
+                                                    {{sale.date}}
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        {% endif %}
                     </div>
                     <div class="modal-footer">
                     </div>

@@ -39,6 +39,7 @@ class CalendarView(LoginRequiredMixin, TemplateView):
         js_dict = {}
 
         for sale in sales:
+            dt = sale.date
             date = sale.date.strftime("%Y-%m-%d")
             if date not in sales_pred_date_dict:
                 sales_pred_date_dict[date] = {
@@ -50,6 +51,21 @@ class CalendarView(LoginRequiredMixin, TemplateView):
                 js_dict[date] = date
             else:
                 sales_pred_date_dict[date]['sale'].append(sale)
+
+            for material in sale.materials_sale_relation:
+                if material.raw_material.can_expire:
+                    mt = material.raw_material.time_to_expire
+                    expire = (dt + mt).strftime("%Y-%m-%d")
+                    if expire not in sales_pred_date_dict:
+                        sales_pred_date_dict[expire] = {
+                            'sale' : [],
+                            'pred' : [],
+                            'expire' : []
+                        }
+                        sales_pred_date_dict[expire]['expire'].append(sale)
+                        js_dict[expire] = expire
+                    else:
+                        sales_pred_date_dict[expire]['expire'].append(sale)
 
         for prediction in predictions:
             date = prediction.prediction_date.strftime("%Y-%m-%d")
