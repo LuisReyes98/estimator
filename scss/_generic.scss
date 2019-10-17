@@ -1,3 +1,19 @@
 .overflow-y-scroll{
     overflow-y: scroll;
 }
+
+.cursor__pointer{
+    cursor: pointer;
+}
+
+.cursor__pointer--imp {
+    cursor: pointer !important;
+}
+
+.mdi__cursor_pointer{
+    cursor: pointer;
+
+    &::before, ::after{
+        cursor: pointer;
+    }
+}

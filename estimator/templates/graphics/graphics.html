@@ -30,8 +30,53 @@
             </div>
             <div class="col-12 ">
                 <div class="container app__background--white rounded">
-                    <!-- <div> Agregar botones para cambiar el tipo de grafica</div> -->
-                    <apexchart class="" type=line height=400 :options="buildOptions(dolar_chart.title,dolar_chart.yaxis)" :series="dolar_chart.series" />
+                    <div class="d-flex justify-content-center align-content-center p-3" >
+                        <i class=" mdi mdi-chart-line mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Gráfica de Linea"
+                            @click="setObjLine(dolar_chart)"
+                            v-bind:class="{ 'text-primary': dolar_chart.type=='line' }"
+                        ></i>
+                        <i class="mdi mdi-chart-areaspline-variant mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Gráfica de area"
+                            @click="setObjArea(dolar_chart)"
+                            v-bind:class="{ 'text-primary': dolar_chart.type=='area' }"
+
+                        ></i>
+                        <i class="mdi mdi-chart-line-variant mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Linea de gráfica recta"
+                            @click="setObjStraightLine(dolar_chart)"
+                            v-bind:class="{ 'text-primary': dolar_chart.line_stroke=='straight' }"
+
+                        ></i>
+                        <i class="mdi mdi-chart-bell-curve mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Linea de gráfica curva"
+                            @click="setObjCurveLine(dolar_chart)"
+                            v-bind:class="{ 'text-primary': dolar_chart.line_stroke=='smooth' }"
+
+                        ></i>
+                        <i class="mdi mdi-chart-histogram mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Linea de gráfica pasos"
+                            @click="setObjStepLine(dolar_chart)"
+                            v-bind:class="{ 'text-primary': dolar_chart.line_stroke=='stepline' }"
+
+                        ></i>
+                    </div>
+                    <apexchart class="" :type="dolar_chart.type" height=400 :options="buildOptions(dolar_chart.title,dolar_chart.yaxis,dolar_chart.line_stroke)" :series="dolar_chart.series" />
                 </div>
             </div>
 
@@ -59,7 +104,49 @@
             </div>
             <div class="col-12" v-for="(graph, index) in current_graph.graphs" :key="index">
                 <div class="container app__background--white rounded">
-                    <apexchart class="" type=line height=400 :options="buildOptions(graph.title,graph.yaxis_title)" :series="graph.series" />
+                <div class="d-flex justify-content-center align-content-center p-3" >
+                        <i class="mdi mdi-chart-line mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Gráfica de Linea"
+                            @click="setObjLine(graph)"
+                            v-bind:class="{ 'text-primary': graph.type=='line' }"
+                        ></i>
+                        <i class="mdi mdi-chart-areaspline-variant mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Gráfica de area"
+                            @click="setObjArea(graph)"
+                            v-bind:class="{ 'text-primary': graph.type=='area' }"
+                        ></i>
+                        <i class="mdi mdi-chart-line-variant mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Linea de gráfica recta"
+                            @click="setObjStraightLine(graph)"
+                            v-bind:class="{ 'text-primary': graph.line_stroke=='straight' }"
+                        ></i>
+                        <i class="mdi mdi-chart-bell-curve mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Linea de gráfica curva"
+                            @click="setObjCurveLine(graph)"
+                            v-bind:class="{ 'text-primary': graph.line_stroke=='smooth' }"
+                        ></i>
+                        <i class="mdi mdi-chart-histogram mdi-24px px-2  "
+                            data-toggle="tooltip"
+                            data-placement="top"
+                            style="cursor: pointer;"
+                            title="Linea de gráfica pasos"
+                            @click="setObjStepLine(graph)"
+                            v-bind:class="{ 'text-primary': graph.line_stroke=='stepline' }"
+                        ></i>
+                    </div>
+                    <apexchart class="" :type="graph.type" height=400 :options="buildOptions(graph.title,graph.yaxis_title,graph.line_stroke)" :series="graph.series" />
                 </div>
             </div>
         </div>
@@ -81,6 +168,10 @@
 
 <script type="text/javascript">
 
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
 var app = new Vue({
     delimiters: ['[[', ']]'],
     el: '#app',
@@ -96,7 +187,7 @@ var app = new Vue({
         }
     },
     methods: {
-        buildOptions: function(title, yaxis_title) {
+        buildOptions: function(title, yaxis_title, lineStroke) {
             let charDefaultsOptions = {
                 chart: {
                     locales: [apexchart_locale_es],
@@ -109,11 +200,12 @@ var app = new Vue({
                         autoSelected: 'zoom'
                     }
                 },
+                colors: ['#04a08e', '#F4B030'],
                 dataLabels: {
                     enabled: true
                 },
                 stroke: {
-                    curve: 'straight'
+                    curve: lineStroke
                 },
                 title: {
                     text: title,
@@ -146,6 +238,21 @@ var app = new Vue({
                 }
             }
             return charDefaultsOptions;
+        },
+        setObjArea: function(obj){
+            obj.type = 'area';
+        },
+        setObjLine: function(obj){
+            obj.type = 'line';
+        },
+        setObjStraightLine: function(obj){
+            obj.line_stroke = 'straight';
+        },
+        setObjCurveLine: function(obj){
+            obj.line_stroke = 'smooth';
+        },
+        setObjStepLine: function(obj){
+            obj.line_stroke = 'stepline';
         },
     },
     computed: {
