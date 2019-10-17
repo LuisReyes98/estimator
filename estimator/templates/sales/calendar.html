@@ -1,5 +1,6 @@
 {% extends 'layouts/base_app.html' %}
 {% load safe_js %}
+{% load es_money %}
 {% load static %}
 
 {% block head %}
@@ -129,77 +130,162 @@
     {% for key, value in salesObj.items %}
         <div id="salesCalendar_{{key}}" class="d-none">
             <span style="z-index: 4;pointer-events: all;">
-                <a
-                    href="sale_{{key}}"
-                    id="tooltip_{{key}}"
-                    data-toggle="modal"
-                    tooltip="tooltip"
-                    data-target="#salesCalendarModal_{{key}}"
-                    class="app__button--icon icon--calendar_sale ml-1"
-                    data-placement="top"
-                    title="Compras"
-                >
-                    <i class="mdi mdi-cart"></i>
-                </a>
+                {% if value.sale %}
+                    <a
+                        href="sale_{{key}}"
+                        id="tooltip_{{key}}"
+                        data-toggle="modal"
+                        tooltip="tooltip"
+                        data-target="#salesCalendarModal_{{key}}"
+                        class="app__button--icon icon--calendar_sale ml-1"
+                        data-placement="left"
+                        title="Compras"
+                    >
+                        <i class="mdi mdi-cart"></i>
+                    </a>
+                {% endif %}
+                {% if value.pred %}
+                    <a
+                        href="pred_{{key}}"
+                        id="tooltip_{{key}}"
+                        data-toggle="modal"
+                        tooltip="tooltip"
+                        data-target="#salesCalendarModal_{{key}}"
+                        class="app__button--icon icon--calendar_pred ml-1"
+                        data-placement="left"
+                        title="Predicciones"
+                    >
+                        <i class="mdi mdi-chart-line"></i>
+                    </a>
+                {% endif %}
             </span>
         </div>
 
         <div class="modal fade" id="salesCalendarModal_{{key}}" tabindex="-1" role="dialog" aria-labelledby="salesCalendarModal_{{key}}Title" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="salesCalendarModal_{{key}}Title">Compras realizadas en {{key}}</h5>
+                        <h5 class="modal-title" id="salesCalendarModal_{{key}}Title">
+                            {{key}}
+                        </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <i class="mdi mdi-close"></i>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-sm table-hover" style="white-space: nowrap;">
-                            <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Materias Primas</th>
-                                    <th scope="col">Total ($)</th>
-                                    <th scope="col">Total (Moneda local)</th>
-                                    <th scope="col" class="text-center">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for sale in value %}
-                                <tr>
-                                    <th scope="row">{{ forloop.counter }}</th>
-                                    <td>
-                                        <ul class="list-unstyled small">
-                                            {% for relation in sale.materials_sale_relation %}
-                                                <li>
-                                                    {{relation.raw_material.name}} ({{ relation.amount}} {{relation.raw_material.measurement_unit}})
-                                                </li>
+                        <div class="row justify-content-lg-center">
+                            {% if value.sale %}
+                                <div class="col-12 col-lg-6">
+                                    <h6 class="text-center text-uppercase font-weight-bold">
+                                        Compras
+                                    </h6>
+                                    <table class="table table-sm table-hover" style="white-space: nowrap;">
+                                        <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Materias Primas</th>
+                                                <th scope="col">Total ($)</th>
+                                                <th scope="col">Total (Moneda local)</th>
+                                                <th scope="col" class="text-center">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for sale in value.sale %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>
+                                                    <ul class="list-unstyled small">
+                                                        {% for relation in sale.materials_sale_relation %}
+                                                            <li>
+                                                                {{relation.raw_material.name}} ({{ relation.amount}} {{relation.raw_material.measurement_unit}})
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+                                                <td class="font-weight-bold">
+                                                    {{sale.total_cost_dollar | floatformat:2}}
+                                                </td>
+                                                <td class="font-weight-bold">
+                                                    {{sale.total_cost_local | floatformat:2}}
+                                                </td>
+                                                <td class="text-center" style="cursor: default;">
+                                                    <a href="{% url 'sales:sale' sale.pk %}"
+                                                        class="app__button--icon" title="Detalles">
+                                                        <i class="mdi mdi-eye"></i></a>
+                                                    {% if user.is_superuser or user.is_staff %}
+                                                        <a href="{% url 'sales:update_sale' sale.pk %}"
+                                                            class="app__button--icon" title="Editar">
+                                                            <i class="mdi mdi-pencil"></i></a>
+                                                        <a href="{% url 'sales:delete_sale' sale.pk %}"
+                                                            class="app__button--icon icon--trash" title="Eliminar">
+                                                            <i class="mdi mdi-trash-can"></i></a>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
                                             {% endfor %}
-                                        </ul>
-                                    </td>
-                                    <td class="font-weight-bold">
-                                        {{sale.total_cost_dollar | floatformat:2}}
-                                    </td>
-                                    <td class="font-weight-bold">
-                                        {{sale.total_cost_local | floatformat:2}}
-                                    </td>
-                                    <td class="text-center" style="cursor: default;">
-                                        <a href="{% url 'sales:sale' sale.pk %}"
-                                            class="app__button--icon" title="Detalles">
-                                            <i class="mdi mdi-eye"></i></a>
-                                        {% if user.is_superuser or user.is_staff %}
-                                            <a href="{% url 'sales:update_sale' sale.pk %}"
-                                                class="app__button--icon" title="Editar">
-                                                <i class="mdi mdi-pencil"></i></a>
-                                            <a href="{% url 'sales:delete_sale' sale.pk %}"
-                                                class="app__button--icon icon--trash" title="Eliminar">
-                                                <i class="mdi mdi-trash-can"></i></a>
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                            {% if value.pred %}
+                                <div class="col-12 col-lg-6">
+                                    <h6 class="text-center text-uppercase font-weight-bold">
+                                        Predicciones
+                                    </h6>
+                                    <table class="table table-sm table-hover" style="white-space: nowrap;">
+                                        <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Materias Primas</th>
+                                                <th scope="col" colspan="2" class="text-center">Precio Estimado</th>
+                                                <th scope="col" class="text-center">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for pred in value.pred %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>
+                                                    <ul class="list-unstyled small">
+                                                        {% for p in pred.predictions %}
+                                                            <li>
+                                                                {{p.raw_material.name}}
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+                                                <td class="font-weight-bold">
+                                                    <ul class="list-unstyled small">
+                                                        {% for p in pred.predictions %}
+                                                            <li>
+                                                                $ {{p.cost_dollar | es_money }}
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+                                                <td class="font-weight-bold">
+                                                    <ul class="list-unstyled small">
+                                                        {% for p in pred.predictions %}
+                                                            <li class="text-right">
+                                                                {{p.cost_local | es_money }} Bs
+                                                            </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+                                                <td class="text-center" style="cursor: default;">
+                                                    <a href="#"
+                                                        class="app__button--icon" title="Gráficas">
+                                                        <i class="mdi mdi-chart-bell-curve-cumulative"></i></a>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
                     </div>
                 </div>
             </div>
@@ -280,8 +366,8 @@
                 formated_date = formatDate(dayRenderInfo.date)
 
                 if (dates[formated_date]) {
-                    console.log(dates[formated_date]);
-                    console.log(formated_date);
+                    //console.log(dates[formated_date]);
+                    //console.log(formated_date);
 
                     let template = document.getElementById('salesCalendar_' + formated_date);
 

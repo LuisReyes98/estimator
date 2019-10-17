@@ -18,6 +18,7 @@ from .forms import SaleForm
 from raw_materials.models import RawMaterial, Provider
 from .models import Sale
 from django.shortcuts import redirect, render
+from predictions.models import PredictionSale
 
 
 class CalendarView(LoginRequiredMixin, TemplateView):
@@ -29,22 +30,46 @@ class CalendarView(LoginRequiredMixin, TemplateView):
         ).order_by('-created').exclude(
             date__isnull=True,
         )
-        sales_date_dict = {}
+
+        predictions = PredictionSale.objects.filter(
+            company= self.request.user.safe_company
+        ).order_by('-prediction_date')
+
+        sales_pred_date_dict = {}
         js_dict = {}
+
         for sale in sales:
             date = sale.date.strftime("%Y-%m-%d")
-
-            if date not in sales_date_dict:
-                sales_date_dict[date] = []
-                sales_date_dict[date].append(sale)
+            if date not in sales_pred_date_dict:
+                sales_pred_date_dict[date] = {
+                    'sale' : [],
+                    'pred' : [],
+                    'expire' : []
+                }
+                sales_pred_date_dict[date]['sale'].append(sale)
                 js_dict[date] = date
             else:
-                sales_date_dict[date].append(sale)
-        return [sales_date_dict, js_dict]
+                sales_pred_date_dict[date]['sale'].append(sale)
+
+        for prediction in predictions:
+            date = prediction.prediction_date.strftime("%Y-%m-%d")
+            if date not in sales_pred_date_dict:
+                sales_pred_date_dict[date] = {
+                    'sale' : [],
+                    'pred' : [],
+                    'expire' : []
+                }
+                sales_pred_date_dict[date]['pred'].append(prediction)
+                js_dict[date] = date
+            else:
+                sales_pred_date_dict[date]['pred'].append(prediction)
+        return [sales_pred_date_dict, js_dict]
 
     def get_context_data(self, **kwargs):
         """Añadiendo variables al contexto """
+
         context = super().get_context_data(**kwargs)
+
         context["title"] = "Calendario"
         context["user"] = self.request.user
         sales_objects = self.salesObject()
