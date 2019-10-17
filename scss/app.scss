@@ -63,6 +63,13 @@
             color: map-get($project_colors, "dark_blue");
           }
         }
+        &_pred {
+          color: map-get($project_colors, "light_cyan");
+
+          &:hover {
+            color: map-get($project_colors, "cyan");
+          }
+        }
       }
 
       &.button--back {
