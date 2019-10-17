@@ -8,64 +8,138 @@
     <div class="row pt-3 pb-3">
       <div class="col">
         <h3 class="text-center font-weight-bold text-uppercase">
-          Bienvenido
+          Estimador
         </h3>
       </div>
     </div>
-    <div class="row mb-3 pt-2 pb-2 app__background--cyan">
+    {% comment %} <div class="row mb-3 pt-2 pb-2">
       <div class="col text-light">
-        
-          <h4>
-            <b>Estimador. </b>Registra tus compras de materia prima para realizar una prediccion de sus costos y cantidad a comprar.
-          </h4>
-        
+          <div class="container-fluid py-3 app__background--cyan rounded shadow">
+            <h4>
+              <b>Estimador. </b>Registra tus compras de materia prima para realizar una prediccion de sus costos y cantidad a comprar.
+            </h4>
+          </div>
+      </div>
+    </div> {% endcomment %}
+    <div class="row pt-2 pb-4">
+      <div class="col-12">
+        <ul class="list-group list-group-horizontal-sm app__border--gray-200 py-1">
+          <li class="pr-5 m-0 h5 d-flex flex-row justify-content-start">
+            <i class="mdi mdi-account-circle-outline mr-3 app__text--cyan"></i>
+            <p class="m-0">
+              <span class="app__text--800">{{user}}</span>
+              {% if user.is_superuser %}
+                <span class="badge badge-pill text-uppercase badge-dark ml-2">Jefe</span>
+              {% elif user.is_staff %}
+                <span class="badge badge-pill text-uppercase badge-dark ml-2">Administrador</span>
+              {% endif %}
+            </p>
+          </li>
+          <li class="pr-5 m-0 h5 d-flex  flex-row justify-content-start">
+            <i class="mdi mdi-factory mr-3 app__text--cyan"></i>
+            <p class="m-0">
+            	<span class="app__text--800">{{user.safe_company}}</span>
+            </p>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="row app__background--gray-300 rounded m-4 p-2">
-      {% if prediction %}
-        <div class="col-12">
-          <h3>Ultima prediccion hecha el {{prediction.created.date}}</h3>
-          <p>
-            La prediccion se hizo para predecir el comportamiento de las materias primas el <b class="h4">{{prediction.prediction_date}}</b>
-          </p>
-          <p>Se estimo el precio del dolar a <b>{{prediction.dollar_price | es_money }} Bs</b></p>
-          <p>Se busco predecir las siguientes materias primas:</p>
-          <ul class="list-group list-group-flush app__background--gray-300">
-            {% for pred in prediction.predictions %}
-              <li class="list-group-item app__background--gray-300">
-                Para <b>{{pred.raw_material}}</b> se estima: 
-                <div>
-                  comprar <b>{{pred.amount}} {{pred.raw_material.unit_name}}</b>
-                </div>
-                <div>
-                  con un costo individual en dolares de <b>$ {{pred.cost_dollar | es_money }}</b>
-                </div>
-                <div>
-                  y con costo individual en en la moneda local a <b>{{pred.cost_local | es_money }} Bs</b>
-                </div>
-              </li>
-            {% endfor %}
-          </ul>
-          <p>
-            Precio total aproximado de la compra: 
-            <div>
-              En dolares <b>$ {{prediction.total_dollar | es_money }}</b>
+    <div class="row pb-3">
+      <div class="col-12">
+        <div class="container-fluid py-3 app__background--white rounded shadow">
+          {% if prediction %}
+            <div class="row">
+              <div class="col-12">
+                <h4 class="">
+                  Última Predicción: 
+                  <span class="font-weight-bold app__text--cyan">{{prediction.created.date}}</span>
+                </h4>
+                <h5 class="app__text--gray-700">
+                  Realizada para estimar el comportamiento de las materias primas en el 
+                  <span class="font-weight-bold">{{prediction.prediction_date}}</span>
+                </h5>
+              </div>
             </div>
-            <div>
-              En moneda local <b>{{prediction.total_local | es_money }} Bs</b>
+            <hr>
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  Precio estimado del Dólar: 
+                  <span class="font-weight-bold">{{prediction.dollar_price | es_money }} Bs</span>
+                </p>
+              </div>
             </div>
-          </p>
+            <div class="row">
+              <div class="col-12">
+                <p>
+                  Materias primas:
+                </p>
+                <div class="container-fluid">
+                  <div class="row m-auto">
+                    {% for pred in prediction.predictions %}
+                      <div class="col-12 col-md-6 pb-3">
+                        <div class="card">
+                        <div class="card-header">
+                          <h6 class="font-weight-bold">{{pred.raw_material}}</h6>
+                        </div>
+                          <div class="card-body">
+                            <p class="">
+                              <i class="mdi mdi-information app__text--light_cyan" style="position: absolute;"></i>
+                              <span class="ml-3 pl-1">Se recomienda comprar: </span>
+                              <span class="font-weight-bold">
+                                {{pred.amount}} {{pred.raw_material.unit_name}}
+                              </span>
+                            </p>
+                            <p class="">
+                              Precio de 1 {{pred.raw_material.measurement_unit}}:
+                            </p>
+                            <p class="small mb-0">
+                              <span class="app__text--gray-600">Dólar ($):</span>
+                              <span class="font-weight-bold">{{pred.cost_dollar | es_money }}</span>
+                            </p>
+                            <p class="small">
+                              <span class="app__text--gray-600">Moneda Local:</span>
+                              <span class="font-weight-bold">{{pred.cost_local | es_money }} Bs</span>
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row pt-2">
+              <div class="col-12">
+                <p class="">
+                  Precio total aproximado de la compra:
+                </p>
+                <div class="ml-3 pl-2 app__vertical_border--light_cyan">
+                  <p class="mb-0">
+                    <span class="">Dólar ($):</span>
+                    <span class="font-weight-bold">{{prediction.total_dollar | es_money }}</span>
+                  </p>
+                  <p>
+                    <span class="">Moneda Local:</span>
+                    <span class="font-weight-bold">{{prediction.total_local | es_money }} Bs</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <div class="row py-5">
+              <div class="col-12">
+                <h4 class="text-center app__text--gray-600">
+                  No hay nada que ver aquí
+                </h4>
+                <h6 class="text-center app__text--gray-500">
+                  Registra compras y deja que nosotros nos encarguemos del resto, verás la última predicción hecha aquí
+                </h6>
+              </div>
+            </div>
+          {% endif %}
         </div>
-      {% else %}
-        <div class="col-12">
-          <h3>No hay nada que ver aquí.</h3>
-          <p>
-            Registra tus compras y realiza una predicción para ver aquí la ultima prediccion realizada.
-          </p>
-        </div>
-      {% endif %}
-
-
+      </div>
     </div>
   </div>
 </div>
