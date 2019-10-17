@@ -29,7 +29,6 @@
                             <div class="col-12">
                                 <h4 class="text-center font-weight-bold text-uppercase">
                                     Comportamiento del Dólar
-                                    <a class="text-decoration-none text-dark" href="#dollar_price"><i class="mdi mdi-link-variant"></i></a>
                                 </h4>
                             </div>
                             <div class="col-12">
@@ -203,9 +202,9 @@ var app = new Vue({
     },
     data: function(){
         return {
-            dolar_chart: {{dolar_prices_series | safe }},
+            dolar_chart: {{dolar_graph | safe }},
             materials_graph: {{ materials_graph | safe}},
-            materials_options: {{materials_options | safe }},
+            materials_options: {{graphed_materials | safe }},
             selected_graph: 0,
         }
     },
@@ -260,6 +259,7 @@ var app = new Vue({
                     }
                 }
             }
+
             return charDefaultsOptions;
         },
         setObjArea: function(obj){
@@ -277,9 +277,17 @@ var app = new Vue({
         setObjStepLine: function(obj){
             obj.line_stroke = 'stepline';
         },
+        updateToolTip: function(){
+            setTimeout(function () {
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                })
+            },0);
+        },
     },
     computed: {
         current_graph: function() {
+            this.updateToolTip();
             return this.materials_graph[this.selected_graph];
         }
     }
