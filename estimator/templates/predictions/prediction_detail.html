@@ -1,0 +1,116 @@
+{% extends 'layouts/base_app.html' %}
+{% load es_money %}
+
+{% block content %}
+{{block.super}}
+
+<div class="page-content" id="content">
+    <div class="container-fluid app__background_gradient--lemon vh-100 overflow-y-scroll">
+        <div class="row pt-3 pb-3">
+            <div class="col">
+                <a href="{% url 'predictions:list' %}" title="Volver"
+                    class="app__button--icon button--back mdl-button mdl-js-button mdl-button--icon position-absolute">
+                    <i class="mdi mdi-arrow-left"></i>
+                </a>
+                <h4 class="text-center font-weight-bold text-uppercase">
+                    Predicción
+                </h4>
+            </div>
+        </div>
+        <div class="row pb-3">
+            <div class="col-12">
+                <div class="container-fluid py-3 app__background--white rounded shadow">
+                    <div class="row">
+                        <div class="col-12">
+                            <h4 class="">
+                            Predicción realizada el:
+                            <span class="font-weight-bold app__text--cyan">{{object.created.date}}</span>
+                            </h4>
+                            <h5 class="app__text--gray-700">
+                            Realizada para estimar el comportamiento de las materias primas en el 
+                            <span class="font-weight-bold">{{object.prediction_date}}</span>
+                            </h5>
+                        </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                        <div class="col-12">
+                            <p>
+                            Precio estimado del Dólar: 
+                            <span class="font-weight-bold">{{object.dollar_price | es_money }} Bs</span>
+                            </p>
+                        </div>
+                        </div>
+                        <div class="row">
+                        <div class="col-12">
+                            <p>
+                            Materias primas:
+                            </p>
+                            <div class="container-fluid">
+                            <div class="row justify-content-md-center">
+                                {% for pred in object.predictions %}
+                                <div class="col-12 col-md-6 col-lg-3 pb-3">
+                                    <div class="card">
+                                    <div class="card-header">
+                                    <div class="d-flex flex-row justify-content-between align-items-center">
+                                        <h6 class="font-weight-bold m-0">
+                                        {{pred.raw_material}}
+                                        </h6>
+                                        <i class="mdi mdi-cube-outline h5 m-0"></i>
+                                    </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-0">
+                                        <i class="mdi mdi-information app__text--light_cyan" style="position: absolute;"></i>
+                                        <span class="ml-3 pl-1">Se recomienda comprar:</span>
+                                        </p>
+                                        <p class="">
+                                        <span class="font-weight-bold">
+                                            {{pred.amount}} {{pred.raw_material.unit_name}}
+                                        </span>
+                                        </p>
+                                        <p class="mb-0">
+                                        Precio de 1 {{pred.raw_material.measurement_unit}}:
+                                        </p>
+                                        <p class="small mb-0">
+                                        <span class="app__text--gray-600">Dólar ($):</span>
+                                        <span class="font-weight-bold">{{pred.cost_dollar | es_money }}</span>
+                                        </p>
+                                        <p class="small">
+                                        <span class="app__text--gray-600">Moneda Local:</span>
+                                        <span class="font-weight-bold">{{pred.cost_local | es_money }} Bs</span>
+                                        </p>
+                                    </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+                        <div class="row pt-2">
+                        <div class="col-12">
+                            <p class="">
+                            Precio total aproximado de la compra:
+                            </p>
+                            <div class="ml-3 pl-2 app__vertical_border--light_cyan">
+                            <p class="mb-0">
+                                <span class="">Dólar ($):</span>
+                                <span class="font-weight-bold">{{object.total_dollar | es_money }}</span>
+                            </p>
+                            <p>
+                                <span class="">Moneda Local:</span>
+                                <span class="font-weight-bold">{{object.total_local | es_money }} Bs</span>
+                            </p>
+                            </div>
+                        </div>
+                        </div>
+    
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock content %}

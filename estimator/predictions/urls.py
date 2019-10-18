@@ -18,4 +18,9 @@ urlpatterns = [
         view=views.PredictionListView.as_view(),
         name="list"
     ),
+    path(
+        route='prediction/<int:pk>/',
+        view=views.PredictionDetailView.as_view(),
+        name="prediction"
+    ),
 ]
