@@ -62,10 +62,16 @@ class CalendarView(LoginRequiredMixin, TemplateView):
                             'pred' : [],
                             'expire' : []
                         }
-                        sales_pred_date_dict[expire]['expire'].append(sale)
+                        sales_pred_date_dict[expire]['expire'].append({
+                            'material' : material,
+                            'sale_date' : sale.date
+                        })
                         js_dict[expire] = expire
                     else:
-                        sales_pred_date_dict[expire]['expire'].append(sale)
+                        sales_pred_date_dict[expire]['expire'].append({
+                            'material' : material,
+                            'sale_date' : sale.date
+                        })
 
         for prediction in predictions:
             date = prediction.prediction_date.strftime("%Y-%m-%d")
