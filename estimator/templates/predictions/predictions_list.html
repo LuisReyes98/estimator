@@ -15,7 +15,7 @@
                     <i class="mdi mdi-arrow-left"></i>
                 </a>
                 <h3 class="text-center font-weight-bold text-uppercase">
-                    Lista de Compras
+                    Lista de Predicciones
                 </h3>
             </div>
         </div>
@@ -39,10 +39,10 @@
                         Calendario
                     </a>
                     <a
-                        href="{% url 'predictions:list' %}"
+                        href="{% url 'sales:sales_list' %}"
                         class="m-1 rounded-pill app__button button--blue mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect"
                     >
-                        Lista de Predicciones
+                        Lista de Compras
                     </a>
                     <a
                         href="{% url 'predictions:generate' %}"
@@ -61,45 +61,46 @@
                             <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
                                 <tr>
                                     <th scope="col">#</th>
-                                    <th scope="col">Fecha</th>
-                                    <th scope="col">Total ($)</th>
-                                    <th scope="col">Total (Moneda local)</th>
                                     <th scope="col">Materias Primas</th>
+                                    <th scope="col" colspan="2" class="text-center">Precio Estimado</th>
                                     <th scope="col" class="text-center">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for sale in object_list %}
+                                {% for pred in object_list %}
                                 <tr>
-                                    <th scope="row">{{ forloop.counter | add:page_counter }}</th>
-                                    <td>{{sale.date}}</td>
-                                    <td class="font-weight-bold">
-                                        {{sale.total_cost_dollar | es_money}}
-                                    </td>
-                                    <td class="font-weight-bold">
-                                        {{sale.total_cost_local | es_money}}
-                                    </td>
+                                    <th scope="row">{{ forloop.counter }}</th>
                                     <td>
                                         <ul class="list-unstyled small">
-                                            {% for relation in sale.materials_sale_relation %}
+                                            {% for p in pred.predictions %}
                                                 <li>
-                                                    {{relation.raw_material.name}} ({{ relation.amount}} {{relation.raw_material.measurement_unit}})
+                                                    {{p.raw_material.name}}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                    <td class="font-weight-bold">
+                                        <ul class="list-unstyled small">
+                                            {% for p in pred.predictions %}
+                                                <li>
+                                                    $ {{p.cost_dollar | es_money }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </td>
+                                    <td class="font-weight-bold">
+                                        <ul class="list-unstyled small">
+                                            {% for p in pred.predictions %}
+                                                <li class="text-right">
+                                                    {{p.cost_local | es_money }} Bs
                                                 </li>
                                             {% endfor %}
                                         </ul>
                                     </td>
                                     <td class="text-center" style="cursor: default;">
-                                        <a href="{% url 'sales:sale' sale.pk %}"
-                                           class="app__button--icon" title="Detalles">
-                                            <i class="mdi mdi-eye"></i></a>
-                                        {% if user.is_superuser or user.is_staff %}
-                                            <a href="{% url 'sales:update_sale' sale.pk %}"
-                                            class="app__button--icon" title="Editar">
-                                                <i class="mdi mdi-pencil"></i></a>
-                                            <a href="{% url 'sales:delete_sale' sale.pk %}"
-                                            class="app__button--icon icon--trash" title="Eliminar">
-                                                <i class="mdi mdi-trash-can"></i></a>
-                                        {% endif %}
+                                        <a href="#"
+                                            class="app__button--icon" title="Gráficas">
+                                            <i class="mdi mdi-chart-bell-curve-cumulative"></i></a>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -142,51 +143,6 @@
                         </ul>
                     </nav>
                 {% endif %}
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div class="modal fade" id="registerSales" tabindex="-1" role="dialog" aria-labelledby="registerSalesTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="registerSalesTitle">Registrar Compra</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <i class="mdi mdi-close"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <ul class="list-group list-group-flush app__nav--system">
-                                    <a
-                                        class="text-decoration-none list-group-item"
-                                        href="{% url 'sales:new_sale' %}"
-                                    >
-                                        <li class="d-flex justify-content-between align-items-center">
-                                            <div class="">
-                                                    Registrar compra manualmente
-                                            </div>
-                                            <i class="mdi mdi-pencil-box-outline app__button--icon"></i>
-                                        </li>
-                                    </a>
-                                    <a
-                                        class="text-decoration-none list-group-item"
-                                        href="{% url 'sales:upload_file' %}"
-                                    >
-                                        <li class="d-flex justify-content-between align-items-center">
-                                            <div class="">
-                                                    Cargar compras en formato csv
-                                            </div>
-                                            <i class="mdi mdi-file-document app__button--icon"></i>
-                                        </li>
-                                    </a>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

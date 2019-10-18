@@ -9,8 +9,13 @@ urlpatterns = [
         name="generate"
     ),
     path(
-        route='result',
+        route='result/',
         view=views.PredictionResultView.as_view(),
         name="result"
+    ),
+    path(
+        route='prediction_list/',
+        view=views.PredictionListView.as_view(),
+        name="list"
     ),
 ]

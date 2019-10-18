@@ -1,7 +1,7 @@
 # from django.shortcuts import render
+import copy
 import io
 import json
-import copy
 from datetime import date, datetime
 
 import category_encoders as ce
@@ -10,19 +10,21 @@ import numpy as np
 import pandas as pd
 import pytz
 import seaborn as sns
-from django.urls import reverse_lazy
-from django.views.generic import FormView, TemplateView
 from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.views.generic import FormView, TemplateView, ListView
 from matplotlib import pyplot as plt
 from sklearn.linear_model import Lasso, LassoCV
-from sklearn.model_selection import (cross_val_score, cross_validate)
+from sklearn.model_selection import cross_val_score, cross_validate
 
+from graphics_statistics.views import \
+    generateRawMaterialDolarGraphData as g_graph
 from raw_materials.models import RawMaterial
 from sales.models import DolarPrice, Sale
 
-from .models import PredictionSale, PredictionMaterialRelated
 from .forms import SelectPredictionForm
-from graphics_statistics.views import generateRawMaterialDolarGraphData as g_graph
+from .models import PredictionMaterialRelated, PredictionSale
 
 matplotlib.use('Agg')
 
@@ -33,7 +35,7 @@ la moneda se dividio 100.000,00
 """
 
 
-class PredictionFormView(FormView):
+class PredictionFormView(LoginRequiredMixin, FormView):
     template_name = "predictions/select_prediction.html"
     success_url = reverse_lazy("predictions:result")
     form_class = SelectPredictionForm
@@ -46,7 +48,30 @@ class PredictionFormView(FormView):
         return form_kwargs
 
 
-class PredictionResultView(TemplateView):
+class PredictionListView(LoginRequiredMixin, ListView):
+    model = Sale
+    template_name = "predictions/predictions_list.html"
+    paginate_by = 30
+
+    def get_queryset(self):
+        new_context = PredictionSale.objects.filter(
+            company=self.request.user.safe_company
+        ).order_by('-prediction_date')
+        return new_context
+
+    def get_context_data(self, **kwargs):
+        """Añadiendo variables al contexto """
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "calendar_sale"
+        try:
+            context["page_counter"] = (int(self.request.GET["page"]) - 1) * self.paginate_by
+        except Exception:
+            context["page_counter"] = 0
+
+        return context
+
+
+class PredictionResultView(LoginRequiredMixin, TemplateView):
     template_name = "predictions/show_prediction.html"
     tz = pytz.timezone(settings.TIME_ZONE)
     SOBERANO_CHANGE = 100000.00
