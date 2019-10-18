@@ -299,7 +299,6 @@
                             {% endif %}
                         </div>
                         {% if value.expire %}
-                            <hr>
                             <div class="row justify-content-lg-center">
                                 <div class="col-12 col-lg-6">
                                     <h6 class="font-weight-bold text-uppercase text-center">
@@ -314,22 +313,14 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {% for sale in value.expire %}
+                                            {% for m in value.expire %}
                                             <tr>
                                                 <th scope="row">{{ forloop.counter }}</th>
                                                 <td>
-                                                    <ul class="list-unstyled small">
-                                                        {% for relation in sale.materials_sale_relation %}
-                                                            {% if relation.raw_material.can_expire %}
-                                                                <li>
-                                                                    {{relation.raw_material.name}}
-                                                                </li>
-                                                            {% endif %}
-                                                        {% endfor %}
-                                                    </ul>
+                                                    {{m.material.raw_material.name}}
                                                 </td>
                                                 <td class="font-weight-bold">
-                                                    {{sale.date}}
+                                                    {{m.sale_date}}
                                                 </td>
                                             </tr>
                                             {% endfor %}
@@ -337,7 +328,6 @@
                                     </table>
                                 </div>
                             </div>
-
                         {% endif %}
                     </div>
                     <div class="modal-footer">
