@@ -260,5 +260,5 @@ class GraphicsView(TemplateView):
         return context
 
 
-class ReportsView(TemplateView):
-    template_name = "graphics/reports.html"
+# class ReportsView(TemplateView):
+#     template_name = "graphics/reports.html"
