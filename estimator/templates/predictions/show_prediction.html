@@ -22,7 +22,7 @@
         </div>
         <div class="row pt-3 pb-3">
             <div class="col">
-                <div class="app__background--white p-2 rounded shadow">
+                <div class="app__background--white p-2 pb-4 rounded shadow">
                     <div class="container-fluid">
                         <div class="row pb-2">
                             <div class="col">
@@ -60,12 +60,16 @@
                                             </div>
                                         </div>
                                         <div class="card-body">
-                                            <p class="">
+                                            <p class="m-0">
                                                 Precio estimado:
-                                                <span class="font-weight-bold">$ {{pred.cost_dollar.0 | es_money }}</span>
                                             </p>
                                             <p class="">
+                                                <span class="font-weight-bold">$ {{pred.cost_dollar.0 | es_money }}</span>
+                                            </p>
+                                            <p class="m-0">
                                                 Se recomienda comprar:
+                                            </p>
+                                            <p class="">
                                                 <span class="font-weight-bold">
                                                     {{pred.amount.0 | floatformat:"0" }} Unidades
                                                 </span>
@@ -75,28 +79,39 @@
                                 </div>
                             {% endfor %}
                         </div>
-                        <div class="row pb-2">
+                        <div class="row pb-4">
                             <div class="col text-center">
-                                <h6 class="font-weight-bold text-uppercase">Gráficos</h6>
+                                {% comment %} <h6 class="font-weight-bold text-uppercase">Gráficos</h6> {% endcomment %}
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#">Active</a>
+                                    </li>
+                                    {% for pred in predicted_materials %}
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="#">
+                                                {{pred.raw_material}}
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
                             </div>
                         </div>
                         {% comment %}
                             Graficas de la prediccion
                         {% endcomment %}
                         <div class="row">
-                            <div class="col-12 my-1 col-lg-6 text-center text-capitalize">
+                            <div class="col-12 pb-3">
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="d-flex flex-row justify-content-between align-items-center">
-                                            <h6 class="font-weight-bold m-0">
+                                            <h6 class="font-weight-bold text-uppercase m-0">
                                                 [[dolar_chart.title]]
                                             </h6>
-                                            <i class="mdi mdi-cube-outline h5 m-0"></i>
                                         </div>
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body p-2">
                                         <div class="d-flex justify-content-center align-content-center p-3" >
-                                            <i class=" mdi mdi-chart-line mdi-24px px-2  "
+                                            <i class="app__text--gray-400 mdi mdi-chart-line mdi-24px px-2  "
                                                 data-toggle="tooltip"
                                                 data-placement="top"
                                                 style="cursor: pointer;"
@@ -104,7 +119,7 @@
                                                 @click="setObjLine(dolar_chart)"
                                                 v-bind:class="{ 'text-primary': dolar_chart.type=='line' }"
                                             ></i>
-                                            <i class="mdi mdi-chart-areaspline-variant mdi-24px px-2  "
+                                            <i class="app__text--gray-400 mdi mdi-chart-areaspline-variant mdi-24px px-2  "
                                                 data-toggle="tooltip"
                                                 data-placement="top"
                                                 style="cursor: pointer;"
@@ -112,7 +127,7 @@
                                                 @click="setObjArea(dolar_chart)"
                                                 v-bind:class="{ 'text-primary': dolar_chart.type=='area' }"
                                             ></i>
-                                            <i class="mdi mdi-chart-line-variant mdi-24px px-2  "
+                                            <i class="app__text--gray-400 mdi mdi-chart-line-variant mdi-24px px-2  "
                                                 data-toggle="tooltip"
                                                 data-placement="top"
                                                 style="cursor: pointer;"
@@ -120,7 +135,7 @@
                                                 @click="setObjStraightLine(dolar_chart)"
                                                 v-bind:class="{ 'text-primary': dolar_chart.line_stroke=='straight' }"
                                             ></i>
-                                            <i class="mdi mdi-chart-bell-curve mdi-24px px-2  "
+                                            <i class="app__text--gray-400 mdi mdi-chart-bell-curve mdi-24px px-2  "
                                                 data-toggle="tooltip"
                                                 data-placement="top"
                                                 style="cursor: pointer;"
@@ -128,7 +143,7 @@
                                                 @click="setObjCurveLine(dolar_chart)"
                                                 v-bind:class="{ 'text-primary': dolar_chart.line_stroke=='smooth' }"
                                             ></i>
-                                            <i class="mdi mdi-chart-histogram mdi-24px px-2  "
+                                            <i class="app__text--gray-400 mdi mdi-chart-histogram mdi-24px px-2  "
                                                 data-toggle="tooltip"
                                                 data-placement="top"
                                                 style="cursor: pointer;"
@@ -138,29 +153,26 @@
                                             ></i>
                                         </div>
                                         <apexchart class="" :type="dolar_chart.type" height=400 :options="buildOptions(dolar_chart.title,dolar_chart.yaxis,dolar_chart.line_stroke)" :series="dolar_chart.series" />
-
                                     </div>
-                                
                                 </div>
                             </div>
 
                             <template v-for="(m_graph, index) in materials_graph" >
                                 <div
-                                    class="my-1 col-12 col-lg-6 text-center text-capitalize"
+                                    class="col-12 pb-3 text-center text-capitalize"
                                     v-for="(graph, index2) in m_graph.graphs" :key="'g' + index2  + 'm_' + index">
-                                    <div class="card ">
+                                    <div class="card">
 
                                         <div class="card-header">
                                             <div class="d-flex flex-row justify-content-between align-items-center">
-                                                <h6 class="font-weight-bold m-0">
+                                                <h6 class="font-weight-bold text-uppercase m-0">
                                                     [[graph.title]]
                                                 </h6>
-                                                <i class="mdi mdi-cube-outline h5 m-0"></i>
                                             </div>
                                         </div>
-                                        <div class="card-body">
+                                        <div class="card-body p-2">
                                             <div class="d-flex justify-content-center align-content-center p-3" >
-                                                <i class="mdi mdi-chart-line mdi-24px px-2  "
+                                                <i class="app__text--gray-400 mdi mdi-chart-line mdi-24px px-2  "
                                                     data-toggle="tooltip"
                                                     data-placement="top"
                                                     style="cursor: pointer;"
@@ -168,7 +180,7 @@
                                                     @click="setObjLine(graph)"
                                                     v-bind:class="{ 'text-primary': graph.type=='line' }"
                                                 ></i>
-                                                <i class="mdi mdi-chart-areaspline-variant mdi-24px px-2  "
+                                                <i class="app__text--gray-400 mdi mdi-chart-areaspline-variant mdi-24px px-2  "
                                                     data-toggle="tooltip"
                                                     data-placement="top"
                                                     style="cursor: pointer;"
@@ -176,7 +188,7 @@
                                                     @click="setObjArea(graph)"
                                                     v-bind:class="{ 'text-primary': graph.type=='area' }"
                                                 ></i>
-                                                <i class="mdi mdi-chart-line-variant mdi-24px px-2  "
+                                                <i class="app__text--gray-400 mdi mdi-chart-line-variant mdi-24px px-2  "
                                                     data-toggle="tooltip"
                                                     data-placement="top"
                                                     style="cursor: pointer;"
@@ -184,7 +196,7 @@
                                                     @click="setObjStraightLine(graph)"
                                                     v-bind:class="{ 'text-primary': graph.line_stroke=='straight' }"
                                                 ></i>
-                                                <i class="mdi mdi-chart-bell-curve mdi-24px px-2  "
+                                                <i class="app__text--gray-400 mdi mdi-chart-bell-curve mdi-24px px-2  "
                                                     data-toggle="tooltip"
                                                     data-placement="top"
                                                     style="cursor: pointer;"
@@ -192,7 +204,7 @@
                                                     @click="setObjCurveLine(graph)"
                                                     v-bind:class="{ 'text-primary': graph.line_stroke=='smooth' }"
                                                 ></i>
-                                                <i class="mdi mdi-chart-histogram mdi-24px px-2  "
+                                                <i class="app__text--gray-400 mdi mdi-chart-histogram mdi-24px px-2  "
                                                     data-toggle="tooltip"
                                                     data-placement="top"
                                                     style="cursor: pointer;"
@@ -203,11 +215,9 @@
                                             </div>
                                             <apexchart class="" :type="graph.type" height=400 :options="buildOptions(graph.title,graph.yaxis_title,graph.line_stroke)" :series="graph.series" />
                                         </div>
-
                                     </div>
                                 </div>
                             </template>
-
                         </div>
 
                         <div class="row pt-3">
