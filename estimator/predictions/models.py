@@ -38,25 +38,27 @@ class PredictionSale(TimeStampFields):
 
     @property
     def total_dollar(self):
-        predicteds = PredictionMaterialRelated.objects.filter(
-            prediction_sale=self,
-        )
         total = 0
-        for el in predicteds:
+        for el in self.predictions:
             total = total + el.cost_dollar
 
         return total
 
     @property
     def total_local(self):
-        predicteds = PredictionMaterialRelated.objects.filter(
-            prediction_sale=self,
-        )
         total = 0
-        for el in predicteds:
+        for el in self.predictions:
             total = total + el.cost_local
 
         return total
+
+    @property
+    def raw_materials(self):
+        raw_mat_array = []
+        for el in self.predictions:
+            raw_mat_array.append(el.raw_material)
+
+        return raw_mat_array
 
     class Meta:
         verbose_name = "Prediccion de Venta"

@@ -55,10 +55,21 @@ class PredictionDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         """Añadiendo variables al contexto """
         context = super().get_context_data(**kwargs)
+
+        graphs = g_graph(
+            company=self.request.user.safe_company,
+            raw_materials=self.object.raw_materials,
+        )
+
+        # context['dolar_graph'] = graphs['dolar_graph']
+        context['materials_graph'] = graphs['materials_graph']
+        context['graphed_materials'] = graphs['graphed_materials']
+
         context["current_page"] = "calendar_sale"
         context["report_date"] = datetime.now()
 
         return context
+
 
 class PredictionListView(LoginRequiredMixin, ListView):
     model = PredictionSale
