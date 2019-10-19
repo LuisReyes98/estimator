@@ -52,6 +52,13 @@ class PredictionDetailView(LoginRequiredMixin, DetailView):
     model = PredictionSale
     template_name = "predictions/prediction_detail.html"
 
+    def get_context_data(self, **kwargs):
+        """Añadiendo variables al contexto """
+        context = super().get_context_data(**kwargs)
+        context["current_page"] = "calendar_sale"
+        context["report_date"] = datetime.now()
+
+        return context
 
 class PredictionListView(LoginRequiredMixin, ListView):
     model = PredictionSale
