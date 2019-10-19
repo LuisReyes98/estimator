@@ -85,23 +85,27 @@
                                                 <div class="card-body">
                                                     <p class="mb-0">
                                                         <i class="mdi mdi-information app__text--light_cyan"
-                                                            style="position: absolute;"></i>
+                                                            style="position: absolute;">
+                                                        </i>
                                                         <span class="ml-3 pl-1">Se recomienda comprar:</span>
                                                     </p>
                                                     <p class="">
                                                         <span class="font-weight-bold">
                                                             {{pred.amount}} {{pred.raw_material.unit_name}}
                                                         </span>
-                                                        <p class="small">
-                                                            La cantidad tiene una tendencia
-                                                            {% if pred.amount_trend > 0 %}
-                                                            al alza
-                                                            {% elif pred.amount_trend < 0 %}
-                                                            a la baja
-                                                            {% else %}
-                                                            estable
-                                                            {% endif %}
                                                     </p>
+                                                    <p class="small">
+                                                        La cantidad tiene una tendencia
+                                                        {% if pred.amount_trend > 0 %}
+                                                            al alza
+                                                            <i class="mdi app__text--cyan mdi-arrow-top-right"></i>
+                                                        {% elif pred.amount_trend < 0 %}
+                                                            a la baja
+                                                            <i class="mdi app__text--red mdi-arrow-bottom-right"></i>
+                                                        {% else %}
+                                                            estable
+                                                            <i class="mdi mdi-arrow-right"></i>
+                                                        {% endif %}
                                                     </p>
                                                     <p class="mb-0">
                                                         Precio de 1 {{pred.raw_material.measurement_unit}}:
@@ -110,23 +114,24 @@
                                                         <span class="app__text--gray-600">Dólar ($):</span>
                                                         <span
                                                             class="font-weight-bold">{{pred.cost_dollar | es_money }}</span>
-                                                        <div class="small">
-                                                            <p>
-                                                                El costo tiene una tendencia
-                                                                {% if pred.cost_trend > 0 %}
-                                                                al alza
-                                                                {% elif pred.cost_trend < 0 %}
-                                                                a la baja
-                                                                {% else %}
-                                                                estable
-                                                                {% endif %}
-                                                            </p>
-                                                        </div>
                                                     </p>
                                                     <p class="small">
                                                         <span class="app__text--gray-600">Moneda Local:</span>
                                                         <span class="font-weight-bold">{{pred.cost_local | es_money }}
                                                             Bs</span>
+                                                    </p>
+                                                    <p class="small">
+                                                        El costo tiene una tendencia
+                                                        {% if pred.cost_trend > 0 %}
+                                                            al alza
+                                                            <i class="mdi app__text--cyan mdi-arrow-top-right"></i>
+                                                        {% elif pred.cost_trend < 0 %}
+                                                            a la baja
+                                                            <i class="mdi app__text--red mdi-arrow-bottom-right"></i>
+                                                        {% else %}
+                                                            estable
+                                                            <i class="mdi mdi-arrow-right"></i>
+                                                        {% endif %}
                                                     </p>
                                                 </div>
                                             </div>
@@ -176,7 +181,7 @@
         var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
-    
+
         var yyyy = today.getFullYear();
         if (dd < 10) {
             dd = '0' + dd;

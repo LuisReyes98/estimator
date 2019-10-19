@@ -51,57 +51,61 @@
                             {% for pred in predicted_materials %}
                                 <div class="col-12 col-md-6 col-lg-3 pb-3">
                                     <div class="card">
-                                    <div class="card-header">
-                                    <div class="d-flex flex-row justify-content-between align-items-center">
-                                        <h6 class="font-weight-bold m-0">
-                                        {{pred.raw_material}}
-                                        </h6>
-                                        <i class="mdi mdi-cube-outline h5 m-0"></i>
-                                    </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <p class="mb-0">
-                                        <i class="mdi mdi-information app__text--light_cyan" style="position: absolute;"></i>
-                                        <span class="ml-3 pl-1">Se recomienda comprar:</span>
-                                        </p>
-                                        <p class="">
-                                            <span class="font-weight-bold">
-                                                {{pred.amount}} {{pred.raw_material.unit_name}}
-                                            </span>
-                                            <p class="small">
+                                        <div class="card-header">
+                                            <div class="d-flex flex-row justify-content-between align-items-center">
+                                                <h6 class="font-weight-bold m-0">
+                                                    {{pred.raw_material}}
+                                                </h6>
+                                                <i class="mdi mdi-cube-outline h5 m-0"></i>
+                                            </div>
+                                        </div>
+                                        <div class="card-body">
+                                            <p class="mb-0">
+                                                <i class="mdi mdi-information app__text--light_cyan" style="position: absolute;"></i>
+                                                <span class="ml-3 pl-1">Se recomienda comprar:</span>
+                                            </p>
+                                            <p class="">
+                                                <span class="font-weight-bold">
+                                                    {{pred.amount}} {{pred.raw_material.unit_name}}
+                                                </span>
+                                            </p>
+                                            <p class="">
                                                 La cantidad tiene una tendencia
                                                 {% if pred.amount_trend > 0 %}
                                                     al alza
+                                                    <i class="mdi app__text--cyan mdi-arrow-up-bold"></i>
                                                 {% elif pred.amount_trend < 0 %}
                                                     a la baja
+                                                    <i class="mdi app__text--red mdi-arrow-down-bold"></i>
                                                 {% else %}
                                                     estable
+                                                    <i class="mdi mdi-arrow-right-bold"></i>
                                                 {% endif %}
                                             </p>
-                                        </p>
-                                        <p class="mb-0">
-                                        Precio de 1 {{pred.raw_material.measurement_unit}}:
-                                        </p>
-                                        <p class="mb-0">
-                                        <span class="app__text--gray-600">Dólar ($):</span>
-                                        <span class="font-weight-bold">{{pred.cost_dollar | es_money }}</span>
-                                        </p>
-                                        <div class="small">
-                                            <p>
+                                            <p class="mb-0">
+                                                Precio de 1 {{pred.raw_material.measurement_unit}}:
+                                            </p>
+                                            <p class="mb-0">
+                                                <span class="app__text--gray-600">Dólar ($):</span>
+                                                <span class="font-weight-bold">{{pred.cost_dollar | es_money }}</span>
+                                            </p>
+                                            <p class="">
+                                                <span class="app__text--gray-600">Moneda Local:</span>
+                                                <span class="font-weight-bold">{{pred.cost_local | es_money }} Bs</span>
+                                            </p>
+                                            <p class="">
                                                 El costo tiene una tendencia
                                                 {% if pred.cost_trend > 0 %}
                                                     al alza
+                                                    <i class="mdi app__text--cyan mdi-arrow-up-bold"></i>
                                                 {% elif pred.cost_trend < 0 %}
                                                     a la baja
+                                                    <i class="mdi app__text--red mdi-arrow-down-bold"></i>
                                                 {% else %}
                                                     estable
+                                                    <i class="mdi mdi-arrow-right-bold"></i>
                                                 {% endif %}
                                             </p>
-                                        </div>
-                                        <p class="">
-                                        <span class="app__text--gray-600">Moneda Local:</span>
-                                        <span class="font-weight-bold">{{pred.cost_local | es_money }} Bs</span>
-                                        </p>
                                         </div>
                                     </div>
                                 </div>
@@ -198,7 +202,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row pt-3">
                             <div class="col text-center">
                                 <a
@@ -227,7 +230,7 @@
 <script type="text/javascript">
 
 $(function () {
-  $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip()
 })
 
 var app = new Vue({
