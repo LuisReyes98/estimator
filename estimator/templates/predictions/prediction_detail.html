@@ -31,6 +31,17 @@
                         </div>
                     </div>
                     <div class="" id="pdfContent">
+                        <div class="row d-none headerControl">
+                            <div class="col app__text--gray-600">
+                                <p class="mb-0 small">
+                                    Reporte generado el {{report_date}}
+                                </p>
+                                <p class="small">
+                                    Companía:
+                                    <span class="font-weight-bold">{{user.safe_company}}</span>
+                                </p>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-12">
                                 <h4 class="">
@@ -139,29 +150,51 @@
 <script src="{% static 'js/jspdf/html2pdf.min.js' %}"></script>
 
 <script>
+    function getToday() {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+    
+        var yyyy = today.getFullYear();
+        if (dd < 10) {
+            dd = '0' + dd;
+        }
+        if (mm < 10) {
+            mm = '0' + mm;
+        }
+        var today = dd + '_' + mm + '_' + yyyy;
+
+        return today;
+    }
+
+    var f = getToday();
+
     var div = document.createElement('div');
     div.id = 'innerPdfContent';
+
     // Get the last <li> element ("Milk") of <ul> with id="myList2"
     var itm = document.getElementById("pdfContent");
 
     // Copy the <li> element and its child nodes
     var cln = itm.cloneNode(true);
     var cols_inner = cln.getElementsByClassName("columnsControl");
+    var head_inner = cln.getElementsByClassName("headerControl");
 
     for (let i = 0; i < cols_inner.length; i++) {
         cols_inner[i].classList.remove("col-12", "col-md-6", "col-lg-3");
         cols_inner[i].classList.add("col-6");
     }
-    //var inner_col = cln.findId("columnsControl");
-    //cln.findId("columnsControl").classList.remove("col-12 col-md-6 col-lg-3");
-    //cln.findId("columnsControl").classList.remove("col-12 col-md-6 col-lg-3");
-    // Append the cloned <li> element to <ul> with id="myList1"
+
+    for (let i = 0; i < head_inner.length; i++) {
+        head_inner[i].classList.remove("d-none");
+    }
+
     div.appendChild(cln);
 
     function savePdf() {
         html2pdf(div, {
-            margin: 1,
-            filename: 'prediction_report.pdf',
+            margin: 0.5,
+            filename: 'prediction_report_' + f + '.pdf',
             image: { type: 'svg' },
             html2canvas: { dpi: 192, letterRendering: true },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
