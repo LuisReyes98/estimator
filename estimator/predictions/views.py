@@ -170,7 +170,7 @@ class PredictionResultView(LoginRequiredMixin, TemplateView):
             xdf = xdf.dropna()
 
         model.fit(xdf, ydf)
-        print('Train score: ', model.score(xdf, ydf))
+        # print('Train score: ', model.score(xdf, ydf))
 
         return model
 
@@ -294,7 +294,7 @@ class PredictionResultView(LoginRequiredMixin, TemplateView):
                 lambda x: x.pct_change().mean()
             ).reset_index(name='avg_change').fillna(0)
 
-            print(res_trend)
+            # print(res_trend)
 
             amount_trend = float(
                 res_trend.loc[res_trend['index'] == 'amount']['avg_change']

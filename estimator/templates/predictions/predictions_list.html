@@ -61,6 +61,7 @@
                             <thead class="font-weight-bold text-uppercase" style="font-size: 12px;">
                                 <tr>
                                     <th scope="col">#</th>
+                                    <th scope="col">Fecha</th>
                                     <th scope="col">Materias Primas</th>
                                     <th scope="col" colspan="2" class="text-center">Precio Estimado</th>
                                     <th scope="col" class="text-center">Acciones</th>
@@ -70,6 +71,7 @@
                                 {% for pred in object_list %}
                                 <tr>
                                     <th scope="row">{{ forloop.counter }}</th>
+                                    <td>{{pred.prediction_date}}</td>
                                     <td>
                                         <ul class="list-unstyled small">
                                             {% for p in pred.predictions %}
