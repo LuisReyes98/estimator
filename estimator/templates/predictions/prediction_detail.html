@@ -30,16 +30,16 @@
                 <div class="container-fluid py-3 app__background--white rounded shadow">
                     <div class="row pb-3">
                         <div class="col-1">
-                            <a href="#donwloadPdf" onclick="savePdf()"
+                            <a href="#donwloadPdf" @click="savePdf"
                                 class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
                                 title="Descargar PDF">
                                 <i class="mdi mdi-file-pdf-box-outline"></i>
                             </a>
                         </div>
-                        <div class="form-group form-row">
-                            <label for="graphs_selector">Selecciona Varias</label>
+                        <div class="d-flex align-content-center border app__border--gray-300 rounded p-2">
+                            <label for="graphs_selector">Selecciona Graficas a Mostrar</label>
                             <div class="col">
-                                <select id="graphs_selector" v-model="selected_graphs" class="selectpicker" data-live-search="true" multiple=""title="Selecciona Graficas a Mostrar">
+                                <select id="graphs_selector" v-model="selected_graphs" class="selectpicker" data-live-search="true" multiple=""title="Selecciona Varias">
                                     <option v-for="option in graphed_materials" v-bind:value="option.key">
                                         [[option.name]]
                                     </option>
@@ -175,12 +175,14 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <template v-for="(el, index) in selected_graphs">
-                                <div class="col-12 pb-3 text-center text-capitalize"
+                        <br>
+
+                        {% comment %} <div class='hidden_charts_pdf d-none' id="hidden_charts_pdf">
+                            <template v-for="(el, j) in selected_graphs">
+                                <div class="col-12 pb-3 my-4 text-center text-capitalize"
                                     v-for="(graph, index) in getDictGraphs(el)" :key="'m_' + index">
-                                    <div class="card">
-    
+                                    <div class="card my-2">
+
                                         <div class="card-header">
                                             <div class="d-flex flex-row justify-content-between align-items-center">
                                                 <h6 class="font-weight-bold text-uppercase m-0">
@@ -188,39 +190,65 @@
                                                 </h6>
                                             </div>
                                         </div>
-                                        <div class="card-body p-2">
-                                            <div class="d-flex justify-content-center align-content-center p-3">
-                                                <i class="app__text--gray-400 mdi mdi-chart-line mdi-24px px-2  "
-                                                    data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
-                                                    title="Gráfica de Línea" @click="setObjLine(graph)"
-                                                    v-bind:class="{ 'text-primary': graph.type=='line' }"></i>
-                                                <i class="app__text--gray-400 mdi mdi-chart-areaspline-variant mdi-24px px-2  "
-                                                    data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
-                                                    title="Gráfica de Área" @click="setObjArea(graph)"
-                                                    v-bind:class="{ 'text-primary': graph.type=='area' }"></i>
-                                                <i class="app__text--gray-400 mdi mdi-chart-line-variant mdi-24px px-2  "
-                                                    data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
-                                                    title="Línea de Gráfica Recta" @click="setObjStraightLine(graph)"
-                                                    v-bind:class="{ 'text-primary': graph.line_stroke=='straight' }"></i>
-                                                <i class="app__text--gray-400 mdi mdi-chart-bell-curve mdi-24px px-2  "
-                                                    data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
-                                                    title="Línea de Gráfica Curva" @click="setObjCurveLine(graph)"
-                                                    v-bind:class="{ 'text-primary': graph.line_stroke=='smooth' }"></i>
-                                                <i class="app__text--gray-400 mdi mdi-chart-histogram mdi-24px px-2  "
-                                                    data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
-                                                    title="Línea de Gráfica Pasos" @click="setObjStepLine(graph)"
-                                                    v-bind:class="{ 'text-primary': graph.line_stroke=='stepline' }"></i>
-                                            </div>
-                                            <apexchart class="" :type="graph.type" height=400
-                                                :options="buildOptions(graph.title,graph.yaxis_title,graph.line_stroke)"
-                                                :series="graph.series" />
+                                        <div class="card-body p-2 ">
+                                            <apexchart class="" :type="graph.type" height=350 width=650 :options="buildOptions(graph.yaxis_title,graph.line_stroke, el +
+                                            'to_pdf',graph.id)" :series="graph.series" />
                                         </div>
                                     </div>
                                 </div>
                             </template>
-                        </div>
-                    </div>
+                        </div> {% endcomment %}
 
+                    </div><!-- Final del div que aparece en el pdf -->
+
+
+                    <div class="row justify-content-center" id="charts_controls"> <!-- Div de las graficas -->
+                        <template v-for="(el, j) in selected_graphs">
+                            <div class="col-12 pb-3 my-4 text-center text-capitalize"
+                                v-for="(graph, index) in getDictGraphs(el)" :key="'m_' + index">
+                                <div class="card">
+
+                                    <div class="card-header">
+                                        <div class="d-flex flex-row justify-content-between align-items-center">
+                                            <h6 class="font-weight-bold text-uppercase m-0">
+                                                [[graph.title]]
+                                            </h6>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-2">
+                                        <div class="graph_options d-flex justify-content-center align-content-center p-3">
+                                            <i class="app__text--gray-400 mdi mdi-chart-line mdi-24px px-2  "
+                                                data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
+                                                title="Gráfica de Línea" @click="setObjLine(graph)"
+                                                v-bind:class="{ 'text-primary': graph.type=='line' }"></i>
+                                            <i class="app__text--gray-400 mdi mdi-chart-areaspline-variant mdi-24px px-2  "
+                                                data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
+                                                title="Gráfica de Área" @click="setObjArea(graph)"
+                                                v-bind:class="{ 'text-primary': graph.type=='area' }"></i>
+                                            <i class="app__text--gray-400 mdi mdi-chart-line-variant mdi-24px px-2  "
+                                                data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
+                                                title="Línea de Gráfica Recta" @click="setObjStraightLine(graph)"
+                                                v-bind:class="{ 'text-primary': graph.line_stroke=='straight' }"></i>
+                                            <i class="app__text--gray-400 mdi mdi-chart-bell-curve mdi-24px px-2  "
+                                                data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
+                                                title="Línea de Gráfica Curva" @click="setObjCurveLine(graph)"
+                                                v-bind:class="{ 'text-primary': graph.line_stroke=='smooth' }"></i>
+                                            <i class="app__text--gray-400 mdi mdi-chart-histogram mdi-24px px-2  "
+                                                data-toggle="tooltip" data-placement="top" style="cursor: pointer;"
+                                                title="Línea de Gráfica Pasos" @click="setObjStepLine(graph)"
+                                                v-bind:class="{ 'text-primary': graph.line_stroke=='stepline' }"></i>
+                                        </div>
+                                        <apexchart class="" :type="graph.type" height=400
+                                            :options="buildOptions(graph.yaxis_title,graph.line_stroke, el +
+                                            'to_chart',graph.id )"
+                                            :series="graph.series" />
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                    </div> <!-- Final del div de las graficas -->
+                    
+                    
                 </div>
             </div>
         </div>
@@ -256,7 +284,7 @@ var app = new Vue({
         }
     },
     methods: {
-        buildOptions: function(title, yaxis_title, lineStroke) {
+        buildOptions: function( yaxis_title, lineStroke, id, group) {
             let charDefaultsOptions = {
                 chart: {
                     locales: [apexchart_locale_es],
@@ -267,7 +295,9 @@ var app = new Vue({
                     },
                     toolbar: {
                         autoSelected: 'zoom'
-                    }
+                    },
+                    group: group,
+                    id: id,
                 },
                 colors: ['#04a08e', '#F4B030'],
                 dataLabels: {
@@ -326,64 +356,67 @@ var app = new Vue({
         },
         getDictGraphs: function(key){
             return this.materials_graph[key].graphs
+        },
+        savePdf: function () {
+            let today = this.getToday();
+
+            let div = document.createElement('div');
+            div.id = 'innerPdfContent';
+
+            let itm = document.getElementById("pdfContent");
+
+            
+
+            let cln = itm.cloneNode(true);
+            let cols_inner = cln.getElementsByClassName("columnsControl");
+            
+            let head_inner = cln.getElementsByClassName("headerControl");
+
+            let charts_inner = cln.getElementsByClassName("hidden_charts_pdf");
+
+            for (let i = 0; i < cols_inner.length; i++) {
+                cols_inner[i].classList.remove("col-12", "col-md-6", "col-lg-3");
+                cols_inner[i].classList.add("col-6");
+            }
+
+            for (let i = 0; i < head_inner.length; i++) {
+                head_inner[i].classList.remove("d-none");
+            }
+
+            for (let i = 0; i < charts_inner.length; i++) {
+                charts_inner[i].classList.remove("d-none");
+            }
+
+
+            div.appendChild(cln);
+            html2pdf(div, {
+                margin: 0.5,
+                filename: 'prediction_report_' + today + '.pdf',
+                image: { type: 'svg' },
+                html2canvas: { dpi: 192, letterRendering: true },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            });
+
+
+        },
+        getToday: function() {
+            let today = new Date();
+            let dd = today.getDate();
+            let mm = today.getMonth() + 1; //January is 0!
+
+            let yyyy = today.getFullYear();
+            if (dd < 10) {
+                dd = '0' + dd;
+            }
+            if (mm < 10) {
+                mm = '0' + mm;
+            }
+            let result = dd + '_' + mm + '_' + yyyy;
+
+            return result;
         }
     }
 })
-
-</script>
-
-<script>
-    function getToday() {
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-
-        var yyyy = today.getFullYear();
-        if (dd < 10) {
-            dd = '0' + dd;
-        }
-        if (mm < 10) {
-            mm = '0' + mm;
-        }
-        var today = dd + '_' + mm + '_' + yyyy;
-
-        return today;
-    }
-
-    
-    function savePdf() {
-        var f = getToday();
-    
-        var div = document.createElement('div');
-        div.id = 'innerPdfContent';
-    
-        // Get the last <li> element ("Milk") of <ul> with id="myList2"
-        var itm = document.getElementById("pdfContent");
-    
-        // Copy the <li> element and its child nodes
-        var cln = itm.cloneNode(true);
-        var cols_inner = cln.getElementsByClassName("columnsControl");
-        var head_inner = cln.getElementsByClassName("headerControl");
-    
-        for (let i = 0; i < cols_inner.length; i++) {
-            cols_inner[i].classList.remove("col-12", "col-md-6", "col-lg-3");
-            cols_inner[i].classList.add("col-6");
-        }
-    
-        for (let i = 0; i < head_inner.length; i++) {
-            head_inner[i].classList.remove("d-none");
-        }
-    
-        div.appendChild(cln);
-        html2pdf(div, {
-            margin: 0.5,
-            filename: 'prediction_report_' + f + '.pdf',
-            image: { type: 'svg' },
-            html2canvas: { dpi: 192, letterRendering: true },
-            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-        });
-    }
-
 
 </script>
 {% endblock javascript %}

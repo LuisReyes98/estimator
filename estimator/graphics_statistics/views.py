@@ -204,6 +204,7 @@ def generateRawMaterialDolarGraphData(company, raw_materials):
                         ),
                         'type': 'line',
                         'line_stroke': 'straight',
+                        'id': '%d_dollar' % value['pk']
                     },
                     {
                         'series': local_data,
@@ -214,6 +215,7 @@ def generateRawMaterialDolarGraphData(company, raw_materials):
                         ),
                         'type': 'line',
                         'line_stroke': 'straight',
+                        'id': '%d_local' % value['pk']
                     },
                     {
                         'series': amount_data,
@@ -224,6 +226,7 @@ def generateRawMaterialDolarGraphData(company, raw_materials):
                         ),
                         'type': 'line',
                         'line_stroke': 'straight',
+                        'id': '%d_amount' % value['pk']
                     }
                 ]
             }
