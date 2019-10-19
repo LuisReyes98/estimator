@@ -1,6 +1,7 @@
 {% extends 'layouts/base_app.html' %}
 {% load widget_tweaks %}
 {% load safe_js %}
+{% load es_money %}
 
 {% load static %}
 
@@ -148,7 +149,7 @@
                                                     <i class="mdi mdi-currency-usd mr-1"></i>
                                                     Costo final dolares
                                                 </label>
-                                                <p class="pl-1 font-weight-bold">[[totalCostDolar | roundDecimals(3) ]]</p>
+                                                <p class="pl-1 font-weight-bold">[[totalCostDolar | roundDecimals(2) ]]</p>
                                             </div>
                                         </div>
                                     </div>
@@ -160,7 +161,7 @@
                                                     <i class="mdi mdi-currency-usd mr-1"></i>
                                                     Costo final local
                                                 </label>
-                                                <p class="pl-1 font-weight-bold">[[totalCostLocal | roundDecimals(3) ]]</p>
+                                                <p class="pl-1 font-weight-bold">[[totalCostLocal | roundDecimals(2) ]]</p>
                                             </div>
                                         </div>
                                     </div>
@@ -302,6 +303,9 @@ var app = new Vue({
     filters: {
         roundDecimals: function (x, roundTo) {
             return Number.parseFloat(x).toFixed(roundTo);
+        },
+        spanish_money: function(value){
+
         }
     }
 });

@@ -87,6 +87,16 @@
                               <span class="font-weight-bold">
                                 {{pred.amount}} {{pred.raw_material.unit_name}}
                               </span>
+                                <p class="small">
+                                  La cantidad tiene una tendencia
+                                  {% if pred.amount_trend > 0 %}
+                                      al alza
+                                  {% elif pred.amount_trend < 0 %}
+                                      a la baja
+                                  {% else %}
+                                      estable
+                                  {% endif %}
+                                </p>
                             </p>
                             <p class="mb-0">
                               Precio de 1 {{pred.raw_material.measurement_unit}}:
@@ -94,6 +104,18 @@
                             <p class="small mb-0">
                               <span class="app__text--gray-600">Dólar ($):</span>
                               <span class="font-weight-bold">{{pred.cost_dollar | es_money }}</span>
+                              <div class="small">
+                                <p>
+                                    El costo tiene una tendencia
+                                    {% if pred.cost_trend > 0 %}
+                                        al alza
+                                    {% elif pred.cost_trend < 0 %}
+                                        a la baja
+                                    {% else %}
+                                        estable
+                                    {% endif %}
+                                </p>
+                            </div>
                             </p>
                             <p class="small">
                               <span class="app__text--gray-600">Moneda Local:</span>

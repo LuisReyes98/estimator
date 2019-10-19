@@ -88,6 +88,16 @@ class PredictionMaterialRelated(TimeStampFields):
         default=0
     )
 
+    cost_trend = models.FloatField(
+        _("Tendendica Porcentual de costos"),
+        default=0
+    )
+
+    amount_trend = models.FloatField(
+        _("Tendendica Porcentual de cantidades"),
+        default=0
+    )
+
     # Referencias
     raw_material = models.ForeignKey(
         "raw_materials.RawMaterial",

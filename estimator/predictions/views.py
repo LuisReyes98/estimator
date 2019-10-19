@@ -13,7 +13,7 @@ import seaborn as sns
 from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from django.views.generic import FormView, TemplateView, ListView, DetailView
+from django.views.generic import DetailView, FormView, ListView, TemplateView
 from matplotlib import pyplot as plt
 from sklearn.linear_model import Lasso, LassoCV
 from sklearn.model_selection import cross_val_score, cross_validate
@@ -265,7 +265,6 @@ class PredictionResultView(LoginRequiredMixin, TemplateView):
                 - fecha "date"
             """
 
-            # print(df.shape)
             # modelo de prediccion de costos de la materia prima seleccionada
             # LinearRegression(),
             materials_models_cost_dict[key] = self.train_model(
@@ -287,18 +286,41 @@ class PredictionResultView(LoginRequiredMixin, TemplateView):
             if p_amount[0] < 1:
                 p_amount[0] = 1
 
+            # conportamiento porcentual de los valores
+
+            trend_df = df.copy(deep=True)
+
+            res_trend = trend_df.apply(
+                lambda x: x.pct_change().mean()
+            ).reset_index(name='avg_change').fillna(0)
+
+            print(res_trend)
+
+            amount_trend = float(
+                res_trend.loc[res_trend['index'] == 'amount']['avg_change']
+            )
+            cost_trend = float(
+                res_trend.loc[res_trend['index'] == 'cost_dollar']['avg_change']
+            )
+
             predicted_materials.append({
                 'raw_material': materials_dict[key],
                 'raw_material_pk': key,
                 'cost_dollar': p_dollars,
                 'amount': p_amount,
+                'amount_trend': amount_trend,
+                'cost_trend': cost_trend,
             })
 
-            # predicted_materials
+
+
+
+        # predicted_materials
         predicted_materials_array = []
         d_price = round(dolar_prediction[0], 4)
 
         if self.request.session['prediction_to_save']:
+            """Guardando la prediccion"""
             print('Debug saving prediction')
             prediction_sale = PredictionSale(**{
                 'prediction_date': prediction_date,
@@ -309,7 +331,7 @@ class PredictionResultView(LoginRequiredMixin, TemplateView):
             for pred in predicted_materials:
                 c_dollar = round(pred['cost_dollar'][0], 4)
                 r_material = RawMaterial.objects.get(pk=pred['raw_material_pk'])
-                
+
                 dict_prediction = {
                         'prediction_date': prediction_date,
                         'amount': int(round(pred['amount'][0])),
@@ -318,6 +340,8 @@ class PredictionResultView(LoginRequiredMixin, TemplateView):
                         'dollar_price': d_price,
                         'raw_material': r_material,
                         'prediction_sale': prediction_sale,
+                        'amount_trend': pred['amount_trend'],
+                        'cost_trend': pred['cost_trend'],
                     }
                 pred_material_related = PredictionMaterialRelated(
                     **dict_prediction
@@ -338,6 +362,8 @@ class PredictionResultView(LoginRequiredMixin, TemplateView):
                     'cost_local': c_dollar * d_price,
                     'dollar_price': d_price,
                     'raw_material': r_material,
+                    'amount_trend': pred['amount_trend'],
+                    'cost_trend': pred['cost_trend'],
                 }
                 predicted_materials_array.append(dict_prediction)
 
