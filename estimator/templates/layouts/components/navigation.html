@@ -86,6 +86,16 @@
         </li>
         <li class="nav-item">
           <a
+            href="{% url 'predictions:list' %}"
+            class="app__text--light_gray app__nav--link nav-link d-flex flex-row align-items-center pl-0"
+            tooltipMenu="Lista de Predicciones"
+          >
+            <i class="mdi mdi-calendar-multiple"></i>
+            <span class="small pl-2">Lista de Predicciones</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a
             href="{% url 'predictions:generate' %}"
             class="app__text--light_gray app__nav--link nav-link d-flex flex-row align-items-center pl-0"
             tooltipMenu="Realizar Predicción"
@@ -120,7 +130,8 @@
       <li class="nav-item">
         <a
           href="{% url 'graphics:graphs' %}"
-          class="app__nav--link app__text--light_gray nav-link d-flex flex-row align-items-center pl-0"
+          class="{% if current_page == "graphics" %} app__text--cyan app__focused_item {% else %} app__text--light_gray {% endif %}
+                 app__nav--link nav-link d-flex flex-row align-items-center pl-0"
           tooltipMenu="Gráficas y Estadísticas"
         >
           <i class="mdi mdi-chart-bar"></i>

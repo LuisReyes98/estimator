@@ -256,6 +256,7 @@ class GraphicsView(TemplateView):
         context['graphed_materials'] = graphs['graphed_materials']
 
         context['dolar_graph'] = graphs['dolar_graph']
+        context["current_page"] = "graphics"
 
         return context
 
