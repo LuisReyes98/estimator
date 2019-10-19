@@ -60,7 +60,7 @@
                                 <div class="container-fluid">
                                     <div class="row justify-content-md-center">
                                         {% for pred in object.predictions %}
-                                        <div class="col-12 col-md-6 col-lg-3 pb-3">
+                                        <div class="col-12 col-md-6 col-lg-3 pb-3 columnsControl">
                                             <div class="card">
                                                 <div class="card-header">
                                                     <div
@@ -139,36 +139,27 @@
 <script src="{% static 'js/jspdf/html2pdf.min.js' %}"></script>
 
 <script>
-    // var doc = new jsPDF();
-    // var elementHTML = $('#pdfContent').html();
-    // var specialElementHandlers = {
-    //     '#elementH': function (element, renderer) {
-    //         return true;
-    //     }
-    // };
+    var div = document.createElement('div');
+    div.id = 'innerPdfContent';
+    // Get the last <li> element ("Milk") of <ul> with id="myList2"
+    var itm = document.getElementById("pdfContent");
 
-    // function savePdf() {
-    //     doc.addHTML(elementHTML, 15, 15, {
-    //         'width': 500,
-    //         'elementHandlers': specialElementHandlers
-    //     });
+    // Copy the <li> element and its child nodes
+    var cln = itm.cloneNode(true);
+    var cols_inner = cln.getElementsByClassName("columnsControl");
 
-    //     // Save the PDF
-    //     doc.save('sample-document.pdf');
-    // }
-
-    // function savePdf() {
-    //     html2canvas(document.getElementById("pdfContent")).then(function (canvas) {
-    //         var img = canvas.toDataURL("image/png");
-    //         var doc = new jsPDF();
-    //         doc.addImage(img, 'SVG', 10, 10);
-    //         doc.save('test.pdf');
-    //         console.log("Hola")
-    //     });
-    // }
+    for (let i = 0; i < cols_inner.length; i++) {
+        cols_inner[i].classList.remove("col-12", "col-md-6", "col-lg-3");
+        cols_inner[i].classList.add("col-6");
+    }
+    //var inner_col = cln.findId("columnsControl");
+    //cln.findId("columnsControl").classList.remove("col-12 col-md-6 col-lg-3");
+    //cln.findId("columnsControl").classList.remove("col-12 col-md-6 col-lg-3");
+    // Append the cloned <li> element to <ul> with id="myList1"
+    div.appendChild(cln);
 
     function savePdf() {
-        html2pdf($('#pdfContent').html(), {
+        html2pdf(div, {
             margin: 1,
             filename: 'prediction_report.pdf',
             image: { type: 'svg' },
