@@ -29,24 +29,36 @@
             <div class="col-12">
                 <div class="container-fluid py-3 app__background--white rounded shadow">
                     <div class="row pb-3">
-                        <div class="col-1">
+                        <div class="col-12 col-md-2">
                             <a href="#donwloadPdf" @click="savePdf"
                                 class="m-1 rounded-pill app__button button--fab button--blue mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect"
                                 title="Descargar PDF">
                                 <i class="mdi mdi-file-pdf-box-outline"></i>
                             </a>
                         </div>
-                        <div class="d-flex align-content-center border app__border--gray-300 rounded p-2">
-                            <label for="graphs_selector">Selecciona Graficas a Mostrar</label>
-                            <div class="col">
-                                <select id="graphs_selector" v-model="selected_graphs" class="selectpicker" data-live-search="true" multiple=""title="Selecciona Varias">
-                                    <option v-for="option in graphed_materials" v-bind:value="option.key">
-                                        [[option.name]]
-                                    </option>
-                                </select>
+                        <div class="col-10">
+                            <div class="form-row">
+                                <div class="form-group col-12 col-md-4">
+                                    <div class="app__form--textfield w-100">
+                                        <label class="ml-auto" for="graphs_selector">
+                                            Seleccione las gráficas a mostrar
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-12 col-md-4">
+                                    <div class="app__form--select w-100">
+                                        <select id="graphs_selector" v-model="selected_graphs" class="selectpicker" data-live-search="true" multiple=""title="Selecciona">
+                                            <option v-for="option in graphed_materials" v-bind:value="option.key">
+                                                [[option.name]]
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <!-- Div que aparece en el pdf -->
                     <div class="" id="pdfContent">
                         <div class="row d-none headerControl">
                             <div class="col app__text--gray-600">
@@ -88,8 +100,8 @@
                                 <div class="container-fluid">
                                     <div class="row justify-content-md-center">
                                         {% for pred in object.predictions %}
-                                        <div class="col-12 col-md-6 col-lg-3 pb-3 columnsControl">
-                                            <div class="card">
+                                        <div class="d-flex col-12 col-md-6 col-lg-3 pb-3 columnsControl">
+                                            <div class="card w-100">
                                                 <div class="card-header">
                                                     <div
                                                         class="d-flex flex-row justify-content-between align-items-center">
@@ -111,17 +123,17 @@
                                                             {{pred.amount}} {{pred.raw_material.unit_name}}
                                                         </span>
                                                     </p>
-                                                    <p class="small">
+                                                    <p class="app__text--gray-700">
                                                         La cantidad tiene una tendencia
                                                         {% if pred.amount_trend > 0 %}
                                                             al alza
-                                                            <i class="mdi app__text--cyan mdi-arrow-top-right"></i>
+                                                            <i class="mdi app__text--cyan mdi-arrow-up-bold"></i>
                                                         {% elif pred.amount_trend < 0 %}
                                                             a la baja
-                                                            <i class="mdi app__text--red mdi-arrow-bottom-right"></i>
+                                                            <i class="mdi app__text--red mdi-arrow-down-bold"></i>
                                                         {% else %}
                                                             estable
-                                                            <i class="mdi mdi-arrow-right"></i>
+                                                            <i class="mdi mdi-arrow-right-bold"></i>
                                                         {% endif %}
                                                     </p>
                                                     <p class="mb-0">
@@ -137,17 +149,17 @@
                                                         <span class="font-weight-bold">{{pred.cost_local | es_money }}
                                                             Bs</span>
                                                     </p>
-                                                    <p class="small">
+                                                    <p class="app__text--gray-700">
                                                         El costo tiene una tendencia
                                                         {% if pred.cost_trend > 0 %}
                                                             al alza
-                                                            <i class="mdi app__text--cyan mdi-arrow-top-right"></i>
+                                                            <i class="mdi app__text--cyan mdi-arrow-up-bold"></i>
                                                         {% elif pred.cost_trend < 0 %}
                                                             a la baja
-                                                            <i class="mdi app__text--red mdi-arrow-bottom-right"></i>
+                                                            <i class="mdi app__text--red mdi-arrow-down-bold"></i>
                                                         {% else %}
                                                             estable
-                                                            <i class="mdi mdi-arrow-right"></i>
+                                                            <i class="mdi mdi-arrow-right-bold"></i>
                                                         {% endif %}
                                                     </p>
                                                 </div>
@@ -175,7 +187,6 @@
                                 </div>
                             </div>
                         </div>
-                        <br>
 
                         {% comment %} <div class='hidden_charts_pdf d-none' id="hidden_charts_pdf">
                             <template v-for="(el, j) in selected_graphs">
@@ -198,14 +209,14 @@
                                 </div>
                             </template>
                         </div> {% endcomment %}
+                    </div>
+                    <!-- Final del div que aparece en el pdf -->
 
-                    </div><!-- Final del div que aparece en el pdf -->
-
-
-                    <div class="row justify-content-center" id="charts_controls"> <!-- Div de las graficas -->
+                    <!-- Div de las graficas -->
+                    <div class="row justify-content-center" id="charts_controls">
                         <template v-for="(el, j) in selected_graphs">
-                            <div class="col-12 pb-3 my-4 text-center text-capitalize"
-                                v-for="(graph, index) in getDictGraphs(el)" :key="'m_' + index">
+                            <div class="col-12 px-4 pt-3 text-center text-capitalize"
+                                v-for="(graph, index) in getDictGraphs(el)" :key="el + '_mg_' + index">
                                 <div class="card">
 
                                     <div class="card-header">
@@ -246,13 +257,12 @@
                                 </div>
                             </div>
                         </template>
-                    </div> <!-- Final del div de las graficas -->
-                    
-                    
+                    </div>
+                    <!-- Final del div de las graficas -->
+
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
@@ -365,11 +375,9 @@ var app = new Vue({
 
             let itm = document.getElementById("pdfContent");
 
-            
-
             let cln = itm.cloneNode(true);
             let cols_inner = cln.getElementsByClassName("columnsControl");
-            
+
             let head_inner = cln.getElementsByClassName("headerControl");
 
             let charts_inner = cln.getElementsByClassName("hidden_charts_pdf");
@@ -387,7 +395,6 @@ var app = new Vue({
                 charts_inner[i].classList.remove("d-none");
             }
 
-
             div.appendChild(cln);
             html2pdf(div, {
                 margin: 0.5,
@@ -396,7 +403,6 @@ var app = new Vue({
                 html2canvas: { dpi: 192, letterRendering: true },
                 jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
             });
-
 
         },
         getToday: function() {

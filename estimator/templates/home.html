@@ -68,8 +68,8 @@
                 <div class="container-fluid">
                   <div class="row justify-content-md-center">
                     {% for pred in prediction.predictions %}
-                      <div class="col-12 col-md-6 col-lg-3 pb-3">
-                        <div class="card">
+                      <div class="d-flex col-12 col-md-6 col-lg-3 pb-3">
+                        <div class="card w-100">
                         <div class="card-header">
                           <div class="d-flex flex-row justify-content-between align-items-center">
                             <h6 class="font-weight-bold m-0">
@@ -88,17 +88,17 @@
                                 {{pred.amount}} {{pred.raw_material.unit_name}}
                               </span>
                             </p>
-                            <p class="small">
+                            <p class="app__text--gray-700">
                               La cantidad tiene una tendencia
                               {% if pred.amount_trend > 0 %}
                                 al alza
-                                <i class="mdi app__text--cyan mdi-arrow-top-right"></i>
+                                <i class="mdi app__text--cyan mdi-arrow-up-bold"></i>
                               {% elif pred.amount_trend < 0 %}
                                 a la baja
-                                <i class="mdi app__text--red mdi-arrow-bottom-right"></i>
+                                <i class="mdi app__text--red mdi-arrow-down-bold"></i>
                               {% else %}
                                 estable
-                                <i class="mdi mdi-arrow-right"></i>
+                                <i class="mdi mdi-arrow-right-bold"></i>
                               {% endif %}
                             </p>
                             <p class="mb-0">
@@ -112,17 +112,17 @@
                               <span class="app__text--gray-600">Moneda Local:</span>
                               <span class="font-weight-bold">{{pred.cost_local | es_money }} Bs</span>
                             </p>
-                            <p class="small">
+                            <p class="app__text--gray-700">
                               El costo tiene una tendencia
                               {% if pred.cost_trend > 0 %}
                                 al alza
-                                <i class="mdi app__text--cyan mdi-arrow-top-right"></i>
+                                <i class="mdi app__text--cyan mdi-arrow-up-bold"></i>
                               {% elif pred.cost_trend < 0 %}
                                 a la baja
-                                <i class="mdi app__text--red mdi-arrow-bottom-right"></i>
+                                <i class="mdi app__text--red mdi-arrow-down-bold"></i>
                               {% else %}
                                 estable
-                                <i class="mdi mdi-arrow-right"></i>
+                                <i class="mdi mdi-arrow-right-bold"></i>
                               {% endif %}
                             </p>
                           </div>
